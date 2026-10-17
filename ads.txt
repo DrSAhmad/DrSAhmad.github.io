@@ -1,0 +1,4 @@
+# ads.txt — replace PASTE-YOUR-PUBLISHER-ID with your AdSense publisher ID
+# (AdSense gives it as: google.com, pub-XXXXXXXXXXXXXXXX, DIRECT, f08c47fec0942fa0)
+# Example once you have it:
+# google.com, pub-1234567890123456, DIRECT, f08c47fec0942fa0
