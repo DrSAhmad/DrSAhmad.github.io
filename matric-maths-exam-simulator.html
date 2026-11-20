@@ -1,0 +1,1234 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>Matric Maths Exam Simulator</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --navy: #0b2a4a;
+        --navy-deep: #071d33;
+        --navy-soft: #14365c;
+        --gold: #b08d2e;
+        --gold-bright: #c9a227;
+        --gold-pale: #f3e9c8;
+        --bg: #f6f4ee;
+        --card: #ffffff;
+        --card-2: #fbfaf6;
+        --ink: #182430;
+        --ink-soft: #43536a;
+        --muted: #6b7684;
+        --line: #e3ddcc;
+        --good: #2e6b34;
+        --good-bg: #e7f2e7;
+        --bad: #a83232;
+        --bad-bg: #f9e9e7;
+        --shadow: 0 1px 2px rgba(11, 42, 74, .07), 0 6px 18px rgba(11, 42, 74, .06);
+        --radius: 14px;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #0c141d;
+          --card: #152231;
+          --card-2: #182839;
+          --ink: #e9edf2;
+          --ink-soft: #b9c4d2;
+          --muted: #8d99a8;
+          --line: #2b3d52;
+          --gold-pale: #33290f;
+          --good-bg: #17301b;
+          --bad-bg: #3a1d1a;
+          --shadow: 0 1px 2px rgba(0,0,0,.35), 0 6px 18px rgba(0,0,0,.3);
+        }
+      }
+      * { box-sizing: border-box; }
+      html { -webkit-text-size-adjust: 100%; }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        font-size: 16px;
+        line-height: 1.55;
+        padding-bottom: calc(76px + env(safe-area-inset-bottom));
+      }
+      h1, h2, h3, .serif { font-family: Georgia, "Iowan Old Style", "Times New Roman", serif; }
+      button, [role="button"], select, summary, input:not([type="checkbox"], [type="radio"]) { min-height: 2.25rem; }
+      button { font: inherit; cursor: pointer; }
+      a { color: var(--navy-soft); }
+      @media (prefers-color-scheme: dark) { a { color: var(--gold-bright); } }
+      .wrap { max-width: 780px; margin: 0 auto; padding: 0 16px; }
+
+      /* ---------- Hero ---------- */
+      .hero {
+        background: linear-gradient(160deg, var(--navy) 0%, var(--navy-deep) 100%);
+        color: #f4f1e6;
+        padding: 34px 0 30px;
+        border-bottom: 4px solid var(--gold);
+      }
+      .hero .kicker {
+        color: var(--gold-bright);
+        font-size: .78rem; font-weight: 700;
+        letter-spacing: .14em; text-transform: uppercase;
+        margin: 0 0 10px;
+      }
+      .hero h1 { font-size: 2rem; line-height: 1.15; margin: 0 0 10px; font-weight: 700; }
+      .hero p.lede { margin: 0 0 18px; color: #d8dee8; font-size: 1.02rem; max-width: 34em; }
+      .hero-stats { display: flex; flex-wrap: wrap; gap: 8px; }
+      .hero-stats span {
+        border: 1px solid rgba(201,162,39,.55); color: #efe6c4;
+        border-radius: 999px; padding: 5px 12px; font-size: .82rem; font-weight: 600;
+      }
+      .hero .cta-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+
+      /* ---------- Buttons ---------- */
+      .btn {
+        display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+        border-radius: 10px; border: 1px solid transparent;
+        padding: 10px 18px; font-weight: 700; font-size: .95rem;
+        text-decoration: none; min-height: 44px;
+      }
+      .btn-gold { background: var(--gold); color: #fff; }
+      .btn-gold:hover { background: var(--gold-bright); }
+      .btn-navy { background: var(--navy); color: #fff; }
+      @media (prefers-color-scheme: dark) { .btn-navy { background: var(--navy-soft); } }
+      .btn-ghost { background: transparent; color: var(--ink); border-color: var(--line); }
+      .hero .btn-ghost { color: #f4f1e6; border-color: rgba(244,241,230,.4); }
+      .btn-block { width: 100%; }
+      .btn[disabled] { opacity: .55; cursor: default; }
+
+      /* ---------- Sections & cards ---------- */
+      section.block { padding: 26px 0 4px; }
+      .sec-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+      .sec-head h2 { font-size: 1.35rem; margin: 0; color: var(--navy); }
+      @media (prefers-color-scheme: dark) { .sec-head h2 { color: var(--ink); } }
+      .sec-head .note { font-size: .85rem; color: var(--muted); }
+      .card {
+        background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+        box-shadow: var(--shadow); padding: 18px; margin-bottom: 14px;
+      }
+      .steps { display: grid; gap: 12px; }
+      @media (min-width: 640px) { .steps { grid-template-columns: 1fr 1fr; } }
+      .step { display: flex; gap: 12px; align-items: flex-start; }
+      .step .num {
+        flex: 0 0 auto; width: 30px; height: 30px; border-radius: 50%;
+        background: var(--navy); color: #fff; font-weight: 700; font-size: .9rem;
+        display: flex; align-items: center; justify-content: center; margin-top: 2px;
+      }
+      @media (prefers-color-scheme: dark) { .step .num { background: var(--gold); color: #1c1503; } }
+      .step p { margin: 0; font-size: .95rem; color: var(--ink-soft); }
+      .step p b { color: var(--ink); }
+
+      /* ---------- Paper list ---------- */
+      .paper-card { display: flex; gap: 14px; align-items: flex-start; }
+      .paper-badge {
+        flex: 0 0 auto; width: 46px; height: 56px; border-radius: 6px;
+        background: var(--navy); color: #fff; text-align: center;
+        display: flex; flex-direction: column; justify-content: center;
+        border-bottom: 4px solid var(--gold);
+      }
+      .paper-badge .pn { font-family: Georgia, serif; font-size: 1.25rem; font-weight: 700; line-height: 1; }
+      .paper-badge .pl { font-size: .58rem; letter-spacing: .12em; text-transform: uppercase; color: var(--gold-bright); }
+      .paper-card h3 { margin: 0 0 4px; font-size: 1.05rem; line-height: 1.3; }
+      .paper-meta { font-size: .85rem; color: var(--muted); margin: 0 0 8px; }
+      .paper-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+      .tag {
+        display: inline-block; font-size: .72rem; font-weight: 700; letter-spacing: .06em;
+        text-transform: uppercase; border-radius: 999px; padding: 3px 9px;
+      }
+      .tag-free { background: var(--good-bg); color: var(--good); }
+      .tag-lock { background: var(--gold-pale); color: #7a5f14; }
+      @media (prefers-color-scheme: dark) { .tag-lock { color: var(--gold-bright); } }
+      .best { font-size: .85rem; color: var(--ink-soft); font-weight: 600; }
+      .best b { color: var(--gold); font-size: 1rem; }
+
+      /* ---------- Unlock card ---------- */
+      .unlock {
+        background: var(--navy); color: #f4f1e6; border: none;
+        border-top: 4px solid var(--gold);
+      }
+      .unlock h3 { margin: 0 0 6px; font-size: 1.2rem; color: #fff; }
+      .unlock p { color: #d8dee8; margin: 0 0 8px; font-size: .95rem; }
+      .unlock ul { margin: 8px 0 14px; padding-left: 20px; color: #d8dee8; font-size: .95rem; }
+      .unlock .price { font-family: Georgia, serif; font-size: 1.6rem; color: var(--gold-bright); font-weight: 700; }
+
+      /* ---------- Views / nav ---------- */
+      .view { display: none; }
+      .view.active { display: block; }
+      .tabbar {
+        position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+        background: var(--card); border-top: 1px solid var(--line);
+        padding-bottom: env(safe-area-inset-bottom);
+        box-shadow: 0 -4px 16px rgba(11,42,74,.08);
+      }
+      .tabbar .inner { max-width: 780px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); }
+      .tabbar button {
+        background: none; border: none; padding: 9px 4px 7px; min-height: 56px;
+        color: var(--muted); font-size: .72rem; font-weight: 700; letter-spacing: .02em;
+        display: flex; flex-direction: column; align-items: center; gap: 3px;
+      }
+      .tabbar button svg { width: 21px; height: 21px; }
+      .tabbar button.on { color: var(--navy); }
+      @media (prefers-color-scheme: dark) { .tabbar button.on { color: var(--gold-bright); } }
+      .tabbar button.on svg { stroke: var(--gold); }
+
+      /* ---------- Exam ---------- */
+      .exam-top {
+        position: sticky; top: 0; z-index: 30;
+        background: var(--navy); color: #fff;
+        border-bottom: 3px solid var(--gold);
+        padding: 10px 0;
+      }
+      .exam-top .row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+      .exam-top .ptitle { font-size: .85rem; font-weight: 700; line-height: 1.25; }
+      .timer {
+        font-variant-numeric: tabular-nums; font-weight: 800; font-size: 1.35rem;
+        background: rgba(255,255,255,.1); border: 1px solid rgba(201,162,39,.6);
+        border-radius: 10px; padding: 4px 12px; min-width: 108px; text-align: center;
+      }
+      .timer.low { background: var(--bad); border-color: var(--bad); }
+      .timer.paused { opacity: .65; }
+      .exam-top .sub { font-size: .78rem; color: #c6d2e0; margin-top: 2px; }
+      .icon-btn {
+        background: rgba(255,255,255,.12); color: #fff; border: 1px solid rgba(255,255,255,.25);
+        border-radius: 10px; padding: 8px 12px; font-weight: 700; font-size: .85rem; min-height: 40px;
+      }
+      .qcard { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px; margin-bottom: 12px; }
+      .qnum { font-size: .75rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--gold); margin: 0 0 4px; }
+      .qtext { margin: 0 0 12px; font-size: 1.02rem; font-weight: 600; overflow-wrap: anywhere; }
+      .opts { display: grid; gap: 8px; }
+      .opt {
+        display: flex; gap: 10px; align-items: center; text-align: left;
+        background: var(--card-2); border: 1.5px solid var(--line); border-radius: 10px;
+        padding: 11px 13px; font-size: .98rem; color: var(--ink); width: 100%; min-height: 48px;
+      }
+      .opt .letter {
+        flex: 0 0 auto; width: 26px; height: 26px; border-radius: 50%;
+        border: 1.5px solid var(--muted); color: var(--muted);
+        display: flex; align-items: center; justify-content: center;
+        font-size: .8rem; font-weight: 800;
+      }
+      .opt.sel { border-color: var(--navy); background: var(--gold-pale); }
+      .opt.sel .letter { background: var(--navy); border-color: var(--navy); color: #fff; }
+      @media (prefers-color-scheme: dark) {
+        .opt.sel { border-color: var(--gold); }
+        .opt.sel .letter { background: var(--gold); border-color: var(--gold); color: #1c1503; }
+      }
+      .opt.correct { border-color: var(--good); background: var(--good-bg); }
+      .opt.correct .letter { background: var(--good); border-color: var(--good); color: #fff; }
+      .opt.wrong { border-color: var(--bad); background: var(--bad-bg); }
+      .opt.wrong .letter { background: var(--bad); border-color: var(--bad); color: #fff; }
+      .opt[disabled] { cursor: default; opacity: 1; }
+      .work-note { font-size: .88rem; color: var(--muted); margin: 0; }
+      .model-answer {
+        display: none; margin-top: 10px; background: var(--good-bg);
+        border-radius: 10px; padding: 10px 12px; font-size: .95rem;
+      }
+      .model-answer.show { display: block; }
+      .model-answer .ma-label { font-size: .72rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--good); display: block; margin-bottom: 2px; }
+      .mark-row { display: none; margin-top: 10px; align-items: center; gap: 10px; flex-wrap: wrap; }
+      .mark-row.show { display: flex; }
+      .mark-row label { font-size: .9rem; font-weight: 700; }
+      .mark-row input {
+        width: 76px; padding: 8px 10px; font-size: 1rem; font-weight: 700;
+        border: 1.5px solid var(--line); border-radius: 10px; background: var(--card);
+        color: var(--ink); text-align: center;
+      }
+      .mark-row .of { color: var(--muted); font-size: .9rem; }
+      .section-banner {
+        display: flex; justify-content: space-between; align-items: baseline; gap: 10px;
+        margin: 22px 0 10px; padding-bottom: 6px; border-bottom: 2px solid var(--gold);
+      }
+      .section-banner h3 { margin: 0; font-size: 1.12rem; color: var(--navy); }
+      @media (prefers-color-scheme: dark) { .section-banner h3 { color: var(--ink); } }
+      .section-banner .marks { font-size: .85rem; color: var(--muted); font-weight: 700; white-space: nowrap; }
+      .progress-line { font-size: .85rem; color: var(--muted); margin: 10px 0 0; }
+      .progress-line b { color: var(--ink); }
+
+      /* ---------- Report ---------- */
+      .score-hero { text-align: center; padding: 26px 18px; }
+      .score-big { font-family: Georgia, serif; font-size: 3.2rem; font-weight: 700; color: var(--navy); line-height: 1; }
+      @media (prefers-color-scheme: dark) { .score-big { color: var(--gold-bright); } }
+      .score-big small { font-size: 1.4rem; color: var(--muted); }
+      .band {
+        display: inline-block; margin-top: 12px; border-radius: 999px; padding: 7px 16px;
+        font-weight: 800; font-size: .95rem;
+      }
+      .band-excellent { background: var(--good-bg); color: var(--good); }
+      .band-good { background: var(--gold-pale); color: #7a5f14; }
+      @media (prefers-color-scheme: dark) { .band-good { color: var(--gold-bright); } }
+      .band-revise { background: var(--bad-bg); color: var(--bad); }
+      .band-msg { color: var(--ink-soft); margin: 12px auto 0; max-width: 32em; font-size: .95rem; }
+      .score-table { width: 100%; border-collapse: collapse; margin-top: 6px; }
+      .score-table td { padding: 10px 4px; border-bottom: 1px solid var(--line); font-size: .98rem; }
+      .score-table td:last-child { text-align: right; font-weight: 800; font-variant-numeric: tabular-nums; }
+      .score-table tr.total td { border-bottom: none; font-size: 1.08rem; }
+      .verdict { font-size: .9rem; font-weight: 700; }
+      .verdict.ok { color: var(--good); }
+      .verdict.no { color: var(--bad); }
+      .verdict.skip { color: var(--muted); }
+
+      /* ---------- Practice & syllabus ---------- */
+      .ex-q { font-weight: 600; margin: 0 0 8px; overflow-wrap: anywhere; }
+      .ex-a { display: none; margin-top: 8px; color: var(--good); font-weight: 600; background: var(--good-bg); border-radius: 10px; padding: 10px 12px; }
+      .ex-a.show { display: block; }
+      .reveal-btn {
+        background: none; border: 1.5px solid var(--gold); color: var(--gold);
+        border-radius: 999px; padding: 7px 16px; font-weight: 700; font-size: .88rem; min-height: 40px;
+      }
+      @media (prefers-color-scheme: dark) { .reveal-btn { color: var(--gold-bright); } }
+      .fam-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+      .fam-head h3 { margin: 0; font-size: 1.08rem; }
+      .fam-head .tested { font-size: .8rem; font-weight: 700; color: var(--gold); white-space: nowrap; }
+      .syl p { margin: 0 0 6px; font-size: .95rem; color: var(--ink-soft); }
+      .syl p b { color: var(--ink); }
+
+      /* ---------- Footer / misc ---------- */
+      .teacher-bar {
+        margin: 26px 0 8px; background: var(--card); border: 1px solid var(--line);
+        border-radius: var(--radius); padding: 16px 18px; box-shadow: var(--shadow);
+        display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between;
+      }
+      .teacher-bar p { margin: 0; font-size: .95rem; }
+      footer.site { padding: 14px 0 20px; color: var(--muted); font-size: .82rem; text-align: center; }
+      .modal-back {
+        display: none; position: fixed; inset: 0; z-index: 60;
+        background: rgba(4, 14, 26, .6); align-items: flex-end; justify-content: center;
+      }
+      .modal-back.show { display: flex; }
+      .modal {
+        background: var(--card); color: var(--ink); width: 100%; max-width: 780px;
+        border-radius: 18px 18px 0 0; padding: 22px 18px calc(18px + env(safe-area-inset-bottom));
+      }
+      .modal h3 { margin: 0 0 8px; font-size: 1.15rem; }
+      .modal p { margin: 0 0 16px; color: var(--ink-soft); font-size: .95rem; }
+      .modal .row { display: flex; gap: 10px; }
+      .modal .row .btn { flex: 1; }
+      .toast {
+        position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(84px + env(safe-area-inset-bottom));
+        background: var(--navy); color: #fff; border-radius: 999px; padding: 10px 18px;
+        font-size: .9rem; font-weight: 600; z-index: 70; display: none; box-shadow: var(--shadow);
+        max-width: calc(100vw - 32px); text-align: center;
+      }
+      .toast.show { display: block; }
+      @media (prefers-reduced-motion: no-preference) {
+        .view.active { animation: fadein .18s ease-out; }
+        @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+      }
+    </style>
+  </head>
+  <body>
+
+  <!-- ================= HOME ================= -->
+  <div class="view active" id="view-home">
+    <div class="hero">
+      <div class="wrap">
+        <p class="kicker">Matric Mathematics · Class 9 &amp; 10</p>
+        <h1>Sit the paper before the board does.</h1>
+        <p class="lede">Shaheen Academy teaches you the topics for free. This simulator does the other half: it sits you down in real board-exam conditions — 3 hours on the clock, 50 marks, no book, no phone — and marks you.</p>
+        <div class="hero-stats">
+          <span>5 full mock papers</span>
+          <span>50 marks each</span>
+          <span>3-hour timer</span>
+          <span>25 practice exercises</span>
+        </div>
+        <div class="cta-row">
+          <button class="btn btn-gold" data-start-paper="0">Start Paper 1 — free</button>
+          <button class="btn btn-ghost" data-goto="practice">Practise first</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="wrap">
+      <section class="block">
+        <div class="sec-head"><h2>How it works</h2></div>
+        <div class="card">
+          <div class="steps">
+            <div class="step"><div class="num">1</div><p><b>Learn the topic.</b> Check the syllabus page — every Class 9–10 topic family, the board chapters it covers, and what you must be able to do.</p></div>
+            <div class="step"><div class="num">2</div><p><b>Practise the exercises.</b> 25 short exercises, one idea at a time, each with its answer underneath. Do them without looking first.</p></div>
+            <div class="step"><div class="num">3</div><p><b>Sit the paper.</b> Pick a paper and start the 3-hour clock. Section A multiple-choice is marked automatically as soon as you submit.</p></div>
+            <div class="step"><div class="num">4</div><p><b>Mark B &amp; C yourself.</b> Work Sections B and C on paper, then compare with the model answers and award your marks honestly — exactly how the pack's answer key works.</p></div>
+          </div>
+          <p style="margin:14px 0 0; font-size:.95rem; color:var(--ink-soft);"><b>The bands:</b> 40+ is excellent, 30–39 is good, below 30 means revise that paper's topics and try again. Paper 5 is a mixed revision paper — save it for last, a week before the exam.</p>
+        </div>
+      </section>
+
+      <section class="block">
+        <div class="sec-head"><h2>The 5 papers</h2><span class="note">50 marks · 3 hours each</span></div>
+        <div id="home-papers"></div>
+        <div id="home-unlock"></div>
+      </section>
+
+      <section class="block">
+        <div class="sec-head"><h2>Your teacher</h2></div>
+        <div class="card">
+          <h3 class="serif" style="margin:0 0 6px; font-size:1.2rem;">Dr Saghir Ahmad</h3>
+          <p style="margin:0; color:var(--ink-soft); font-size:.97rem;">Psychologist, educationist and author — and a mathematics and statistics teacher with almost 30 years in the classroom. Every question, exercise and model answer in this simulator comes from his Matric Mathematics Study Pack, written and worked out by hand for Class 9 &amp; 10 board students in Pakistan.</p>
+        </div>
+      </section>
+
+      <div class="teacher-bar">
+        <p><b>Stuck on a topic?</b> Learn it free at Shaheen Academy — or study 1-to-1 with Dr Ahmad.</p>
+        <a class="btn btn-navy" href="mailto:leaderoftime786@gmail.com?subject=Matric%20Maths%20tuition%20enquiry">Need a teacher?</a>
+      </div>
+      <footer class="site">Matric Maths Exam Simulator · Practice material in the board exam pattern, for personal and classroom use.<br/>Not affiliated with any board or university.</footer>
+    </div>
+  </div>
+
+  <!-- ================= PAPERS ================= -->
+  <div class="view" id="view-papers">
+    <div class="wrap">
+      <section class="block">
+        <div class="sec-head"><h2>Exam papers</h2><span class="note">Tap a paper to begin</span></div>
+        <div class="card" style="padding:14px 18px;">
+          <p style="margin:0; font-size:.93rem; color:var(--ink-soft);"><b>Exam conditions:</b> 3 hours, attempt all questions. Section A — 10 multiple-choice (10 marks). Section B — 6 short questions (18 marks). Section C — 3 long questions (22 marks). Keep rough paper and a pen beside you for Sections B and C.</p>
+        </div>
+        <div id="papers-list"></div>
+        <div id="papers-unlock"></div>
+      </section>
+      <div class="teacher-bar">
+        <p><b>Need a teacher?</b> 1-to-1 online maths and statistics tuition with Dr Saghir Ahmad.</p>
+        <a class="btn btn-navy" href="mailto:leaderoftime786@gmail.com?subject=Matric%20Maths%20tuition%20enquiry">Email to enquire</a>
+      </div>
+      <footer class="site">Practice material only — not affiliated with any board or university.</footer>
+    </div>
+  </div>
+
+  <!-- ================= EXAM ================= -->
+  <div class="view" id="view-exam">
+    <div class="exam-top">
+      <div class="wrap">
+        <div class="row">
+          <div>
+            <div class="ptitle" id="exam-title">Paper</div>
+            <div class="sub" id="exam-sub">Section A is marked automatically</div>
+          </div>
+          <div class="timer" id="exam-timer">3:00:00</div>
+          <button class="icon-btn" id="btn-pause">Pause</button>
+        </div>
+      </div>
+    </div>
+    <div class="wrap">
+      <p class="progress-line" id="exam-progress"></p>
+      <div id="exam-body"></div>
+      <div style="display:flex; gap:10px; margin:18px 0 6px; flex-wrap:wrap;">
+        <button class="btn btn-gold" id="btn-submit" style="flex:1;">Submit paper</button>
+        <button class="btn btn-ghost" id="btn-quit">Leave exam</button>
+      </div>
+      <p class="work-note" style="margin-bottom:20px;">Submitting ends the clock. You will then mark Sections B and C against the model answers.</p>
+    </div>
+  </div>
+
+  <!-- ================= REPORT ================= -->
+  <div class="view" id="view-report">
+    <div class="wrap">
+      <section class="block">
+        <div class="sec-head"><h2>Your result</h2></div>
+        <div class="card score-hero">
+          <div class="score-big"><span id="rep-total">0</span><small> / 50</small></div>
+          <div><span class="band" id="rep-band"></span></div>
+          <p class="band-msg" id="rep-msg"></p>
+          <table class="score-table">
+            <tr><td>Section A — Multiple choice (auto-marked)</td><td id="rep-a">0 / 10</td></tr>
+            <tr><td>Section B — Short questions (self-marked)</td><td id="rep-b">0 / 18</td></tr>
+            <tr><td>Section C — Long questions (self-marked)</td><td id="rep-c">0 / 22</td></tr>
+            <tr class="total"><td>Total</td><td id="rep-t2">0 / 50</td></tr>
+          </table>
+          <p class="progress-line" id="rep-best" style="text-align:left;"></p>
+        </div>
+        <div id="rep-review"></div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin:16px 0 6px;">
+          <button class="btn btn-navy" id="btn-again" style="flex:1;">Sit this paper again</button>
+          <button class="btn btn-ghost" data-goto="papers" style="flex:1;">All papers</button>
+        </div>
+      </section>
+      <div class="teacher-bar">
+        <p><b>Want this score higher?</b> 1-to-1 tuition works on exactly the topics you lost marks on.</p>
+        <a class="btn btn-navy" href="mailto:leaderoftime786@gmail.com?subject=Matric%20Maths%20tuition%20enquiry">Need a teacher?</a>
+      </div>
+      <footer class="site">Practice material only — not affiliated with any board or university.</footer>
+    </div>
+  </div>
+
+  <!-- ================= PRACTICE ================= -->
+  <div class="view" id="view-practice">
+    <div class="wrap">
+      <section class="block">
+        <div class="sec-head"><h2>Practice exercises</h2><span class="note">All 25 free</span></div>
+        <div class="card" style="padding:14px 18px;">
+          <p style="margin:0; font-size:.93rem; color:var(--ink-soft);">One idea at a time. Work each exercise out first — on paper or in your head — then tap <b>Show answer</b> to check yourself.</p>
+        </div>
+        <div id="practice-list"></div>
+      </section>
+      <div class="teacher-bar">
+        <p><b>Finding these hard?</b> That is what tuition is for — patient, step by step.</p>
+        <a class="btn btn-navy" href="mailto:leaderoftime786@gmail.com?subject=Matric%20Maths%20tuition%20enquiry">Need a teacher?</a>
+      </div>
+      <footer class="site">Practice material only — not affiliated with any board or university.</footer>
+    </div>
+  </div>
+
+  <!-- ================= SYLLABUS ================= -->
+  <div class="view" id="view-syllabus">
+    <div class="wrap">
+      <section class="block">
+        <div class="sec-head"><h2>Syllabus — Class 9 &amp; 10</h2></div>
+        <p style="margin:0 0 14px; color:var(--ink-soft); font-size:.95rem;">Grouped by topic family, as on Math is Fun (mathsisfun.com). Each family names the board chapters it covers, what you must be able to do, and the paper that tests it.</p>
+        <div id="syllabus-list"></div>
+      </section>
+      <div class="teacher-bar">
+        <p><b>Need a teacher</b> for any of these topics?</p>
+        <a class="btn btn-navy" href="mailto:leaderoftime786@gmail.com?subject=Matric%20Maths%20tuition%20enquiry">Email Dr Ahmad</a>
+      </div>
+      <footer class="site">Practice material only — not affiliated with any board or university.</footer>
+    </div>
+  </div>
+
+  <!-- ================= TAB BAR ================= -->
+  <nav class="tabbar" aria-label="Main">
+    <div class="inner">
+      <button data-goto="home" class="on" aria-label="Home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
+        Home
+      </button>
+      <button data-goto="papers" aria-label="Exam papers">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        Exam
+      </button>
+      <button data-goto="practice" aria-label="Practice exercises">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+        Practice
+      </button>
+      <button data-goto="syllabus" aria-label="Syllabus">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5Z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/></svg>
+        Syllabus
+      </button>
+    </div>
+  </nav>
+
+  <!-- ================= MODALS & TOAST ================= -->
+  <div class="modal-back" id="modal-quit">
+    <div class="modal">
+      <h3>Leave this exam?</h3>
+      <p>Your answers in this attempt will be lost and the clock will stop. Your saved best score is not affected.</p>
+      <div class="row">
+        <button class="btn btn-ghost" id="quit-stay">Keep going</button>
+        <button class="btn btn-gold" id="quit-leave">Leave exam</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal-back" id="modal-submit">
+    <div class="modal">
+      <h3>Submit this paper?</h3>
+      <p id="submit-msg">The clock will stop and Section A will be marked. Then you mark Sections B and C against the model answers.</p>
+      <div class="row">
+        <button class="btn btn-ghost" id="submit-back">Not yet</button>
+        <button class="btn btn-gold" id="submit-yes">Submit</button>
+      </div>
+    </div>
+  </div>
+  <div class="toast" id="toast" role="status"></div>
+
+<script>
+"use strict";
+/* =====================================================================
+   CONTENT — transcribed verbatim from the Matric Mathematics Study Pack
+   source (build_mock_tests.py): syllabus, 25 exercises, 5 mock papers.
+   MCQ format: [question, [optionA, optionB, optionC, optionD], correctIndex]
+   ===================================================================== */
+var SYLLABUS = [
+ ["1. Numbers",
+  "Real numbers; complex numbers; surds and indices; logarithms; scientific notation.",
+  "tell rational from irrational numbers; simplify surds; use the laws of indices and logarithms; rationalise a denominator; write numbers in standard form.",
+  "Paper 1"],
+ ["2. Algebra",
+  "Algebraic expressions and manipulation; factorisation; matrices and determinants; linear equations and inequalities; quadratic equations; variation; sets and functions; partial fractions.",
+  "expand and factorise; add, multiply and invert matrices; solve linear and quadratic equations; find the sum and product of roots; work with direct and inverse variation.",
+  "Papers 2 and 3"],
+ ["3. Geometry",
+  "Practical geometry and constructions; coordinate geometry; theorems of chords, tangents and circles; mensuration.",
+  "find distances, midpoints and gradients; write the equation of a straight line; use circle theorems; find areas and perimeters.",
+  "Paper 4"],
+ ["4. Trigonometry",
+  "Ratios in right-angled triangles (SOHCAHTOA); standard angles 30°, 45°, 60°; trigonometric identities; heights and distances.",
+  "find an unknown side or angle; prove identities such as sin²θ + cos²θ = 1; solve a height-and-distance problem.",
+  "Paper 4"],
+ ["5. Data & Statistics",
+  "Frequency tables and graphs; mean, median, mode and range; cumulative frequency; basic probability.",
+  "read a frequency table; calculate mean, median and mode; find the range of a data set.",
+  "Paper 3"]
+];
+
+var EXERCISES = [
+ ["Numbers, Matrices & Logarithms", [
+  ["Simplify: 5³ × 5² ÷ 5⁴", "5^(3+2−4) = 5¹ = 5"],
+  ["Find the determinant of [[4, 2], [3, 5]].", "4×5 − 2×3 = 20 − 6 = 14"],
+  ["If log₃ x = 4, find x.", "x = 3⁴ = 81"],
+  ["Rationalise the denominator: 2/√5", "2√5/5"],
+  ["Write 0.00045 in scientific notation.", "4.5 × 10⁻⁴"]
+ ]],
+ ["Algebra & Quadratic Equations", [
+  ["Factorise: x² + 9x + 20", "(x + 4)(x + 5)"],
+  ["Solve: x² − 10x + 21 = 0", "(x − 3)(x − 7) = 0, so x = 3 or x = 7"],
+  ["If x − 1/x = 3, find x² + 1/x².", "x² + 1/x² = (x − 1/x)² + 2 = 9 + 2 = 11"],
+  ["Find the roots of 2x² + 5x − 3 = 0.", "(2x − 1)(x + 3) = 0, so x = 1/2 or x = −3"],
+  ["Simplify: (x² − 16) ÷ (x + 4)", "x − 4"]
+ ]],
+ ["Equations, Variation, Sets & Statistics", [
+  ["Solve: (2x − 1)/3 = 5", "2x − 1 = 15, so x = 8"],
+  ["If y ∝ x² and y = 36 when x = 3, find y when x = 5.", "k = 36/9 = 4, so y = 4 × 25 = 100"],
+  ["Find the mean of 12, 18, 24, 30.", "(12 + 18 + 24 + 30) ÷ 4 = 84 ÷ 4 = 21"],
+  ["If A = {2, 4, 6, 8} and B = {3, 6, 9}, find A ∪ B.", "{2, 3, 4, 6, 8, 9}"],
+  ["Find the median of 8, 12, 15, 20, 25, 30.", "(15 + 20) ÷ 2 = 17.5"]
+ ]],
+ ["Trigonometry & Coordinate Geometry", [
+  ["If cos θ = 12/13 and θ is acute, find sin θ.", "sin θ = 5/13"],
+  ["Evaluate: sin²45° + cos²45°", "1"],
+  ["Find the distance between (−2, 3) and (2, 6).", "√(16 + 9) = 5 units"],
+  ["Find the midpoint of (5, −1) and (−3, 7).", "((5 − 3)/2, (−1 + 7)/2) = (1, 3)"],
+  ["Find the slope of the line joining (2, 5) and (6, 13).", "(13 − 5) ÷ (6 − 2) = 8 ÷ 4 = 2"]
+ ]],
+ ["Mixed Revision", [
+  ["Simplify: (2/3)⁻²", "(3/2)² = 9/4"],
+  ["Find the 8th term of the AP 5, 9, 13, …", "a + 7d = 5 + 7 × 4 = 33"],
+  ["A number increased by 15% becomes 92. Find the number.", "92 ÷ 1.15 = 80"],
+  ["Find the LCM of 15 and 20.", "60"],
+  ["Find the simple interest on Rs 4,000 at 6% for 3 years.", "4000 × 0.06 × 3 = Rs 720"]
+ ]]
+];
+</script>
+<script>
+"use strict";
+var PAPERS = [
+ { title: "Paper 1 — Number Systems, Matrices & Logarithms",
+   mcq: [
+    ["The additive inverse of −7 is:", ["7", "−7", "1/7", "0"], 0],
+    ["If A = [[2, 3], [1, 4]], then det(A) =", ["11", "5", "−5", "8"], 1],
+    ["log₁₀ 1000 =", ["2", "3", "10", "100"], 1],
+    ["Which of the following is an irrational number?", ["2/3", "√9", "√2", "0.5"], 2],
+    ["(3²)³ =", ["3⁵", "3⁶", "6³", "9²"], 1],
+    ["The multiplicative inverse of 4/5 is:", ["−4/5", "5/4", "4/5", "−5/4"], 1],
+    ["If log x = 2 (base 10), then x =", ["10", "20", "100", "200"], 2],
+    ["The transpose of [[1, 2], [3, 4]] is:", ["[[1, 2], [3, 4]]", "[[1, 3], [2, 4]]", "[[4, 3], [2, 1]]", "[[2, 1], [4, 3]]"], 1],
+    ["√144 =", ["12", "14", "16", "24"], 0],
+    ["If A + B = [[5, 3], [2, 6]] and A = [[2, 1], [1, 3]], then B =", ["[[3, 2], [1, 3]]", "[[7, 4], [3, 9]]", "[[3, 1], [2, 3]]", "[[2, 3], [1, 3]]"], 0]
+   ],
+   short: [
+    ["Simplify: (2³ × 2⁴) ÷ 2²", "2⁵ = 32"],
+    ["Find x: log₂ x = 5", "x = 2⁵ = 32"],
+    ["If A = [[3, 1], [2, 5]], find A + Aᵀ.", "Aᵀ = [[3, 2], [1, 5]], so A + Aᵀ = [[6, 3], [3, 10]]"],
+    ["Rationalise the denominator: 1/√3", "√3/3"],
+    ["Solve: 3x − 7 = 11", "3x = 18, so x = 6"],
+    ["Find the HCF of 24 and 36.", "12"]
+   ],
+   longq: [
+    ["Solve the simultaneous equations: 2x + y = 7 and x − y = 2.",
+     "Adding the equations: 3x = 9, so x = 3. Then y = 7 − 2(3) = 1. Solution: x = 3, y = 1."],
+    ["If A = [[1, 2], [3, 4]] and B = [[2, 0], [1, 3]], find AB.",
+     "AB = [[1×2 + 2×1, 1×0 + 2×3], [3×2 + 4×1, 3×0 + 4×3]] = [[4, 6], [10, 12]]."],
+    ["Using log 2 = 0.3010 and log 3 = 0.4771, find log 6.",
+     "log 6 = log (2 × 3) = log 2 + log 3 = 0.3010 + 0.4771 = 0.7781."]
+   ] },
+ { title: "Paper 2 — Algebra: Factorisation & Quadratic Equations",
+   mcq: [
+    ["x² − 9 =", ["(x − 3)²", "(x − 3)(x + 3)", "(x + 3)²", "(x − 9)(x + 1)"], 1],
+    ["The factors of x² + 5x + 6 are:", ["(x + 1)(x + 6)", "(x + 2)(x + 3)", "(x − 2)(x − 3)", "(x + 6)(x + 1)"], 1],
+    ["The roots of x² − 5x + 6 = 0 are:", ["2 and 3", "−2 and −3", "1 and 6", "−1 and −6"], 0],
+    ["If x + 1/x = 5, then x² + 1/x² =", ["23", "25", "27", "21"], 0],
+    ["The HCF of x² − 4 and x² + 4x + 4 is:", ["x − 2", "x + 2", "x² − 4", "(x + 2)²"], 1],
+    ["(a + b)² =", ["a² + b²", "a² + 2ab + b²", "a² − 2ab + b²", "(a − b)²"], 1],
+    ["The discriminant of 2x² − 4x + 1 = 0 is:", ["8", "24", "0", "−8"], 0],
+    ["Simplify: (x² − 1) ÷ (x − 1)", ["x − 1", "x + 1", "x² + 1", "1"], 1],
+    ["If (x − 2) is a factor of x² + kx + 6, find k.", ["5", "−5", "2", "−2"], 1],
+    ["The sum of the roots of 3x² − 6x + 2 = 0 is:", ["2", "−2", "6", "2/3"], 0]
+   ],
+   short: [
+    ["Factorise: 4x² − 25", "(2x − 5)(2x + 5)"],
+    ["Solve: x² − 7x + 12 = 0", "(x − 3)(x − 4) = 0, so x = 3 or x = 4"],
+    ["Simplify: (a² − b²) ÷ (a + b)", "a − b"],
+    ["If x = 2, find the value of x³ − 3x + 1.", "8 − 6 + 1 = 3"],
+    ["Find the product of the roots of x² + 4x − 5 = 0.", "c/a = −5"],
+    ["Solve: 2x + 5 = 3x − 1", "x = 6"]
+   ],
+   longq: [
+    ["Solve by factorisation: 2x² − 7x + 3 = 0.",
+     "2x² − 6x − x + 3 = 2x(x − 3) − 1(x − 3) = (2x − 1)(x − 3) = 0, so x = 1/2 or x = 3."],
+    ["If the roots of x² + px + 12 = 0 are 3 and 4, find p.",
+     "Sum of roots = 3 + 4 = 7 = −p, so p = −7. (Check: product = 12 ✓)"],
+    ["The length of a rectangle is 3 m more than its width. Its area is 40 m². Find its dimensions.",
+     "Let width = x m, length = (x + 3) m. x(x + 3) = 40 → x² + 3x − 40 = 0 → (x + 8)(x − 5) = 0 → x = 5. Width 5 m, length 8 m."]
+   ] },
+ { title: "Paper 3 — Linear Equations, Variation, Sets & Statistics",
+   mcq: [
+    ["The solution of 5x − 3 = 2x + 9 is:", ["3", "4", "6", "12"], 1],
+    ["If y varies directly as x and y = 12 when x = 4, find y when x = 7.", ["14", "21", "28", "35"], 1],
+    ["The mean of 5, 8, 12, 15, 20 is:", ["10", "12", "15", "11"], 1],
+    ["The median of 3, 7, 9, 12, 15 is:", ["7", "9", "12", "10"], 1],
+    ["If A = {1, 2, 3} and B = {2, 3, 4}, then A ∩ B =", ["{1, 2, 3, 4}", "{2, 3}", "{1, 4}", "{3}"], 1],
+    ["The range of the data 4, 9, 15, 22, 30 is:", ["26", "22", "30", "34"], 0],
+    ["If f(x) = 2x + 3, then f(4) =", ["8", "11", "14", "7"], 1],
+    ["The mode of 2, 3, 3, 5, 7, 3, 9 is:", ["2", "3", "5", "7"], 1],
+    ["Which of the following is a function?", ["{(1, 2), (2, 3), (1, 4)}", "{(1, 2), (2, 3), (3, 4)}", "{(1, 1), (1, 2)}", "{(2, 2), (2, 3)}"], 1],
+    ["If x : y = 3 : 4 and x + y = 28, then x =", ["12", "16", "14", "9"], 0]
+   ],
+   short: [
+    ["Find the mean of the first five natural numbers.", "(1 + 2 + 3 + 4 + 5) ÷ 5 = 3"],
+    ["Solve: (x/2) + 3 = 7", "x/2 = 4, so x = 8"],
+    ["If A = {a, b, c}, how many subsets does A have?", "2³ = 8 subsets"],
+    ["The ages of 4 boys are 12, 14, 16 and 18 years. Find their mean age.", "(12 + 14 + 16 + 18) ÷ 4 = 15 years"],
+    ["If y ∝ 1/x and y = 6 when x = 2, find y when x = 3.", "k = 12, so y = 12/3 = 4"],
+    ["Find f(0) if f(x) = x² − 3x + 2.", "f(0) = 2"]
+   ],
+   longq: [
+    ["The sum of two numbers is 25 and their difference is 7. Find the numbers.",
+     "x + y = 25, x − y = 7. Adding: 2x = 32 → x = 16, y = 9."],
+    ["The marks of 8 students are 45, 52, 60, 48, 55, 62, 50, 58. Find the mean and the median.",
+     "Sum = 430. Mean = 430 ÷ 8 = 53.75. In order: 45, 48, 50, 52, 55, 58, 60, 62. Median = (52 + 55) ÷ 2 = 53.5."],
+    ["Draw the graph of y = 2x + 1 for x = −2 to 2, and use it to find y when x = 3.",
+     "Table: (−2, −3), (−1, −1), (0, 1), (1, 3), (2, 5). The line is straight; when x = 3, y = 2(3) + 1 = 7."]
+   ] },
+ { title: "Paper 4 — Trigonometry & Coordinate Geometry",
+   mcq: [
+    ["sin 30° =", ["1", "1/2", "√3/2", "0"], 1],
+    ["cos 60° =", ["1/2", "√3/2", "1", "0"], 0],
+    ["tan 45° =", ["0", "1", "√3", "1/√3"], 1],
+    ["The distance between (0, 0) and (3, 4) is:", ["5", "7", "12", "25"], 0],
+    ["The midpoint of (2, 3) and (6, 7) is:", ["(4, 5)", "(3, 4)", "(8, 10)", "(4, 4)"], 0],
+    ["sin²θ + cos²θ =", ["0", "1", "2", "tan θ"], 1],
+    ["The gradient of the line joining (1, 2) and (3, 6) is:", ["1", "2", "3", "4"], 1],
+    ["If tan θ = 1, then θ =", ["30°", "45°", "60°", "90°"], 1],
+    ["The point (5, −3) lies in which quadrant?", ["1st", "2nd", "3rd", "4th"], 3],
+    ["cos 90° =", ["0", "1", "−1", "1/2"], 0]
+   ],
+   short: [
+    ["Find the value of sin 60°.", "√3/2"],
+    ["If sin θ = 3/5 and θ is acute, find cos θ.", "cos θ = 4/5"],
+    ["Find the distance between (1, 1) and (4, 5).", "√(9 + 16) = 5 units"],
+    ["Find the slope of the line 2x − y + 3 = 0.", "y = 2x + 3, so slope = 2"],
+    ["Evaluate: tan 60° × cos 30°.", "√3 × (√3/2) = 3/2"],
+    ["Find the area of the triangle with vertices (0, 0), (4, 0) and (0, 3).", "(1/2) × 4 × 3 = 6 square units"]
+   ],
+   longq: [
+    ["Prove that 1 + tan²θ = sec²θ.",
+     "tan θ = sin θ / cos θ, so 1 + tan²θ = 1 + sin²θ/cos²θ = (cos²θ + sin²θ)/cos²θ = 1/cos²θ = sec²θ."],
+    ["A ladder 10 m long leans against a wall, making 60° with the ground. How high up the wall does it reach?",
+     "Height = 10 × sin 60° = 10 × (√3/2) = 5√3 ≈ 8.66 m."],
+    ["Find the equation of the line passing through (2, 3) with slope 4.",
+     "y − 3 = 4(x − 2) → y = 4x − 5."]
+   ] },
+ { title: "Paper 5 — Mixed Revision: Full Syllabus",
+   mcq: [
+    ["The value of 5⁰ + 5¹ is:", ["5", "6", "1", "0"], 1],
+    ["The cube root of 27 is:", ["3", "9", "27", "6"], 0],
+    ["If 2ˣ = 32, then x =", ["4", "5", "6", "16"], 1],
+    ["The LCM of 12 and 18 is:", ["6", "36", "72", "18"], 1],
+    ["15% of 200 is:", ["20", "30", "15", "45"], 1],
+    ["If A = {1, 2}, how many elements does P(A) have?", ["2", "3", "4", "8"], 2],
+    ["The next term of the sequence 2, 5, 8, 11, … is:", ["13", "14", "15", "16"], 1],
+    ["The simple interest on Rs 10,000 at 5% for 2 years is:", ["Rs 500", "Rs 1,000", "Rs 1,500", "Rs 2,000"], 1],
+    ["√50 in simplest form is:", ["5√2", "2√5", "25√2", "10√5"], 0],
+    ["If x² = 49, then x =", ["7", "−7", "±7", "49"], 2]
+   ],
+   short: [
+    ["Simplify: (3/4) ÷ (9/8)", "(3/4) × (8/9) = 24/36 = 2/3"],
+    ["Solve: 4(x − 2) = 12", "x − 2 = 3, so x = 5"],
+    ["Find the 10th term of the AP 3, 7, 11, …", "a + 9d = 3 + 9(4) = 39"],
+    ["Convert 0.75 to a fraction.", "3/4"],
+    ["Find the ratio of 45 minutes to 3 hours.", "45 : 180 = 1 : 4"],
+    ["Find the value of 2³ × 3².", "8 × 9 = 72"]
+   ],
+   longq: [
+    ["A shopkeeper buys an article for Rs 800 and sells it for Rs 960. Find his profit percentage.",
+     "Profit = 960 − 800 = Rs 160. Profit % = (160/800) × 100 = 20%."],
+    ["Solve the simultaneous equations: 3x + 2y = 12 and x + y = 5.",
+     "From the second equation x = 5 − y. Substituting: 3(5 − y) + 2y = 12 → 15 − y = 12 → y = 3, x = 2."],
+    ["The sum of the ages of a father and his son is 50 years. Five years ago, the father's age was 7 times the son's age. Find their present ages.",
+     "Let the son be x years old; the father is (50 − x). Five years ago: (45 − x) = 7(x − 5) → 45 − x = 7x − 35 → 8x = 80 → x = 10. Son 10 years, father 40 years. (Check: 5 years ago, 35 = 7 × 5 ✓)"]
+   ] }
+];
+var LETTERS = ["(a)", "(b)", "(c)", "(d)"];
+var GUMROAD_URL = "https://mindfuldesignes.gumroad.com/l/krfvnw";
+</script>
+<script>
+"use strict";
+/* ================= helpers ================= */
+function $(id) { return document.getElementById(id); }
+function el(tag, cls, text) {
+  var n = document.createElement(tag);
+  if (cls) n.className = cls;
+  if (text != null) n.textContent = text;
+  return n;
+}
+function esc(s) { return String(s); } /* textContent is used everywhere; no HTML injection */
+var store = {
+  get: function (k) { try { var v = localStorage.getItem(k); return v == null ? null : JSON.parse(v); } catch (e) { return null; } },
+  set: function (k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+};
+function bestKey(i) { return "mmes_best_" + i; }
+function getBest(i) { var v = store.get(bestKey(i)); return (typeof v === "number") ? v : null; }
+function toast(msg) {
+  var t = $("toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(toast._h); toast._h = setTimeout(function () { t.classList.remove("show"); }, 2600);
+}
+
+/* ================= navigation ================= */
+var currentView = "home";
+function show(view) {
+  if (exam.active && view !== "exam" && view !== "report") { /* guarded by callers */ }
+  currentView = view;
+  var views = ["home", "papers", "exam", "report", "practice", "syllabus"];
+  views.forEach(function (v) { $("view-" + v).classList.toggle("active", v === view); });
+  var tabs = document.querySelectorAll(".tabbar button");
+  tabs.forEach(function (b) {
+    var g = b.getAttribute("data-goto");
+    b.classList.toggle("on", g === view || (view === "exam" && g === "papers") || (view === "report" && g === "papers"));
+  });
+  window.scrollTo(0, 0);
+}
+document.addEventListener("click", function (e) {
+  var g = e.target.closest("[data-goto]");
+  if (g) {
+    var target = g.getAttribute("data-goto");
+    if (exam.active && currentView === "exam" && target !== "exam") { openModal("modal-quit"); pendingNav = target; return; }
+    show(target);
+    return;
+  }
+  var s = e.target.closest("[data-start-paper]");
+  if (s) { startExam(parseInt(s.getAttribute("data-start-paper"), 10)); }
+});
+
+/* ================= paper cards & unlock ================= */
+function paperCard(i) {
+  var p = PAPERS[i];
+  var card = el("div", "card paper-card");
+  var badge = el("div", "paper-badge");
+  badge.appendChild(el("span", "pn", String(i + 1)));
+  badge.appendChild(el("span", "pl", "Paper"));
+  card.appendChild(badge);
+  var body = el("div");
+  body.style.flex = "1";
+  body.appendChild(el("h3", null, p.title));
+  body.appendChild(el("p", "paper-meta", "Time: 3 hours  •  Total marks: 50  •  Attempt all questions"));
+  var actions = el("div", "paper-actions");
+  if (i === 0) {
+    actions.appendChild(el("span", "tag tag-free", "Free"));
+    var btn = el("button", "btn btn-navy", "Start exam");
+    btn.setAttribute("data-start-paper", "0");
+    actions.appendChild(btn);
+  } else {
+    actions.appendChild(el("span", "tag tag-lock", "Locked"));
+    var ub = el("a", "btn btn-gold", "Unlock — $5");
+    ub.href = GUMROAD_URL; ub.target = "_blank"; ub.rel = "noopener";
+    actions.appendChild(ub);
+  }
+  var best = getBest(i);
+  if (best != null) {
+    var b = el("span", "best");
+    b.appendChild(document.createTextNode("Best score on this device: "));
+    var bb = el("b", null, best + " / 50");
+    b.appendChild(bb);
+    actions.appendChild(b);
+  }
+  body.appendChild(actions);
+  card.appendChild(body);
+  return card;
+}
+function unlockCard() {
+  var c = el("div", "card unlock");
+  c.appendChild(el("h3", null, "Unlock Papers 2–5"));
+  var priceRow = el("p");
+  priceRow.appendChild(el("span", "price", "$5"));
+  priceRow.appendChild(document.createTextNode("  — one payment, yours to keep. The Matric Maths Study Pack on Gumroad:"));
+  c.appendChild(priceRow);
+  var ul = el("ul");
+  ["All 5 mock papers in printable form — sit Papers 2, 3, 4 and 5 from the pack, in the same 3-hour exam conditions",
+   "The full syllabus and all 25 practice exercises with answers",
+   "The complete answer key with worked answers for every question",
+   "Teachers and parents may photocopy the pack pages for their own class or child"
+  ].forEach(function (t) { ul.appendChild(el("li", null, t)); });
+  c.appendChild(ul);
+  var a = el("a", "btn btn-gold btn-block", "Get the Study Pack on Gumroad — $5");
+  a.href = GUMROAD_URL; a.target = "_blank"; a.rel = "noopener";
+  c.appendChild(a);
+  var note = el("p", null, "Paper 1 and all 25 practice exercises stay free here, forever.");
+  note.style.margin = "10px 0 0"; note.style.fontSize = ".85rem";
+  c.appendChild(note);
+  return c;
+}
+function renderPaperLists() {
+  ["home-papers", "papers-list"].forEach(function (id) {
+    var host = $(id); host.innerHTML = "";
+    for (var i = 0; i < PAPERS.length; i++) host.appendChild(paperCard(i));
+  });
+  ["home-unlock", "papers-unlock"].forEach(function (id) {
+    var host = $(id); host.innerHTML = ""; host.appendChild(unlockCard());
+  });
+}
+
+/* ================= practice ================= */
+function renderPractice() {
+  var host = $("practice-list"); host.innerHTML = "";
+  EXERCISES.forEach(function (fam) {
+    var card = el("div", "card");
+    var head = el("div", "fam-head");
+    head.appendChild(el("h3", "serif", fam[0]));
+    head.appendChild(el("span", "tested", fam[1].length + " exercises"));
+    card.appendChild(head);
+    fam[1].forEach(function (qa, j) {
+      var wrap = el("div");
+      wrap.style.padding = "12px 0";
+      if (j > 0) wrap.style.borderTop = "1px solid var(--line)";
+      wrap.appendChild(el("p", "ex-q", "E" + (j + 1) + ". " + qa[0]));
+      var btn = el("button", "reveal-btn", "Show answer");
+      var ans = el("div", "ex-a", "Answer: " + qa[1]);
+      btn.addEventListener("click", function () {
+        var open = ans.classList.toggle("show");
+        btn.textContent = open ? "Hide answer" : "Show answer";
+      });
+      wrap.appendChild(btn);
+      wrap.appendChild(ans);
+      card.appendChild(wrap);
+    });
+    host.appendChild(card);
+  });
+}
+
+/* ================= syllabus ================= */
+function renderSyllabus() {
+  var host = $("syllabus-list"); host.innerHTML = "";
+  SYLLABUS.forEach(function (fam) {
+    var card = el("div", "card syl");
+    var head = el("div", "fam-head");
+    head.appendChild(el("h3", "serif", fam[0]));
+    head.appendChild(el("span", "tested", "Tested in " + fam[3]));
+    card.appendChild(head);
+    var p1 = el("p"); p1.appendChild(el("b", null, "Board chapters: ")); p1.appendChild(document.createTextNode(fam[1]));
+    var p2 = el("p"); p2.appendChild(el("b", null, "You must be able to: ")); p2.appendChild(document.createTextNode(fam[2]));
+    var p3 = el("p"); var it = el("i", null, "Tested in " + fam[3] + "."); p3.appendChild(it);
+    card.appendChild(p1); card.appendChild(p2); card.appendChild(p3);
+    var btn = el("button", "btn btn-ghost", "Practise this family");
+    btn.addEventListener("click", function () { show("practice"); });
+    btn.style.marginTop = "6px";
+    card.appendChild(btn);
+    host.appendChild(card);
+  });
+}
+
+/* ================= exam engine ================= */
+var EXAM_SECONDS = 3 * 60 * 60;
+var exam = {
+  active: false, marking: false, paper: -1,
+  answers: [], remaining: EXAM_SECONDS, paused: false,
+  timerId: null, selfB: [], selfC: []
+};
+var pendingNav = null;
+
+function fmtTime(s) {
+  var h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
+  function pad(n) { return (n < 10 ? "0" : "") + n; }
+  return h + ":" + pad(m) + ":" + pad(sec);
+}
+function startExam(i) {
+  if (i > 0) { show("papers"); toast("Paper " + (i + 1) + " is in the Study Pack — unlock it below."); return; }
+  stopTimer();
+  exam.active = true; exam.marking = false; exam.paper = i;
+  exam.answers = PAPERS[i].mcq.map(function () { return -1; });
+  exam.selfB = PAPERS[i].short.map(function () { return ""; });
+  exam.selfC = PAPERS[i].longq.map(function () { return ""; });
+  exam.remaining = EXAM_SECONDS; exam.paused = false;
+  $("exam-title").textContent = PAPERS[i].title;
+  $("exam-sub").textContent = "Time: 3 hours  •  Total marks: 50  •  Attempt all questions";
+  $("btn-pause").textContent = "Pause";
+  $("btn-submit").textContent = "Submit paper";
+  buildExamBody(false);
+  updateTimerUI(); updateProgress();
+  exam.timerId = setInterval(tick, 1000);
+  show("exam");
+}
+function tick() {
+  if (exam.paused || !exam.active || exam.marking) return;
+  exam.remaining--;
+  if (exam.remaining <= 0) {
+    exam.remaining = 0; updateTimerUI();
+    toast("Time is up — your paper has been submitted.");
+    finishExam();
+    return;
+  }
+  updateTimerUI();
+}
+function updateTimerUI() {
+  var t = $("exam-timer");
+  t.textContent = fmtTime(exam.remaining) + (exam.paused ? " ⏸" : "");
+  t.classList.toggle("low", exam.remaining <= 600 && exam.remaining > 0);
+  t.classList.toggle("paused", exam.paused);
+}
+function stopTimer() { if (exam.timerId) { clearInterval(exam.timerId); exam.timerId = null; } }
+$("btn-pause").addEventListener("click", function () {
+  if (!exam.active || exam.marking) return;
+  exam.paused = !exam.paused;
+  $("btn-pause").textContent = exam.paused ? "Resume" : "Pause";
+  updateTimerUI();
+});
+function updateProgress() {
+  var n = exam.answers.filter(function (a) { return a >= 0; }).length;
+  $("exam-progress").innerHTML = "";
+  var b = el("b", null, "Section A: " + n + " of 10 answered.");
+  $("exam-progress").appendChild(b);
+  $("exam-progress").appendChild(document.createTextNode(" Work Sections B and C on your rough paper — you will mark them after you submit."));
+}
+
+function sectionBanner(title, marks) {
+  var d = el("div", "section-banner");
+  d.appendChild(el("h3", "serif", title));
+  d.appendChild(el("span", "marks", marks));
+  return d;
+}
+function buildExamBody(marking) {
+  var p = PAPERS[exam.paper];
+  var host = $("exam-body"); host.innerHTML = "";
+
+  host.appendChild(sectionBanner("Section A — Multiple Choice", "10 × 1 = 10 marks"));
+  p.mcq.forEach(function (q, qi) {
+    var card = el("div", "qcard");
+    card.appendChild(el("p", "qnum", "Question " + (qi + 1)));
+    card.appendChild(el("p", "qtext", q[0]));
+    var opts = el("div", "opts");
+    q[1].forEach(function (optText, oi) {
+      var b = el("button", "opt");
+      var letter = el("span", "letter", LETTERS[oi].replace(/[()]/g, ""));
+      b.appendChild(letter);
+      b.appendChild(document.createTextNode(optText));
+      if (!marking) {
+        if (exam.answers[qi] === oi) b.classList.add("sel");
+        b.addEventListener("click", function () {
+          exam.answers[qi] = oi;
+          var siblings = opts.querySelectorAll(".opt");
+          siblings.forEach(function (s) { s.classList.remove("sel"); });
+          b.classList.add("sel");
+          updateProgress();
+        });
+      } else {
+        b.disabled = true;
+        if (oi === q[2]) b.classList.add("correct");
+        else if (exam.answers[qi] === oi) b.classList.add("wrong");
+        else if (exam.answers[qi] === oi) b.classList.add("sel");
+      }
+      opts.appendChild(b);
+    });
+    card.appendChild(opts);
+    if (marking) {
+      var v = el("p", "verdict");
+      if (exam.answers[qi] === q[2]) { v.className += " ok"; v.textContent = "✓ Correct — 1 mark"; }
+      else if (exam.answers[qi] === -1) { v.className += " skip"; v.textContent = "Not answered — the correct answer is " + LETTERS[q[2]]; }
+      else { v.className += " no"; v.textContent = "✗ Incorrect — the correct answer is " + LETTERS[q[2]]; }
+      v.style.margin = "10px 0 0";
+      card.appendChild(v);
+    }
+    host.appendChild(card);
+  });
+
+  host.appendChild(sectionBanner("Section B — Short Questions", "6 × 3 = 18 marks"));
+  if (!marking) {
+    var noteB = el("p", "work-note", "Write your answers on rough paper, as in the real exam. The model answers appear after you submit.");
+    noteB.style.marginBottom = "10px"; host.appendChild(noteB);
+  }
+  p.short.forEach(function (q, qi) {
+    host.appendChild(writtenCard(q, qi, 10 + qi + 1, 3, "B", marking));
+  });
+
+  host.appendChild(sectionBanner("Section C — Long Questions", "22 marks"));
+  if (!marking) {
+    var noteC = el("p", "work-note", "Write full answers with working on rough paper. The model answers appear after you submit.");
+    noteC.style.marginBottom = "10px"; host.appendChild(noteC);
+  }
+  p.longq.forEach(function (q, qi) {
+    host.appendChild(writtenCard(q, qi, 16 + qi + 1, null, "C", marking));
+  });
+}
+function writtenCard(q, qi, qnum, maxEach, section, marking) {
+  var card = el("div", "qcard");
+  card.appendChild(el("p", "qnum", "Question " + qnum));
+  card.appendChild(el("p", "qtext", q[0]));
+  if (marking) {
+    var ma = el("div", "model-answer show");
+    ma.appendChild(el("span", "ma-label", "Model answer"));
+    ma.appendChild(document.createTextNode(q[1]));
+    card.appendChild(ma);
+    var row = el("div", "mark-row show");
+    row.appendChild(el("label", null, "My mark:"));
+    var input = document.createElement("input");
+    input.type = "number"; input.inputMode = "numeric";
+    input.min = "0"; input.max = section === "B" ? "3" : "22";
+    input.step = section === "B" ? "1" : "0.5";
+    input.placeholder = "0";
+    input.value = section === "B" ? exam.selfB[qi] : exam.selfC[qi];
+    input.setAttribute("aria-label", "Your mark for question " + qnum);
+    input.addEventListener("input", function () {
+      if (section === "B") exam.selfB[qi] = input.value; else exam.selfC[qi] = input.value;
+      updateMarkingTotals();
+    });
+    row.appendChild(input);
+    row.appendChild(el("span", "of", section === "B" ? "out of 3" : "marks (Section C total is out of 22)"));
+    card.appendChild(row);
+  } else {
+    card.appendChild(el("p", "work-note", "✎ Answer on rough paper — " + (section === "B" ? "3 marks" : "long question") + "."));
+  }
+  return card;
+}
+
+/* submit flow */
+$("btn-submit").addEventListener("click", function () {
+  if (!exam.active) return;
+  if (!exam.marking) {
+    var unanswered = exam.answers.filter(function (a) { return a < 0; }).length;
+    $("submit-msg").textContent = unanswered > 0
+      ? "You have " + unanswered + " unanswered multiple-choice question" + (unanswered === 1 ? "" : "s") + ". The clock will stop and Section A will be marked. Then you mark Sections B and C against the model answers."
+      : "The clock will stop and Section A will be marked. Then you mark Sections B and C against the model answers.";
+    openModal("modal-submit");
+  } else {
+    showReport();
+  }
+});
+$("submit-yes").addEventListener("click", function () { closeModal("modal-submit"); finishExam(); });
+$("submit-back").addEventListener("click", function () { closeModal("modal-submit"); });
+$("btn-quit").addEventListener("click", function () { pendingNav = "papers"; openModal("modal-quit"); });
+$("quit-stay").addEventListener("click", function () { closeModal("modal-quit"); pendingNav = null; });
+$("quit-leave").addEventListener("click", function () {
+  closeModal("modal-quit");
+  stopTimer(); exam.active = false; exam.marking = false;
+  var target = pendingNav || "papers"; pendingNav = null;
+  show(target);
+});
+function openModal(id) { $(id).classList.add("show"); }
+function closeModal(id) { $(id).classList.remove("show"); }
+
+function finishExam() {
+  exam.marking = true;
+  stopTimer();
+  $("exam-sub").textContent = "Marking — compare your rough-paper answers with the model answers";
+  $("btn-pause").textContent = "Done";
+  $("btn-submit").textContent = "See my score";
+  var t = $("exam-timer"); t.textContent = "Marking"; t.classList.remove("low");
+  buildExamBody(true);
+  var totals = el("div", "card");
+  totals.id = "marking-totals";
+  $("exam-body").appendChild(totals);
+  updateMarkingTotals();
+  show("exam");
+  toast("Section A marked. Now award your B and C marks honestly.");
+}
+function clampMark(v, max) {
+  var n = parseFloat(v);
+  if (isNaN(n) || n < 0) return 0;
+  return Math.min(n, max);
+}
+function sectionBTotal() {
+  return exam.selfB.reduce(function (s, v) { return s + clampMark(v, 3); }, 0);
+}
+function sectionCTotal() {
+  var raw = exam.selfC.reduce(function (s, v) { return s + clampMark(v, 22); }, 0);
+  return Math.min(raw, 22);
+}
+function sectionATotal() {
+  var p = PAPERS[exam.paper];
+  return p.mcq.reduce(function (s, q, i) { return s + (exam.answers[i] === q[2] ? 1 : 0); }, 0);
+}
+function updateMarkingTotals() {
+  var host = $("marking-totals");
+  if (!host) return;
+  host.innerHTML = "";
+  host.appendChild(el("h3", "serif", "Your running total"));
+  host.style.marginTop = "4px";
+  var tbl = el("table", "score-table");
+  [["Section A (auto-marked)", sectionATotal() + " / 10"],
+   ["Section B (your marks)", sectionBTotal() + " / 18"],
+   ["Section C (your marks)", sectionCTotal() + " / 22"]
+  ].forEach(function (r) {
+    var tr = el("tr");
+    tr.appendChild(el("td", null, r[0]));
+    tr.appendChild(el("td", null, r[1]));
+    tbl.appendChild(tr);
+  });
+  host.appendChild(tbl);
+  host.appendChild(el("p", "work-note", "When every B and C mark is in, tap “See my score” below."));
+}
+
+/* ================= report ================= */
+function showReport() {
+  var a = sectionATotal(), b = sectionBTotal(), c = sectionCTotal();
+  var total = Math.round((a + b + c) * 10) / 10;
+  var totalDisplay = (total % 1 === 0) ? String(total) : total.toFixed(1);
+  exam.active = false; exam.marking = false;
+  $("rep-total").textContent = totalDisplay;
+  $("rep-a").textContent = a + " / 10";
+  $("rep-b").textContent = (b % 1 === 0 ? b : b.toFixed(1)) + " / 18";
+  $("rep-c").textContent = (c % 1 === 0 ? c : c.toFixed(1)) + " / 22";
+  $("rep-t2").textContent = totalDisplay + " / 50";
+  var band = $("rep-band"), msg = $("rep-msg");
+  var paperTitle = PAPERS[exam.paper].title;
+  if (total >= 40) {
+    band.className = "band band-excellent"; band.textContent = "Excellent — 40+";
+    msg.textContent = "Excellent work on " + paperTitle + ". This is board-ready standard. Keep the topics warm and move to the next paper.";
+  } else if (total >= 30) {
+    band.className = "band band-good"; band.textContent = "Good — 30 to 39";
+    msg.textContent = "A good score on " + paperTitle + ". Look through the questions you missed below, fix those topics, and the next attempt should cross 40.";
+  } else {
+    band.className = "band band-revise"; band.textContent = "Below 30 — revise and retry";
+    msg.textContent = "Below 30 on " + paperTitle + " means the topics are not secure yet. Revise this paper's topics in the syllabus and the practice exercises, then sit the paper again.";
+  }
+  var prevBest = getBest(exam.paper);
+  var bestLine = $("rep-best");
+  bestLine.innerHTML = "";
+  if (prevBest == null || total > prevBest) {
+    store.set(bestKey(exam.paper), total);
+    bestLine.appendChild(el("b", null, prevBest == null ? "Best score on this device: " + totalDisplay + " / 50" : "New best score on this device: " + totalDisplay + " / 50 (was " + prevBest + ")"));
+  } else {
+    bestLine.appendChild(document.createTextNode("Best score on this device: "));
+    bestLine.appendChild(el("b", null, prevBest + " / 50"));
+    bestLine.appendChild(document.createTextNode(" — this attempt: " + totalDisplay + "."));
+  }
+  /* Section A review */
+  var review = $("rep-review"); review.innerHTML = "";
+  var head = el("div", "sec-head"); head.style.marginTop = "8px";
+  head.appendChild(el("h2", null, "Section A — question by question"));
+  review.appendChild(head);
+  var p = PAPERS[exam.paper];
+  p.mcq.forEach(function (q, qi) {
+    var card = el("div", "qcard");
+    card.appendChild(el("p", "qnum", "Question " + (qi + 1)));
+    card.appendChild(el("p", "qtext", q[0]));
+    var opts = el("div", "opts");
+    q[1].forEach(function (optText, oi) {
+      var b = el("button", "opt");
+      b.disabled = true;
+      var letter = el("span", "letter", LETTERS[oi].replace(/[()]/g, ""));
+      b.appendChild(letter);
+      b.appendChild(document.createTextNode(optText));
+      if (oi === q[2]) b.classList.add("correct");
+      else if (exam.answers[qi] === oi) b.classList.add("wrong");
+      opts.appendChild(b);
+    });
+    card.appendChild(opts);
+    var v = el("p", "verdict");
+    v.style.margin = "10px 0 0";
+    if (exam.answers[qi] === q[2]) { v.className += " ok"; v.textContent = "✓ Your answer is correct."; }
+    else if (exam.answers[qi] === -1) { v.className += " skip"; v.textContent = "You did not answer. Correct answer: " + LETTERS[q[2]] + " " + q[1][q[2]]; }
+    else { v.className += " no"; v.textContent = "✗ You chose " + LETTERS[exam.answers[qi]] + ". Correct answer: " + LETTERS[q[2]] + " " + q[1][q[2]]; }
+    card.appendChild(v);
+    review.appendChild(card);
+  });
+  renderPaperLists();
+  show("report");
+}
+$("btn-again").addEventListener("click", function () { startExam(exam.paper); });
+
+/* ================= init ================= */
+renderPaperLists();
+renderPractice();
+renderSyllabus();
+</script>
+</body>
+</html>
