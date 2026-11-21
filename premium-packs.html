@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="description" content="Premium Packs by Dr. S. Ahmad — curated collections of his own software, books, planners and learning tools, sold individually on Gumroad." />
+    <link rel="icon" href="data:," />
+    <title>Premium Packs — by Dr. S. Ahmad</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg: #0b0805;
+        --bg-2: #141009;
+        --panel: #1a1409;
+        --panel-2: #211a0e;
+        --line: #3a2d12;
+        --line-soft: #2a2110;
+        --gold: #f2c230;
+        --gold-bright: #ffd94d;
+        --gold-deep: #c99612;
+        --ink: #f5efdd;
+        --ink-2: #cfc4a4;
+        --ink-3: #9a8d6c;
+        --radius: 18px;
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        background:
+          radial-gradient(900px 480px at 50% -120px, rgba(242, 194, 48, 0.14), transparent 65%),
+          radial-gradient(700px 400px at 110% 30%, rgba(242, 194, 48, 0.05), transparent 60%),
+          var(--bg);
+        color: var(--ink);
+        font-family: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+        line-height: 1.6;
+        padding-bottom: 104px;
+      }
+      a { color: var(--gold-bright); }
+      button, a.btn, .nav a { min-height: 44px; }
+
+      .wrap { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+
+      /* ---------- Hero ---------- */
+      .hero { text-align: center; padding: 64px 20px 40px; }
+      .hero .mark {
+        width: 72px; height: 72px; margin: 0 auto 22px;
+        display: grid; place-items: center;
+        background: linear-gradient(145deg, var(--gold-bright), var(--gold-deep));
+        border-radius: 18px;
+        box-shadow: 0 10px 34px rgba(242, 194, 48, 0.35);
+        color: #241a02;
+        font-family: "Cinzel", serif; font-weight: 800; font-size: 2rem;
+      }
+      .pill {
+        display: inline-flex; align-items: center; gap: 10px;
+        border: 1px solid var(--line);
+        background: rgba(242, 194, 48, 0.08);
+        color: var(--gold-bright);
+        padding: 8px 18px; border-radius: 999px;
+        font-size: 0.78rem; font-weight: 700;
+        letter-spacing: 0.22em; text-transform: uppercase;
+      }
+      .pill .dia { color: var(--gold); font-size: 0.65rem; }
+      h1 {
+        font-family: "Cinzel", serif;
+        font-size: clamp(2.4rem, 7vw, 4.2rem);
+        line-height: 1.08; margin: 26px 0 6px;
+        color: var(--gold-bright);
+        letter-spacing: 0.02em;
+      }
+      .hero .byline {
+        font-family: "Cinzel", serif;
+        font-size: clamp(1rem, 3vw, 1.3rem);
+        color: var(--ink); letter-spacing: 0.14em; text-transform: uppercase;
+        margin: 0 0 18px;
+      }
+      .hero p.lede { max-width: 620px; margin: 0 auto; color: var(--ink-2); font-size: 1.05rem; }
+      .hero .stats {
+        display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;
+        margin-top: 30px;
+      }
+      .stat {
+        border: 1px solid var(--line-soft); background: var(--bg-2);
+        border-radius: 12px; padding: 10px 18px; min-width: 118px;
+      }
+      .stat b { display: block; font-size: 1.25rem; color: var(--gold-bright); line-height: 1.2; }
+      .stat span { font-size: 0.78rem; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.12em; }
+
+      /* ---------- Sections ---------- */
+      section { padding: 34px 0 10px; scroll-margin-top: 20px; }
+      .sec-head { text-align: center; margin-bottom: 26px; }
+      .sec-head h2 {
+        font-family: "Cinzel", serif; font-size: clamp(1.6rem, 4.5vw, 2.2rem);
+        margin: 0 0 8px; color: var(--ink); letter-spacing: 0.03em;
+      }
+      .sec-head p { color: var(--ink-2); margin: 0 auto; max-width: 560px; }
+      .rule {
+        width: 120px; height: 3px; margin: 16px auto 0; border-radius: 2px;
+        background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      }
+
+      /* ---------- Pack cards ---------- */
+      .grid {
+        display: grid; gap: 18px;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      }
+      .pack {
+        background: linear-gradient(180deg, var(--panel-2), var(--panel));
+        border: 1px solid var(--line-soft);
+        border-radius: var(--radius);
+        overflow: hidden;
+        display: flex; flex-direction: column;
+      }
+      .pack-top { padding: 24px 24px 0; text-align: center; }
+      .pack-icon {
+        width: 84px; height: 84px; margin: 0 auto 16px;
+        display: grid; place-items: center;
+        background: radial-gradient(circle at 50% 35%, #2e2410, #171106);
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        box-shadow: inset 0 0 24px rgba(242, 194, 48, 0.12);
+      }
+      .pack-icon svg { width: 42px; height: 42px; stroke: var(--gold); fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+      .pack h3 {
+        font-family: "Cinzel", serif; font-size: 1.25rem; margin: 0 0 8px;
+        color: var(--ink); letter-spacing: 0.02em;
+      }
+      .pack .desc { color: var(--ink-2); font-size: 0.95rem; margin: 0 0 6px; }
+      .pack .count { color: var(--gold); font-size: 0.8rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
+      .pack-body { padding: 18px 24px 24px; margin-top: auto; }
+      .open-btn {
+        width: 100%; border: 0; cursor: pointer;
+        background: linear-gradient(180deg, var(--gold-bright), var(--gold-deep));
+        color: #241a02; font-family: inherit; font-weight: 800; font-size: 1rem;
+        border-radius: 12px; padding: 13px 16px;
+        display: flex; align-items: center; justify-content: center; gap: 10px;
+        box-shadow: 0 8px 22px rgba(242, 194, 48, 0.25);
+      }
+      .open-btn .chev { transition: transform 0.25s ease; font-size: 0.8rem; }
+      .pack.open .open-btn .chev { transform: rotate(180deg); }
+      .items { display: none; margin-top: 18px; }
+      .pack.open .items { display: block; }
+      .item {
+        display: flex; align-items: center; gap: 12px;
+        padding: 12px 0; border-top: 1px solid var(--line-soft);
+      }
+      .item:first-child { border-top: 0; padding-top: 2px; }
+      .item .info { flex: 1; min-width: 0; }
+      .item .name { font-weight: 700; font-size: 0.95rem; line-height: 1.35; }
+      .item .sub { color: var(--ink-3); font-size: 0.82rem; line-height: 1.4; }
+      .item .price { color: var(--gold-bright); font-weight: 800; white-space: nowrap; font-size: 0.95rem; }
+      .item .buy {
+        flex-shrink: 0; text-decoration: none;
+        border: 1px solid var(--gold-deep); color: var(--gold-bright);
+        border-radius: 10px; padding: 8px 14px; font-weight: 700; font-size: 0.85rem;
+        display: inline-flex; align-items: center;
+      }
+      .item .buy:hover { background: rgba(242, 194, 48, 0.12); }
+
+      /* ---------- Pricing ---------- */
+      .price-table {
+        background: var(--panel); border: 1px solid var(--line-soft);
+        border-radius: var(--radius); overflow: hidden;
+      }
+      .price-group { padding: 20px 24px 8px; }
+      .price-group + .price-group { border-top: 1px solid var(--line-soft); }
+      .price-group h3 {
+        font-family: "Cinzel", serif; font-size: 1rem; color: var(--gold);
+        letter-spacing: 0.06em; margin: 0 0 6px; text-transform: uppercase;
+      }
+      .prow {
+        display: flex; align-items: baseline; gap: 12px;
+        padding: 9px 0; border-top: 1px dashed var(--line-soft);
+      }
+      .prow:first-of-type { border-top: 0; }
+      .prow .pname { flex: 1; min-width: 0; }
+      .prow .pprice { color: var(--gold-bright); font-weight: 800; white-space: nowrap; }
+      .prow a { font-weight: 700; font-size: 0.88rem; white-space: nowrap; text-decoration: none; border-bottom: 1px solid var(--gold-deep); padding-bottom: 1px; }
+      .price-note { text-align: center; color: var(--ink-3); font-size: 0.9rem; max-width: 620px; margin: 16px auto 0; }
+
+      /* ---------- Buy ---------- */
+      .buy-box {
+        background: linear-gradient(180deg, var(--panel-2), var(--panel));
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 30px 26px; text-align: center;
+      }
+      .buy-box h2 { font-family: "Cinzel", serif; margin: 0 0 10px; font-size: 1.6rem; }
+      .buy-box p { color: var(--ink-2); max-width: 560px; margin: 0 auto 14px; }
+      .steps { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin: 22px 0 26px; text-align: left; }
+      .step { border: 1px solid var(--line-soft); border-radius: 12px; padding: 16px; background: var(--bg-2); }
+      .step b { color: var(--gold-bright); display: block; margin-bottom: 4px; }
+      .step span { color: var(--ink-2); font-size: 0.92rem; }
+      .cta {
+        display: inline-flex; align-items: center; justify-content: center;
+        background: linear-gradient(180deg, var(--gold-bright), var(--gold-deep));
+        color: #241a02; text-decoration: none; font-weight: 800;
+        border-radius: 12px; padding: 14px 28px; font-size: 1rem;
+        box-shadow: 0 8px 22px rgba(242, 194, 48, 0.25);
+      }
+      .contact { margin-top: 18px; color: var(--ink-3); font-size: 0.92rem; }
+      footer { text-align: center; color: var(--ink-3); font-size: 0.85rem; padding: 34px 20px 6px; }
+
+      /* ---------- Bottom nav ---------- */
+      .nav {
+        position: fixed; left: 50%; transform: translateX(-50%);
+        bottom: max(12px, env(safe-area-inset-bottom));
+        width: min(560px, calc(100% - 24px));
+        background: rgba(26, 20, 9, 0.96);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        display: grid; grid-template-columns: repeat(4, 1fr);
+        padding: 8px; z-index: 50;
+        box-shadow: 0 14px 40px rgba(0, 0, 0, 0.55);
+        backdrop-filter: blur(8px);
+      }
+      .nav a {
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        gap: 3px; text-decoration: none; color: var(--ink-3);
+        font-size: 0.78rem; font-weight: 700; border-radius: 12px; padding: 8px 4px;
+      }
+      .nav a svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+      .nav a.active { color: var(--gold-bright); background: rgba(242, 194, 48, 0.12); }
+
+      @media (max-width: 520px) {
+        .item { flex-wrap: wrap; }
+        .item .buy { margin-left: auto; }
+        .hero { padding-top: 44px; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        .pack .open-btn .chev { transition: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ================= HERO / HOME ================= -->
+    <header class="hero" id="home">
+      <div class="mark" aria-hidden="true">P</div>
+      <span class="pill"><span class="dia">◆</span> Premium Private Collection <span class="dia">◆</span></span>
+      <h1>PREMIUM<br />PACKS</h1>
+      <p class="byline">by Dr. S. Ahmad</p>
+      <p class="lede">
+        Five curated packs of Dr. S. Ahmad's own work — business software, Islamic books and apps,
+        planners and journals, and learning tools. Every product is his own, sold individually
+        on Gumroad at its listed price. Open a pack to see what's inside.
+      </p>
+      <div class="stats">
+        <div class="stat"><b>5</b><span>Packs</span></div>
+        <div class="stat"><b>24</b><span>Products</span></div>
+        <div class="stat"><b>4</b><span>Free items</span></div>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <!-- ================= PACKS ================= -->
+      <section id="packs">
+        <div class="sec-head">
+          <h2>THE PREMIUM PACKS</h2>
+          <p>Five collections — one complete catalogue. Tap a pack to open it, then buy any item on its own Gumroad page.</p>
+          <div class="rule"></div>
+        </div>
+
+        <div class="grid">
+          <!-- Pack 1 -->
+          <article class="pack" id="pack-business">
+            <div class="pack-top">
+              <div class="pack-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M3 13h18"/></svg>
+              </div>
+              <h3>Business Software Pack</h3>
+              <p class="desc">Tools for running and growing a small business — messaging, operations, AI and inspections.</p>
+              <p class="count">6 products</p>
+            </div>
+            <div class="pack-body">
+              <button class="open-btn" type="button" aria-expanded="false" aria-controls="items-business">Open Pack <span class="chev">▾</span></button>
+              <div class="items" id="items-business">
+                <div class="item"><div class="info"><div class="name">WAppKit</div><div class="sub">WhatsApp Business dashboard</div></div><span class="price">from $5/mo</span><a class="buy" href="https://mindfuldesignes.gumroad.com/l/wapkit" target="_blank" rel="noopener">Buy</a></div>
+                <div class="item"><div class="info"><div class="name">ERP System</div><div class="sub">Inventory, accounting, sales, purchases &amp; HR</div></div><span class="price">$29</span><a class="buy" href="https://mindfuldesignes.gumroad.com/l/ERP" target="_blank" rel="noopener">Buy</a></div>
+                <div class="item"><div class="info"><div class="name">WhatsApp AI Agent</div><div class="sub">Local-LLM auto-replies and lead booking (n8n)</div></div><span class="price">$19</span><a class="buy" href="https://mindfuldesignes.gumroad.com/l/WhatsAppAI" target="_blank" rel="noopener">Buy</a></div>
+                <div class="item"><div class="info"><div class="name">ShadowTrace AI</div><div class="sub">Local cybersecurity monitoring for students</div></div><span class="price">$19</span><a class="buy" href="https://mindfuldesignes.gumroad.com/l/shadowtraceai" target="_blank" rel="noopener">Buy</a></div>
+                <div class="item"><div class="info"><div class="name">Car Inspection AI</div><div class="sub">AI vehicle damage inspection with PDF reports</div></div><span class="price">$29</span><a class="buy" href="https://mindfuldesignes.gumroad.com/l/aivszb" target="_blank" rel="noopener">Buy</a></div>
+                <div class="item"><div class="info"><div class="name">Karobar Business Exchange Kit</div><div class="sub">Blind business-listings website kit</div></div><span class="price">$19</span><a class="buy" href="https://mindfuldesignes.gumroad.com/l/khunjv" target="_blank" rel="noopener">Buy</a></div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Pack 2 -->
+          <article class="pack" id="pack-islamic">
+            <div class="pack-top">
+              <div class="pack-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M20 13.5A8.5 8.5 0 1 1 10.5 4 6.8 6.8 0 0 0 20 13.5z"/><path d="M17.5 3.5l.6 1.6 1.6.6-1.6.6-.6 1.6-.6-1.6-1.6-.6 1.6-.6z"/></svg>
+              </div>
+              <h3>Islamic Books &amp; Apps</h3>
+              <p class="desc">Books by Dr. S. Ahmad and the Islam Companion app — faith, reflection and daily practice.</p>
+              <p class="count">5 products</p>
+            </div>
+            <div class="pack-body">
+              <button class="open-btn" type="button" aria-expanded="false" aria-controls="items-islamic">Open Pack <span class="chev">▾</span></button>
+              <div class="items" id="items-islamic">
+                <div class="item"><div class="info"><div class="name">The Crimson Oath</div><div class="sub">Romantic fantasy novel — The Dragonbound Chronicles #1</div></div><span class="price">$14.95</span><a class="buy" href="https://mindfuldesignes.gumroad.com/l/trtrw" target="_blank" rel="noopener">Buy</a></div>
+                <div class="item"><div class="info"><div class="name">Overcome Fear</div><div class="sub">By Dr. Saghir Ahmad</div></div><span class="price">$7</span><a class="buy" href="https://mindfuldesignes.gumroad.com/l/onsuheu" target="_blank" rel="noopener">Buy</a></div>
+                <div class="item"><div class="info"><div class="name">Zawal-e-Bemisal</div><div class="sub">Urdu book</div></div><span class="price">$5</span><a class="buy" href="https://mindfuldesignes.gumroad.com/l/hdkgce" target="_blank" rel="noopener">Buy</a></div>
+                <div class="item"><div class="info"><div class="name">Islam Companion</div><div class="sub">Android app — Quran reader, prayer times, Qibla</div></div><span class="price">$9</span><a class="buy" href="https://mindfuldesignes.gumroad.com/l/giaieo" target="_blank" rel="noopener">Buy</a></div>
+                <div class="item"><div class="info"><div class="name">30-Day Salah Tracker</div><div class="sub">Build a steady prayer habit in 30 days</div></div><span class="price">$5</span><a class="buy" href="https://mindfuldesignes.gumroad.com/l/qjanpz" target="_blank" rel="noopener">Buy</a></div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Pack 3 -->
+          <article class="pack" id="pack-planners">
+            <div class="pack-top">
+              <div class="pack-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M6 3h13a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H6z"/><path d="M6 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2"/><path d="M9 8h7M9 12h7"/></svg>
+              </div>
+              <h3>Planners &amp; Journals</h3>
+              <p class="desc">Mindful planners and journals for a calmer, more organised year — print or use digitally.</p>
+              <p class="count">6 products</p>
+            </div>
+            <div class="pack-body">
+              <button class="open-btn" type="button" aria-expanded="false" aria-controls="items-planners">Open Pack <span class="chev">▾</span></button>
+              <div class="items" id="items-planners">
+                <div class="item"><div class="info"><div class="name">2027 Mindfulness &amp; Self-Care Journal</div><div class="sub">Full-year A4 journal</div></div><span class="price">$7</span><a class="buy" href="https://mindfuldesignes.gumroad.com/l/oiegxf" target="_blank" rel="noopener">Buy</a></div>
+                <div class="item"><div class="info"><div class="name">2027 Journal Compact Edition</div><div class="sub">The compact 19-page edition</div></div><span class="price">$5</span><a class="buy" href="https://mindfuldesignes.gumroad.com/l/gliukc" target="_blank" rel="noopener">Buy</a></div>
+                <div class="item"><div class="info"><div class="name">My Daily Balance</div><div class="sub">Day 1 daily balance planner</div></div><span class="price">$5</span><a class="buy" href="https://mindfuldesignes.gumroad.com/l/dfgty" target="_blank" rel="noopener">Buy</a></div>
+                <div class="item"><div class="info"><div class="name">12 Lists for an Organized Life</div><div class="sub">Twelve lists that keep life in order</div></div><span class="price">$5</span><a class="buy" href="https://mindfuldesignes.gumroad.com/l/ccvqpd" target="_blank" rel="noopener">Buy</a></div>
+                <div class="item"><div class="info"><div class="name">The Calm Week Bundle</div><div class="sub">Week 1 mindfulness bundle</div></div><span class="price">$15</span><a class="buy" href="https://mindfuldesignes.gumroad.com/l/kaxsdg" target="_blank" rel="noopener">Buy</a></div>
+                <div class="item"><div class="info"><div class="name">Faithful Days Bundle</div><div class="sub">Week 2 bundle</div></div><span class="price">$15</span><a class="buy" href="https://mindfuldesignes.gumroad.com/l/dqian" target="_blank" rel="noopener">Buy</a></div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Pack 4 -->
+          <article class="pack" id="pack-learning">
+            <div class="pack-top">
+              <div class="pack-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M12 4L2 9l10 5 10-5z"/><path d="M6 11.5V16c0 1.7 2.7 3 6 3s6-1.3 6-3v-4.5"/><path d="M22 9v5"/></svg>
+              </div>
+              <h3>Learning &amp; Productivity</h3>
+              <p class="desc">Study material, AI prompts and a clarity system for students and business owners.</p>
+              <p class="count">3 products</p>
+            </div>
+            <div class="pack-body">
+              <button class="open-btn" type="button" aria-expanded="false" aria-controls="items-learning">Open Pack <span class="chev">▾</span></button>
+              <div class="items" id="items-learning">
+                <div class="item"><div class="info"><div class="name">Matric Maths Study Pack</div><div class="sub">Class 9–10: 25 exercises, 5 mock papers with answer key</div></div><span class="price">$5</span><a class="buy" href="https://mindfuldesignes.gumroad.com/l/krfvnw" target="_blank" rel="noopener">Buy</a></div>
+                <div class="item"><div class="info"><div class="name">AI Prompt Pack for Small Business Owners</div><div class="sub">Ready-to-use prompts for everyday business tasks</div></div><span class="price">$19</span><a class="buy" href="https://mindfuldesignes.gumroad.com/l/yzrbd" target="_blank" rel="noopener">Buy</a></div>
+                <div class="item"><div class="info"><div class="name">Strategic Clarity OS</div><div class="sub">Notion life dashboard</div></div><span class="price">$29</span><a class="buy" href="https://mindfuldesignes.gumroad.com/l/xrlmxe" target="_blank" rel="noopener">Buy</a></div>
+              </div>
+            </div>
+          </article>
+
+          <!-- Pack 5 -->
+          <article class="pack" id="pack-free">
+            <div class="pack-top">
+              <div class="pack-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="4"/><path d="M5 12v9h14v-9"/><path d="M12 8v13"/><path d="M12 8s-4.5.2-4.5-2A1.8 1.8 0 0 1 11 4.6C12 5.4 12 8 12 8zm0 0s4.5.2 4.5-2A1.8 1.8 0 0 0 13 4.6C12 5.4 12 8 12 8z"/></svg>
+              </div>
+              <h3>Free Starter Pack</h3>
+              <p class="desc">Start here at no cost — free tools, a free tracker and two free learning platforms.</p>
+              <p class="count">4 free items</p>
+            </div>
+            <div class="pack-body">
+              <button class="open-btn" type="button" aria-expanded="false" aria-controls="items-free">Open Pack <span class="chev">▾</span></button>
+              <div class="items" id="items-free">
+                <div class="item"><div class="info"><div class="name">Geotag Photos</div><div class="sub">Free geotagging tool</div></div><span class="price">Free</span><a class="buy" href="https://mindfuldesignes.gumroad.com/l/dywmff" target="_blank" rel="noopener">Get</a></div>
+                <div class="item"><div class="info"><div class="name">7-Day Salah Tracker</div><div class="sub">Free one-week prayer tracker</div></div><span class="price">Free</span><a class="buy" href="https://mindfuldesignes.gumroad.com/l/nxnfgx" target="_blank" rel="noopener">Get</a></div>
+                <div class="item"><div class="info"><div class="name">Islam — Your Complete Islamic Companion</div><div class="sub">Free web companion</div></div><span class="price">Free</span><a class="buy" href="https://drsahmad.github.io/islam/" target="_blank" rel="noopener">Open</a></div>
+                <div class="item"><div class="info"><div class="name">Shaheen Academy</div><div class="sub">Free learning platform, Class 1–12 &amp; test prep</div></div><span class="price">Free</span><a class="buy" href="https://drsahmad.github.io/shaheen-academy/" target="_blank" rel="noopener">Open</a></div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ================= PRICING ================= -->
+      <section id="pricing">
+        <div class="sec-head">
+          <h2>PRICING</h2>
+          <p>Every product keeps its own Gumroad price — the packs group them, they don't reprice them. You buy only the items you want.</p>
+          <div class="rule"></div>
+        </div>
+
+        <div class="price-table">
+          <div class="price-group">
+            <h3>Business Software Pack</h3>
+            <div class="prow"><span class="pname">WAppKit — WhatsApp Business dashboard</span><span class="pprice">from $5/month</span><a href="https://mindfuldesignes.gumroad.com/l/wapkit" target="_blank" rel="noopener">Buy</a></div>
+            <div class="prow"><span class="pname">ERP System</span><span class="pprice">$29 one-time</span><a href="https://mindfuldesignes.gumroad.com/l/ERP" target="_blank" rel="noopener">Buy</a></div>
+            <div class="prow"><span class="pname">WhatsApp AI Agent</span><span class="pprice">$19</span><a href="https://mindfuldesignes.gumroad.com/l/WhatsAppAI" target="_blank" rel="noopener">Buy</a></div>
+            <div class="prow"><span class="pname">ShadowTrace AI</span><span class="pprice">$19</span><a href="https://mindfuldesignes.gumroad.com/l/shadowtraceai" target="_blank" rel="noopener">Buy</a></div>
+            <div class="prow"><span class="pname">Car Inspection AI</span><span class="pprice">$29</span><a href="https://mindfuldesignes.gumroad.com/l/aivszb" target="_blank" rel="noopener">Buy</a></div>
+            <div class="prow"><span class="pname">Karobar Business Exchange Kit</span><span class="pprice">$19</span><a href="https://mindfuldesignes.gumroad.com/l/khunjv" target="_blank" rel="noopener">Buy</a></div>
+          </div>
+          <div class="price-group">
+            <h3>Islamic Books &amp; Apps</h3>
+            <div class="prow"><span class="pname">The Crimson Oath</span><span class="pprice">$14.95</span><a href="https://mindfuldesignes.gumroad.com/l/trtrw" target="_blank" rel="noopener">Buy</a></div>
+            <div class="prow"><span class="pname">Overcome Fear</span><span class="pprice">$7</span><a href="https://mindfuldesignes.gumroad.com/l/onsuheu" target="_blank" rel="noopener">Buy</a></div>
+            <div class="prow"><span class="pname">Zawal-e-Bemisal</span><span class="pprice">$5</span><a href="https://mindfuldesignes.gumroad.com/l/hdkgce" target="_blank" rel="noopener">Buy</a></div>
+            <div class="prow"><span class="pname">Islam Companion (Android app)</span><span class="pprice">$9</span><a href="https://mindfuldesignes.gumroad.com/l/giaieo" target="_blank" rel="noopener">Buy</a></div>
+            <div class="prow"><span class="pname">30-Day Salah Tracker</span><span class="pprice">$5</span><a href="https://mindfuldesignes.gumroad.com/l/qjanpz" target="_blank" rel="noopener">Buy</a></div>
+          </div>
+          <div class="price-group">
+            <h3>Planners &amp; Journals</h3>
+            <div class="prow"><span class="pname">2027 Mindfulness &amp; Self-Care Journal</span><span class="pprice">$7</span><a href="https://mindfuldesignes.gumroad.com/l/oiegxf" target="_blank" rel="noopener">Buy</a></div>
+            <div class="prow"><span class="pname">2027 Journal Compact Edition</span><span class="pprice">$5</span><a href="https://mindfuldesignes.gumroad.com/l/gliukc" target="_blank" rel="noopener">Buy</a></div>
+            <div class="prow"><span class="pname">My Daily Balance</span><span class="pprice">$5</span><a href="https://mindfuldesignes.gumroad.com/l/dfgty" target="_blank" rel="noopener">Buy</a></div>
+            <div class="prow"><span class="pname">12 Lists for an Organized Life</span><span class="pprice">$5</span><a href="https://mindfuldesignes.gumroad.com/l/ccvqpd" target="_blank" rel="noopener">Buy</a></div>
+            <div class="prow"><span class="pname">The Calm Week Bundle</span><span class="pprice">$15</span><a href="https://mindfuldesignes.gumroad.com/l/kaxsdg" target="_blank" rel="noopener">Buy</a></div>
+            <div class="prow"><span class="pname">Faithful Days Bundle</span><span class="pprice">$15</span><a href="https://mindfuldesignes.gumroad.com/l/dqian" target="_blank" rel="noopener">Buy</a></div>
+          </div>
+          <div class="price-group">
+            <h3>Learning &amp; Productivity</h3>
+            <div class="prow"><span class="pname">Matric Maths Study Pack</span><span class="pprice">$5</span><a href="https://mindfuldesignes.gumroad.com/l/krfvnw" target="_blank" rel="noopener">Buy</a></div>
+            <div class="prow"><span class="pname">AI Prompt Pack for Small Business Owners</span><span class="pprice">$19</span><a href="https://mindfuldesignes.gumroad.com/l/yzrbd" target="_blank" rel="noopener">Buy</a></div>
+            <div class="prow"><span class="pname">Strategic Clarity OS</span><span class="pprice">$29</span><a href="https://mindfuldesignes.gumroad.com/l/xrlmxe" target="_blank" rel="noopener">Buy</a></div>
+          </div>
+          <div class="price-group">
+            <h3>Free Starter Pack</h3>
+            <div class="prow"><span class="pname">Geotag Photos</span><span class="pprice">Free</span><a href="https://mindfuldesignes.gumroad.com/l/dywmff" target="_blank" rel="noopener">Get</a></div>
+            <div class="prow"><span class="pname">7-Day Salah Tracker</span><span class="pprice">Free</span><a href="https://mindfuldesignes.gumroad.com/l/nxnfgx" target="_blank" rel="noopener">Get</a></div>
+            <div class="prow"><span class="pname">Islam — Your Complete Islamic Companion</span><span class="pprice">Free</span><a href="https://drsahmad.github.io/islam/" target="_blank" rel="noopener">Open</a></div>
+            <div class="prow"><span class="pname">Shaheen Academy</span><span class="pprice">Free</span><a href="https://drsahmad.github.io/shaheen-academy/" target="_blank" rel="noopener">Open</a></div>
+          </div>
+        </div>
+        <p class="price-note">Prices are the live listed prices on Gumroad, in US dollars. WAppKit is a subscription (monthly, 6-month and yearly tiers on its Gumroad page); the ERP System is a one-time price. Everything else is a one-time purchase unless its Gumroad page says otherwise.</p>
+      </section>
+
+      <!-- ================= BUY ================= -->
+      <section id="buy">
+        <div class="buy-box">
+          <h2>HOW TO BUY</h2>
+          <p>Checkout runs on Gumroad — the same store behind all of Dr. S. Ahmad's products. Pick an item, pay on its Gumroad page, and your download or licence arrives by email.</p>
+          <div class="steps">
+            <div class="step"><b>1 · Open a pack</b><span>Tap “Open Pack” on any collection above to see every product inside it.</span></div>
+            <div class="step"><b>2 · Tap Buy</b><span>Each Buy button opens that product's own Gumroad page in a new tab.</span></div>
+            <div class="step"><b>3 · Check out on Gumroad</b><span>Pay securely on Gumroad and get your file, app or licence by email.</span></div>
+          </div>
+          <a class="cta" href="https://mindfuldesignes.gumroad.com" target="_blank" rel="noopener">Visit the full Gumroad store</a>
+          <p class="contact">Questions about a product? Email <a href="mailto:leaderoftime786@gmail.com">leaderoftime786@gmail.com</a></p>
+        </div>
+      </section>
+
+      <footer>Premium Packs — a catalogue of Dr. S. Ahmad's own products. All sales are completed on Gumroad.</footer>
+    </main>
+
+    <!-- ================= BOTTOM NAV ================= -->
+    <nav class="nav" aria-label="Store sections">
+      <a href="#home" data-nav="home" class="active">
+        <svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
+        Home
+      </a>
+      <a href="#packs" data-nav="packs">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5"/></svg>
+        Packs
+      </a>
+      <a href="#pricing" data-nav="pricing">
+        <svg viewBox="0 0 24 24"><path d="M12 3l2.5 5.5L20 10l-5.5 1.5L12 17l-2.5-5.5L4 10l5.5-1.5z"/><path d="M18.5 15.5l.8 1.9 1.9.8-1.9.8-.8 1.9-.8-1.9-1.9-.8 1.9-.8z"/></svg>
+        Pricing
+      </a>
+      <a href="#buy" data-nav="buy">
+        <svg viewBox="0 0 24 24"><circle cx="9" cy="20" r="1.6"/><circle cx="17" cy="20" r="1.6"/><path d="M2 3h3l2.6 12.5a1.5 1.5 0 0 0 1.5 1.2h7.9a1.5 1.5 0 0 0 1.5-1.2L20.5 7H6"/></svg>
+        Buy
+      </a>
+    </nav>
+
+    <script>
+      // Pack open / close
+      document.querySelectorAll(".pack .open-btn").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          var pack = btn.closest(".pack");
+          var open = pack.classList.toggle("open");
+          btn.setAttribute("aria-expanded", open ? "true" : "false");
+          btn.firstChild.textContent = open ? "Close Pack " : "Open Pack ";
+        });
+      });
+
+      // Bottom nav: highlight the section in view
+      var navLinks = document.querySelectorAll(".nav a[data-nav]");
+      var sections = { home: document.getElementById("home"), packs: document.getElementById("packs"), pricing: document.getElementById("pricing"), buy: document.getElementById("buy") };
+      function setActive(key) {
+        navLinks.forEach(function (a) { a.classList.toggle("active", a.getAttribute("data-nav") === key); });
+      }
+      if ("IntersectionObserver" in window) {
+        var obs = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) {
+              var key = e.target.id === "home" ? "home" : e.target.id;
+              setActive(key);
+            }
+          });
+        }, { rootMargin: "-40% 0px -50% 0px" });
+        Object.keys(sections).forEach(function (k) { if (sections[k]) obs.observe(sections[k]); });
+      }
+      navLinks.forEach(function (a) {
+        a.addEventListener("click", function () { setActive(a.getAttribute("data-nav")); });
+      });
+    </script>
+  </body>
+</html>
