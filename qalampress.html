@@ -294,6 +294,49 @@
       footer.site .wrap { display: flex; gap: 18px; flex-wrap: wrap; align-items: baseline; justify-content: space-between; }
       footer.site .fl { font-family: var(--display); font-weight: 700; font-size: 1.2rem; }
       footer.site p { color: var(--muted); font-size: 0.88rem; margin: 4px 0 0; max-width: 40em; }
+
+      /* ---------- Accounts ---------- */
+      .username { font-size: 0.9rem; font-weight: 600; color: var(--ink-soft); white-space: nowrap; }
+      .authwrap { max-width: 460px; margin: 0 auto; padding: 26px 20px 80px; }
+      .authtitle { font-family: var(--display); font-weight: 600; font-size: 2rem; line-height: 1.15; margin: 10px 0 8px; }
+      .authsub { color: var(--ink-soft); margin: 0 0 22px; }
+      .authalt { color: var(--ink-soft); font-size: 0.95rem; margin: 16px 0 0; }
+      .linkbtn {
+        background: none; border: 0; color: var(--accent-ink); font: inherit; font-weight: 600;
+        text-decoration: underline; padding: 0; min-height: 0; cursor: pointer;
+      }
+      .rolepick { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+      .rolecard {
+        text-align: left; border: 1px solid var(--line); background: var(--surface); border-radius: 12px;
+        padding: 14px; display: flex; flex-direction: column; gap: 3px; color: var(--ink); min-height: 0;
+      }
+      .rolecard strong { font-family: var(--display); font-size: 1.05rem; }
+      .rolecard span { font-size: 0.85rem; color: var(--ink-soft); }
+      .rolecard[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+      .field input[type="email"], .field input[type="password"], .field input[type="url"] {
+        width: 100%; border: 1px solid var(--line); border-radius: 10px; background: var(--surface);
+        color: var(--ink); font: inherit; padding: 12px 14px; outline: none;
+      }
+      .field input[type="email"]:focus, .field input[type="password"]:focus, .field input[type="url"]:focus { border-color: var(--accent); }
+      .authsubmit { width: 100%; justify-content: center; }
+
+      /* ---------- Shop ---------- */
+      .shopgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; margin: 22px 0 30px; }
+      .prod { border: 1px solid var(--line); border-radius: 14px; background: var(--surface); padding: 18px; display: flex; flex-direction: column; }
+      .prod h3 { font-family: var(--display); font-weight: 600; font-size: 1.15rem; line-height: 1.3; margin: 8px 0 4px; }
+      .prod .pauthor { color: var(--muted); font-size: 0.88rem; margin: 0 0 14px; }
+      .prod .prow { margin-top: auto; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+      .prod .price { font-size: 1.15rem; font-weight: 700; color: var(--gold); white-space: nowrap; }
+      .sellcard { border: 1px solid var(--line); border-radius: 14px; background: var(--surface); padding: 22px; }
+      .sellcard h3 { font-family: var(--display); font-weight: 600; margin: 0 0 6px; font-size: 1.25rem; }
+      .sellcard > p { color: var(--ink-soft); margin: 0 0 16px; font-size: 0.95rem; }
+      @media (max-width: 640px) {
+        #shop-btn { font-size: 0; padding: 8px 11px; gap: 0; }
+        #signin-btn { display: none; }
+        .username { display: none; }
+        #join-btn { padding: 8px 13px; }
+        #signout-btn { padding: 8px 11px; }
+      }
       .hidden { display: none !important; }
       @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .toast { transition: none; } }
     </style>
@@ -312,6 +355,10 @@
         <button class="iconbtn" id="search-toggle" aria-label="Search">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.8-3.8"/></svg>
         </button>
+        <button class="btn ghost" id="shop-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h15l-1.5 9h-12z"/><path d="M6 7L5 3H2"/><circle cx="9" cy="20" r="1.6"/><circle cx="17" cy="20" r="1.6"/></svg>
+          Shop
+        </button>
         <button class="btn ghost" id="library-btn">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z"/></svg>
           Library
@@ -320,6 +367,14 @@
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
           Write
         </button>
+        <span id="auth-out">
+          <button class="btn ghost" id="signin-btn">Sign in</button>
+          <button class="btn" id="join-btn">Join free</button>
+        </span>
+        <span id="auth-in" class="hidden">
+          <span class="username" id="user-name"></span>
+          <button class="btn ghost" id="signout-btn">Sign out</button>
+        </span>
         <button class="avatar" id="author-btn" aria-label="About the author">SA</button>
       </div>
     </header>
@@ -328,8 +383,11 @@
     <main id="view-home">
       <section class="hero wrap">
         <h1>Stories &amp; ideas, written to be read slowly.</h1>
-        <p>QalamPress is the writing home of Dr. S. Ahmad — psychologist, educationist and author — essays and stories on peace, fear, faith, teaching and the writing life.</p>
-        <button class="btn primary" id="hero-write">Start writing</button>
+        <p>QalamPress is the writing home of Dr. S. Ahmad — psychologist, educationist and author — essays and stories on peace, fear, faith, teaching and the writing life. Membership is free for readers and writers alike.</p>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="btn primary" id="hero-write">Start writing</button>
+          <button class="btn" id="hero-join">Join free</button>
+        </div>
         <p class="verse">“<b>Nūn. By the pen</b> and what they write.” — Qur’an 68:1. The pen is where QalamPress takes its name.</p>
       </section>
 
@@ -362,7 +420,8 @@
             <div class="bookrow"><span class="bt">The Crimson Oath</span><span class="bp">$14.95</span></div>
             <div class="bookrow"><span class="bt">Overcome Fear</span><span class="bp">$7</span></div>
             <div class="bookrow"><span class="bt">Islam Companion app</span><span class="bp">$9</span></div>
-            <p class="fine">Books are sold on Gumroad and Draft2Digital — ask in chat for a link.</p>
+            <button class="btn" data-goto="shop" style="margin-top:8px;">Visit the Shop</button>
+            <p class="fine">Checkout and delivery are handled by Gumroad.</p>
           </div>
         </aside>
       </div>
@@ -425,6 +484,84 @@
       </div>
     </main>
 
+    <!-- ============ SIGN UP ============ -->
+    <main id="view-signup" class="hidden">
+      <div class="authwrap">
+        <button class="btn ghost back" data-nav="home">← Back to stories</button>
+        <h1 class="authtitle">Join QalamPress</h1>
+        <p class="authsub">Create a free account. Readers can read everything, clap and save stories. Writers can also publish their own stories — and sell eBooks, articles and planners in the Shop.</p>
+        <div class="field">
+          <label>I’m joining as a</label>
+          <div class="rolepick" role="group" aria-label="Choose your role">
+            <button type="button" class="rolecard" data-role="Reader" aria-pressed="true"><strong>Reader</strong><span>Read, clap and save stories</span></button>
+            <button type="button" class="rolecard" data-role="Writer" aria-pressed="false"><strong>Writer</strong><span>Publish stories &amp; sell in the Shop</span></button>
+          </div>
+        </div>
+        <form id="signup-form" novalidate>
+          <div class="field">
+            <label for="su-name">Your name</label>
+            <input type="text" id="su-name" placeholder="e.g. Ayesha Khan" maxlength="60" autocomplete="name" />
+          </div>
+          <div class="field">
+            <label for="su-email">Email</label>
+            <input type="email" id="su-email" placeholder="you@example.com" autocomplete="email" />
+          </div>
+          <div class="field">
+            <label for="su-pass">Password</label>
+            <input type="password" id="su-pass" placeholder="At least 6 characters" autocomplete="new-password" />
+          </div>
+          <p class="err" id="su-err"></p>
+          <button class="btn primary authsubmit" type="submit">Create free account</button>
+        </form>
+        <p class="authalt">Already have an account? <button class="linkbtn" data-goto="signin">Sign in</button></p>
+      </div>
+    </main>
+
+    <!-- ============ SIGN IN ============ -->
+    <main id="view-signin" class="hidden">
+      <div class="authwrap">
+        <button class="btn ghost back" data-nav="home">← Back to stories</button>
+        <h1 class="authtitle">Welcome back</h1>
+        <p class="authsub">Sign in to write, sell in the Shop, and pick up your reading where you left off.</p>
+        <form id="signin-form" novalidate>
+          <div class="field">
+            <label for="si-email">Email</label>
+            <input type="email" id="si-email" placeholder="you@example.com" autocomplete="email" />
+          </div>
+          <div class="field">
+            <label for="si-pass">Password</label>
+            <input type="password" id="si-pass" placeholder="Your password" autocomplete="current-password" />
+          </div>
+          <p class="err" id="si-err"></p>
+          <button class="btn primary authsubmit" type="submit">Sign in</button>
+        </form>
+        <p class="authalt"><button class="linkbtn" id="forgot-btn">Forgot your password?</button></p>
+        <p class="authalt">New to QalamPress? <button class="linkbtn" data-goto="signup">Create a free account</button></p>
+      </div>
+    </main>
+
+    <!-- ============ BECOME A WRITER ============ -->
+    <main id="view-writerprompt" class="hidden">
+      <div class="authwrap">
+        <button class="btn ghost back" data-nav="home">← Back to stories</button>
+        <h1 class="authtitle">The pen is for Writers</h1>
+        <p class="authsub">You’re signed in as a Reader, and writing on QalamPress is a Writer’s desk: publishing stories and selling eBooks, articles and planners in the Shop. Switching your account to Writer is free and takes one tap — you keep the same email and password.</p>
+        <button class="btn primary authsubmit" data-become="1">Become a Writer — free</button>
+        <p class="authalt">Prefer to keep reading? <button class="linkbtn" data-goto="home">Back to stories</button></p>
+      </div>
+    </main>
+
+    <!-- ============ SHOP ============ -->
+    <main id="view-shop" class="hidden">
+      <div class="wrap" style="padding-bottom:70px;">
+        <button class="btn ghost back" data-nav="home" style="margin-top:22px;">← Back to stories</button>
+        <h2 class="libhead">The Shop</h2>
+        <p style="color:var(--ink-soft); margin:0; max-width:38em;">eBooks, articles and planners by QalamPress authors. Every Buy button opens the author’s Gumroad page in a new tab, where checkout and delivery are handled.</p>
+        <div class="shopgrid" id="shop-grid"></div>
+        <div id="sell-box"></div>
+      </div>
+    </main>
+
     <footer class="site">
       <div class="wrap">
         <div>
@@ -437,6 +574,8 @@
 
     <div class="toast" id="toast" role="status"></div>
 
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
     <script>
     "use strict";
 
@@ -582,7 +721,8 @@
       claps: {},        // id -> true once clapped
       clapCounts: {},   // id -> extra claps given here
       bookmarks: {},    // id -> true
-      mine: []          // stories published this visit
+      mine: [],         // stories published this visit
+      user: null        // { name, role, email } when signed in via Firebase
     };
 
     var $ = function (id) { return document.getElementById(id); };
@@ -612,15 +752,14 @@
     }
 
     /* ---------------- Views ---------------- */
+    var VIEW_IDS = ["home", "reader", "editor", "library", "signup", "signin", "shop", "writerprompt"];
     function show(view) {
       state.view = view;
-      $("view-home").classList.toggle("hidden", view !== "home");
-      $("view-reader").classList.toggle("hidden", view !== "reader");
-      $("view-editor").classList.toggle("hidden", view !== "editor");
-      $("view-library").classList.toggle("hidden", view !== "library");
+      VIEW_IDS.forEach(function (v) { $("view-" + v).classList.toggle("hidden", view !== v); });
       $("progress").style.width = "0";
       window.scrollTo(0, 0);
       if (view === "library") renderLibrary();
+      if (view === "shop") renderShop();
     }
 
     /* ---------------- Rendering: home ---------------- */
@@ -834,6 +973,10 @@
       if (bm) { e.stopPropagation(); toggleBookmark(bm.getAttribute("data-bookmark")); return; }
       var op = e.target.closest("[data-open]");
       if (op) { openStory(op.getAttribute("data-open")); return; }
+      var go = e.target.closest("[data-goto]");
+      if (go) { show(go.getAttribute("data-goto")); return; }
+      var bc = e.target.closest("[data-become]");
+      if (bc) { becomeWriter(); return; }
       var nav = e.target.closest("[data-nav]");
       if (nav) { show(nav.getAttribute("data-nav")); }
     });
@@ -853,8 +996,18 @@
 
     /* ---------------- Wiring ---------------- */
     $("logo-btn").addEventListener("click", function () { state.topic = "All"; state.query = ""; $("search").value = ""; renderHome(); show("home"); });
-    $("write-btn").addEventListener("click", function () { show("editor"); });
-    $("hero-write").addEventListener("click", function () { show("editor"); });
+    $("write-btn").addEventListener("click", openEditor);
+    $("hero-write").addEventListener("click", openEditor);
+    $("shop-btn").addEventListener("click", function () { show("shop"); });
+    $("join-btn").addEventListener("click", function () { show("signup"); });
+    $("signin-btn").addEventListener("click", function () { show("signin"); });
+    $("hero-join").addEventListener("click", function () { show("signup"); });
+    $("signout-btn").addEventListener("click", function () {
+      if (auth) auth.signOut();
+      setUser(null);
+      toast("Signed out — see you soon.");
+      show("home");
+    });
     $("library-btn").addEventListener("click", function () { show("library"); });
     function goAuthor() {
       show("home");
@@ -877,8 +1030,196 @@
       renderHome();
     });
 
+    /* ---------------- Accounts (Firebase Auth) ---------------- */
+    var FB_CONFIG = {
+      apiKey: "AIzaSyCvunQX7GQ6G_hyECRbaojXJP7sgg8RlxQ",
+      authDomain: "qalampress-27352.firebaseapp.com",
+      projectId: "qalampress-27352",
+      storageBucket: "qalampress-27352.firebasestorage.app",
+      messagingSenderId: "941251226301",
+      appId: "1:941251226301:web:f47c6f5773793d81b465d4"
+    };
+    var auth = null;
+    var pendingRoute = null;
+    try {
+      if (window.firebase) {
+        if (!firebase.apps.length) firebase.initializeApp(FB_CONFIG);
+        auth = firebase.auth();
+      }
+    } catch (e) { auth = null; }
+
+    // The profile's displayName carries "Name|Role" — Firebase Auth profiles
+    // have no custom fields, so name and role travel together in the one
+    // free-text field and are split back apart on sign-in.
+    function parseProfile(user) {
+      var parts = (user.displayName || "").split("|");
+      var name = (parts[0] || "").trim();
+      if (!name) name = user.email ? user.email.split("@")[0] : "Member";
+      return { name: name, role: parts[1] === "Writer" ? "Writer" : "Reader", email: user.email || "" };
+    }
+    function setUser(user) {
+      state.user = user ? parseProfile(user) : null;
+      $("auth-out").classList.toggle("hidden", !!state.user);
+      $("auth-in").classList.toggle("hidden", !state.user);
+      if (state.user) $("user-name").textContent = state.user.name + " · " + state.user.role;
+      renderSellBox();
+    }
+    function authErrorText(err) {
+      var code = err && err.code ? err.code : "";
+      if (code === "auth/email-already-in-use") return "That email already has an account — try signing in instead.";
+      if (code === "auth/invalid-email") return "That email address doesn’t look right.";
+      if (code === "auth/weak-password") return "Password needs at least 6 characters.";
+      if (code === "auth/user-not-found" || code === "auth/wrong-password" || code === "auth/invalid-credential") return "That email and password don’t match an account.";
+      if (code === "auth/too-many-requests") return "Too many attempts just now — wait a moment and try again.";
+      if (code === "auth/network-request-failed") return "No connection — check your internet and try again.";
+      return "Something went wrong. Please try again.";
+    }
+    function showFormErr(id, msg) { var el = $(id); el.textContent = msg; el.style.display = "block"; }
+    function afterAuth() {
+      var r = pendingRoute;
+      pendingRoute = null;
+      if (r === "editor") { openEditor(); return; }
+      if (r === "shop") { show("shop"); return; }
+      show("home");
+    }
+    function openEditor() {
+      if (!state.user) {
+        pendingRoute = "editor";
+        show("signin");
+        toast("Sign in to write — joining QalamPress is free.");
+        return;
+      }
+      if (state.user.role !== "Writer") { show("writerprompt"); return; }
+      $("ed-author").value = state.user.name;
+      show("editor");
+    }
+    function becomeWriter() {
+      if (!auth || !auth.currentUser || !state.user) { show("signup"); return; }
+      auth.currentUser.updateProfile({ displayName: state.user.name + "|Writer" }).then(function () {
+        setUser(auth.currentUser);
+        toast("You’re a Writer now — publish stories and sell in the Shop.");
+        openEditor();
+      }).catch(function () { toast("That didn’t go through — please try again."); });
+    }
+    if (auth) auth.onAuthStateChanged(function (user) { setUser(user); });
+
+    var signupRole = "Reader";
+    document.querySelectorAll("[data-role]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        signupRole = b.getAttribute("data-role");
+        document.querySelectorAll("[data-role]").forEach(function (x) {
+          x.setAttribute("aria-pressed", x === b ? "true" : "false");
+        });
+      });
+    });
+    $("signup-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      $("su-err").style.display = "none";
+      var name = $("su-name").value.trim();
+      var email = $("su-email").value.trim();
+      var pass = $("su-pass").value;
+      if (!name || !email || pass.length < 6) {
+        showFormErr("su-err", "Add your name, an email, and a password of at least 6 characters.");
+        return;
+      }
+      if (!auth) { showFormErr("su-err", "Accounts are unavailable right now — please try again in a moment."); return; }
+      auth.createUserWithEmailAndPassword(email, pass).then(function (cred) {
+        return cred.user.updateProfile({ displayName: name + "|" + signupRole });
+      }).then(function () {
+        setUser(auth.currentUser);
+        toast("Welcome to QalamPress, " + name + " — your free account is ready.");
+        afterAuth();
+      }).catch(function (err) { showFormErr("su-err", authErrorText(err)); });
+    });
+    $("signin-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      $("si-err").style.display = "none";
+      var email = $("si-email").value.trim();
+      var pass = $("si-pass").value;
+      if (!email || !pass) { showFormErr("si-err", "Add your email and password."); return; }
+      if (!auth) { showFormErr("si-err", "Accounts are unavailable right now — please try again in a moment."); return; }
+      auth.signInWithEmailAndPassword(email, pass).then(function () {
+        setUser(auth.currentUser);
+        toast("Welcome back, " + (state.user ? state.user.name : "reader") + ".");
+        afterAuth();
+      }).catch(function (err) { showFormErr("si-err", authErrorText(err)); });
+    });
+    $("forgot-btn").addEventListener("click", function () {
+      var email = $("si-email").value.trim();
+      if (!email) { showFormErr("si-err", "Type your email above first, then tap “Forgot your password?”"); return; }
+      if (!auth) { showFormErr("si-err", "Accounts are unavailable right now — please try again in a moment."); return; }
+      auth.sendPasswordResetEmail(email).then(function () {
+        toast("Password reset email sent — check your inbox.");
+      }).catch(function (err) { showFormErr("si-err", authErrorText(err)); });
+    });
+
+    /* ---------------- Shop ---------------- */
+    var PRODUCTS = [
+      { title: "The Crimson Oath", type: "eBook", price: "$14.95", url: "https://mindfuldesignes.gumroad.com/l/trtrw", author: "Dr. S. Ahmad" },
+      { title: "Overcome Fear", type: "eBook", price: "$7", url: "https://mindfuldesignes.gumroad.com/l/onsuheu", author: "Dr. S. Ahmad" },
+      { title: "Zawal-e-Bemisal", type: "eBook", price: "$5", url: "https://mindfuldesignes.gumroad.com/l/hdkgce", author: "Dr. S. Ahmad" },
+      { title: "2027 Mindfulness & Self-Care Journal", type: "Planner", price: "$7", url: "https://mindfuldesignes.gumroad.com/l/oiegxf", author: "Dr. S. Ahmad" },
+      { title: "My Daily Balance", type: "Planner", price: "$5", url: "https://mindfuldesignes.gumroad.com/l/dfgty", author: "Dr. S. Ahmad" },
+      { title: "12 Lists for an Organized Life", type: "Planner", price: "$5", url: "https://mindfuldesignes.gumroad.com/l/ccvqpd", author: "Dr. S. Ahmad" },
+      { title: "Matric Maths Study Pack", type: "eBook", price: "$5", url: "https://mindfuldesignes.gumroad.com/l/krfvnw", author: "Dr. S. Ahmad" },
+      { title: "AI Prompt Pack for Small Business Owners", type: "Article / Guide", price: "$19", url: "https://mindfuldesignes.gumroad.com/l/yzrbd", author: "Dr. S. Ahmad" },
+      { title: "Strategic Clarity OS", type: "Planner", price: "$29", url: "https://mindfuldesignes.gumroad.com/l/xrlmxe", author: "Dr. S. Ahmad" }
+    ];
+    var shopMine = []; // listings a writer adds — this visit only
+    function renderShop() {
+      var grid = $("shop-grid");
+      grid.innerHTML = "";
+      shopMine.concat(PRODUCTS).forEach(function (p) {
+        var card = document.createElement("div");
+        card.className = "prod";
+        card.innerHTML = '<span class="tag' + (p.type === "Planner" ? " gold" : "") + '">' + esc(p.type) + '</span>' +
+          '<h3>' + esc(p.title) + '</h3><p class="pauthor">by ' + esc(p.author) + '</p>' +
+          '<div class="prow"><span class="price">' + esc(p.price) + '</span>' +
+          '<a class="btn primary" href="' + esc(p.url) + '" target="_blank" rel="noopener">Buy on Gumroad</a></div>';
+        grid.appendChild(card);
+      });
+      renderSellBox();
+    }
+    function renderSellBox() {
+      var box = $("sell-box");
+      if (!box) return;
+      if (state.user && state.user.role === "Writer") {
+        box.innerHTML = '<div class="sellcard"><h3>Sell your work</h3>' +
+          '<p>List an eBook, article or planner with its Gumroad link. Buyers check out on Gumroad, which pays you directly.</p>' +
+          '<form id="sell-form">' +
+          '<div class="field"><label for="sf-title">Title</label><input type="text" id="sf-title" maxlength="90" placeholder="Your book, article or planner title" /></div>' +
+          '<div class="edrow"><div class="field"><label for="sf-type">Type</label><select id="sf-type"><option>eBook</option><option>Article</option><option>Planner</option></select></div>' +
+          '<div class="field"><label for="sf-price">Price (USD)</label><input type="text" id="sf-price" inputmode="decimal" placeholder="9" /></div></div>' +
+          '<div class="field"><label for="sf-url">Gumroad link</label><input type="url" id="sf-url" placeholder="https://yourname.gumroad.com/l/…" /></div>' +
+          '<p class="err" id="sf-err"></p>' +
+          '<div class="edactions"><button class="btn primary" type="submit">Add listing</button><span class="ednote">Shows in the Shop for this visit.</span></div>' +
+          '</form></div>';
+        $("sell-form").addEventListener("submit", function (e) {
+          e.preventDefault();
+          var title = $("sf-title").value.trim();
+          var price = $("sf-price").value.trim();
+          var url = $("sf-url").value.trim();
+          if (!title || !price || !url) { showFormErr("sf-err", "Add a title, a price and your Gumroad link."); return; }
+          if (url.indexOf("http://") !== 0 && url.indexOf("https://") !== 0) { showFormErr("sf-err", "The Gumroad link should start with https://"); return; }
+          if (price.charAt(0) !== "$") price = "$" + price;
+          shopMine.unshift({ title: title, type: $("sf-type").value, price: price, url: url, author: state.user.name });
+          renderShop();
+          toast("Listed in the Shop — buyers check out on your Gumroad.");
+        });
+      } else if (state.user) {
+        box.innerHTML = '<div class="sellcard"><h3>Sell your work on QalamPress</h3>' +
+          '<p>The Shop is where Writers sell eBooks, articles and planners. Your account is a Reader account — switch to Writer, free, to list your work here and publish stories.</p>' +
+          '<button class="btn primary" data-become="1">Become a Writer — free</button></div>';
+      } else {
+        box.innerHTML = '<div class="sellcard"><h3>Sell your work on QalamPress</h3>' +
+          '<p>Writers list eBooks, articles and planners here, each linked to their own Gumroad checkout. Join free as a Writer to add yours.</p>' +
+          '<div style="display:flex; gap:10px; flex-wrap:wrap;"><button class="btn primary" data-goto="signup">Join free as a Writer</button><button class="btn" data-goto="signin">Sign in</button></div></div>';
+      }
+    }
+
     initEditor();
     renderHome();
+    renderShop();
     show("home");
     </script>
   </body>
