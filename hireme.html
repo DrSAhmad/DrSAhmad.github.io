@@ -69,6 +69,16 @@
   .app{border-top:1px solid var(--line);padding-top:14px;margin-top:14px}
   .app h4{color:var(--emerald);margin-bottom:4px}
   .app p{font-size:.93rem}
+  .nbadge{display:inline-block;background:var(--gold);color:#fff;border-radius:999px;padding:0 8px;margin-left:4px;font-size:.78rem;font-weight:700}
+  .conv-unread{border-color:var(--gold);background:#fffdf5}
+  .tag.green{background:#dcfce7;color:#166534}
+  .tag.red{background:#fee2e2;color:#991b1b}
+  .msg{background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin-bottom:10px;max-width:88%}
+  .msg.mine{background:#eef6f2;border-color:#c8e6d6;margin-left:auto}
+  .msg-name{font-size:.8rem;color:var(--muted);font-weight:700;margin-bottom:2px}
+  #thread-msgs{max-height:55vh;overflow-y:auto;padding:4px 2px}
+  .hired-note{background:#f0fdf4;border:1px solid #86efac;border-radius:12px;padding:16px 20px;margin:18px 0;font-size:.93rem}
+  .hired-note strong{color:#166534}
   footer{background:#10201a;color:#cbd5d1;padding:28px 20px;text-align:center;font-size:.9rem}
   footer a{color:#9fd8c0;margin:0 10px;text-decoration:none}
   footer a:hover{text-decoration:underline}
@@ -89,6 +99,7 @@
     <button data-nav="postjob" id="nav-postjob" class="hidden">Post a Job</button>
     <button data-nav="myjobs" id="nav-myjobs" class="hidden">My Jobs</button>
     <button data-nav="myapps" id="nav-myapps" class="hidden">My Applications</button>
+    <button data-nav="messages" id="nav-messages" class="hidden">Messages <span id="nav-msg-badge" class="nbadge hidden"></span></button>
     <button data-nav="profile" id="nav-profile" class="hidden">My Profile</button>
     <span class="spacer"></span>
     <span class="who hidden" id="nav-who"></span>
@@ -158,6 +169,7 @@
     <div id="apply-done" class="card hidden">
       <h3>Application sent</h3>
       <p>You have already applied for this job. You can follow it under <strong>My Applications</strong>.</p>
+      <button class="btn" id="apply-msg-employer">Message employer</button>
     </div>
   </section>
 
@@ -321,6 +333,31 @@
     <div id="myapps-empty" class="empty hidden">You have not applied for any job yet.</div>
   </section>
 
+  <!-- ============ MESSAGES ============ -->
+  <section id="view-messages" class="hidden">
+    <h2 class="sec">Messages</h2>
+    <p class="lead">Your conversations with employers and job seekers — all in one place. Agree the job, the start date and the pay here.</p>
+    <div id="msg-list"></div>
+    <div id="msg-empty" class="empty hidden">No messages yet. Apply for a job, or post one, and your conversations will show up here.</div>
+  </section>
+
+  <!-- ============ MESSAGE THREAD ============ -->
+  <section id="view-thread" class="hidden">
+    <p><a href="#" id="thread-back" style="color:var(--emerald);font-weight:700;text-decoration:none">← Back to messages</a></p>
+    <div id="thread-hired" class="hired-note hidden"><strong>🎉 Hired!</strong> <span id="thread-hired-text"></span></div>
+    <h2 class="sec" id="thread-title">Chat</h2>
+    <p class="lead" id="thread-sub"></p>
+    <div class="safety">Keep your conversation here — never share bank details or pay any fee to get a job.</div>
+    <div id="thread-msgs"></div>
+    <form id="thread-form">
+      <label for="thread-input">Message</label>
+      <textarea id="thread-input" maxlength="1000" placeholder="Write your message…" required></textarea>
+      <p class="hint">Max 1000 characters. Text only.</p>
+      <button class="btn gold" type="submit" id="thread-send">Send</button>
+    </form>
+    <div class="err" id="thread-err"></div>
+  </section>
+
 </div>
 
 <footer>
@@ -335,7 +372,7 @@
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, collection, doc, setDoc, getDoc, getDocs, addDoc, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, collection, doc, setDoc, getDoc, getDocs, addDoc, updateDoc, query, where, orderBy, limit, serverTimestamp, increment, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 /* ================= Firebase config ================= */
 /* Free Firebase project "HIRE ME" (hire-me-58146): Email/Password sign-in
@@ -388,6 +425,16 @@ function dateText(ts) {
 function tsMillis(ts) {
   try { return ts && ts.toMillis ? ts.toMillis() : (ts ? new Date(ts).getTime() : 0); } catch (e) { return 0; }
 }
+function timeText(ts) {
+  try {
+    const d = ts && ts.toDate ? ts.toDate() : (ts ? new Date(ts) : null);
+    if (!d || isNaN(d)) return "";
+    const t = d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
+    const today = new Date();
+    if (d.toDateString() === today.toDateString()) return t;
+    return d.toLocaleDateString("en-GB", { day: "numeric", month: "short" }) + " " + t;
+  } catch (e) { return ""; }
+}
 function parseSkills(s) {
   return String(s || "").split(",").map((x) => x.trim()).filter(Boolean).slice(0, 20);
 }
@@ -429,15 +476,17 @@ let prosCache = [];
 let currentJobId = null;
 let currentJob = null;
 
-const VIEWS = ["home", "job", "professionals", "pro", "signup", "signin", "profile", "postjob", "myjobs", "myapps"];
+const VIEWS = ["home", "job", "professionals", "pro", "signup", "signin", "profile", "postjob", "myjobs", "myapps", "messages", "thread"];
 function show(view) {
   VIEWS.forEach((v) => $("view-" + v).classList.toggle("hidden", v !== view));
   document.querySelectorAll("[data-nav]").forEach((b) => b.classList.toggle("active", b.getAttribute("data-nav") === view));
   window.scrollTo(0, 0);
+  if (view !== "thread" && threadUnsub) { threadUnsub(); threadUnsub = null; currentThread = null; }
   if (view === "home") loadJobs();
   if (view === "professionals") loadProfessionals();
   if (view === "myjobs") loadMyJobs();
   if (view === "myapps") loadMyApplications();
+  if (view === "messages") loadConversations();
   if (view === "profile") fillProfileForm();
 }
 document.querySelectorAll("[data-nav]").forEach((b) => {
@@ -449,6 +498,7 @@ document.querySelectorAll("[data-nav]").forEach((b) => {
     if (v === "myapps" && !(currentProfile && currentProfile.role === "seeker")) {
       show("signup"); toast("Create a free seeker account to apply for jobs."); return;
     }
+    if (v === "messages" && !currentUser) { show("signin"); toast("Sign in to see your messages."); return; }
     if (v === "profile" && !currentUser) { show("signin"); toast("Sign in to open your profile."); return; }
     show(v);
   });
@@ -459,6 +509,11 @@ $("su-to-signin").addEventListener("click", (e) => { e.preventDefault(); show("s
 $("si-to-signup").addEventListener("click", (e) => { e.preventDefault(); show("signup"); });
 $("apply-goto-signin").addEventListener("click", () => show("signin"));
 $("apply-goto-profile").addEventListener("click", () => show("profile"));
+$("apply-msg-employer").addEventListener("click", () => {
+  if (!currentJob || !currentUser || !currentProfile) return;
+  openConversation({ jobId: currentJobId, jobTitle: currentJob.title, employerId: currentJob.employerId, employerName: currentJob.employerName || currentJob.company || "", seekerId: currentUser.uid, seekerName: currentProfile.name });
+});
+$("thread-back").addEventListener("click", (e) => { e.preventDefault(); show("messages"); });
 if (!CONFIGURED) $("setup-note").classList.remove("hidden");
 
 // Category dropdowns
@@ -487,6 +542,8 @@ function setSignedInUI() {
   $("nav-postjob").classList.toggle("hidden", !isEmp);
   $("nav-myjobs").classList.toggle("hidden", !isEmp);
   $("nav-myapps").classList.toggle("hidden", !isSeek);
+  $("nav-messages").classList.toggle("hidden", !in_);
+  if (!in_) $("nav-msg-badge").classList.add("hidden");
   if (in_ && currentProfile) {
     $("nav-who").classList.remove("hidden");
     $("nav-who").textContent = currentProfile.name + " · " + (currentProfile.role === "employer" ? "Employer" : "Seeker");
@@ -502,9 +559,17 @@ async function loadProfile(uid) {
 if (auth) {
   onAuthStateChanged(auth, async (user) => {
     currentUser = user;
-    if (user) { await loadProfile(user.uid); }
-    else { currentProfile = null; setSignedInUI(); }
+    if (user) { await loadProfile(user.uid); startConvListeners(); }
+    else { currentProfile = null; setSignedInUI(); stopConvListeners(); if (threadUnsub) { threadUnsub(); threadUnsub = null; } currentThread = null; }
     refreshJobApplyBox();
+    /* Auth restores a moment after page load; if a signed-in view was already
+       opened before that, its loader ran with no user and showed empty — rerun it. */
+    if (user) {
+      if (!$("view-myjobs").classList.contains("hidden")) loadMyJobs();
+      else if (!$("view-myapps").classList.contains("hidden")) loadMyApplications();
+      else if (!$("view-messages").classList.contains("hidden")) loadConversations();
+      else if (!$("view-profile").classList.contains("hidden")) fillProfileForm();
+    }
   });
 }
 $("signup-form").addEventListener("submit", async (e) => {
@@ -548,6 +613,9 @@ $("forgot-btn").addEventListener("click", async (e) => {
 });
 $("nav-signout").addEventListener("click", async () => {
   try { if (auth) await signOut(auth); } catch (e) {}
+  stopConvListeners();
+  if (threadUnsub) { threadUnsub(); threadUnsub = null; }
+  currentThread = null;
   currentUser = null; currentProfile = null; setSignedInUI(); show("home");
   toast("Signed out. See you soon.");
 });
@@ -691,11 +759,11 @@ async function loadProfessionals() {
   } catch (e) { prosCache = []; toast(dataErrorText(e)); }
   renderPros();
 }
-function openPro(id) {
-  const p = prosCache.find((x) => x.id === id);
-  if (!p) { toast("That profile could not be opened."); return; }
+let currentProJob = null; // { jobId, jobTitle } when a profile is opened from My Jobs
+function renderProDetail(p) {
   const rate = money(p.rate, p.rateCurrency);
   const tags = (p.skills || []).map((s) => '<span class="tag">' + esc(s) + "</span>").join("");
+  const canMsg = !!(currentUser && currentProfile && currentProfile.role === "employer" && p.id !== currentUser.uid);
   $("pro-detail").innerHTML = '<div class="card">'
     + "<h3>" + esc(p.name) + "</h3>"
     + "<p><strong>" + esc(p.title || "Professional") + "</strong>" + (p.location ? " · " + esc(p.location) : "") + "</p>"
@@ -703,8 +771,53 @@ function openPro(id) {
     + (tags ? '<p style="margin-top:8px">' + tags + "</p>" : "")
     + (p.bio ? '<p style="margin-top:12px;white-space:pre-line">' + esc(p.bio) + "</p>" : "")
     + (p.cvURL ? '<p style="margin-top:14px"><a class="btn" href="' + esc(p.cvURL) + '" target="_blank" rel="noopener">Download CV' + (p.cvName ? " (" + esc(p.cvName) + ")" : "") + "</a></p>" : '<p class="meta" style="margin-top:14px">No CV uploaded yet.</p>')
+    + (canMsg ? '<div id="pro-msg-box" style="margin-top:16px"></div>' : "")
     + "</div>";
   show("pro");
+  wireProMessage(p);
+}
+function openPro(id) {
+  const p = prosCache.find((x) => x.id === id);
+  if (!p) { toast("That profile could not be opened."); return; }
+  currentProJob = null;
+  renderProDetail(p);
+}
+async function openProById(id, jobCtx) {
+  currentProJob = jobCtx || null;
+  let p = prosCache.find((x) => x.id === id);
+  if (!p && db) {
+    try { const s = await getDoc(doc(db, "users", id)); if (s.exists()) p = Object.assign({ id: s.id }, s.data()); } catch (e) {}
+  }
+  if (!p) { toast("That profile could not be opened."); return; }
+  renderProDetail(p);
+}
+async function wireProMessage(p) {
+  const box = $("pro-msg-box");
+  if (!box) return;
+  if (!currentUser || !currentProfile || currentProfile.role !== "employer" || p.id === currentUser.uid) { box.innerHTML = ""; return; }
+  if (currentProJob) {
+    box.innerHTML = '<button class="btn" id="pro-msg-btn">Message about “' + esc(currentProJob.jobTitle) + "”</button>";
+    $("pro-msg-btn").addEventListener("click", () => openConversation({
+      jobId: currentProJob.jobId, jobTitle: currentProJob.jobTitle,
+      employerId: currentUser.uid, employerName: currentProfile.name || "",
+      seekerId: p.id, seekerName: p.name || ""
+    }));
+    return;
+  }
+  box.innerHTML = '<p class="meta">Message this professional about one of your jobs:</p><p style="margin-top:8px"><select id="pro-msg-job" style="width:100%;padding:11px 14px;border:1px solid #d1d5db;border-radius:9px;font-size:1rem;font-family:inherit"></select></p><p style="margin-top:10px"><button class="btn" id="pro-msg-btn">Message</button></p>';
+  const sel = $("pro-msg-job");
+  try {
+    const snap = await getDocs(query(collection(db, "jobs"), where("employerId", "==", currentUser.uid), where("status", "==", "open")));
+    const jobs = [];
+    snap.forEach((d) => jobs.push(Object.assign({ id: d.id }, d.data())));
+    if (!jobs.length) { box.innerHTML = '<p class="meta">Post a job first to message this professional.</p>'; return; }
+    sel.innerHTML = jobs.map((j) => '<option value="' + esc(j.id) + '">' + esc(j.title) + "</option>").join("");
+    $("pro-msg-btn").addEventListener("click", () => {
+      const j = jobs.find((x) => x.id === sel.value);
+      if (!j) return;
+      openConversation({ jobId: j.id, jobTitle: j.title, employerId: currentUser.uid, employerName: currentProfile.name || "", seekerId: p.id, seekerName: p.name || "" });
+    });
+  } catch (e) { box.innerHTML = '<p class="meta">Could not load your jobs — try again.</p>'; }
 }
 
 /* ================= My Profile ================= */
@@ -816,16 +929,26 @@ async function loadMyJobs() {
     mine.sort((a, b) => tsMillis(b.createdAt) - tsMillis(a.createdAt));
     if (!mine.length) { $("myjobs-empty").classList.remove("hidden"); return; }
     for (const j of mine) {
-      const asnap = await getDocs(query(collection(db, "applications"), where("jobId", "==", j.id)));
+      const asnap = await getDocs(query(collection(db, "applications"), where("jobId", "==", j.id), where("employerId", "==", currentUser.uid)));
       const apps = [];
       asnap.forEach((d) => apps.push(Object.assign({ id: d.id }, d.data())));
       apps.sort((a, b) => tsMillis(b.createdAt) - tsMillis(a.createdAt));
-      const appHtml = apps.length ? apps.map((a) =>
-        '<div class="app"><h4>' + esc(a.seekerName || "Applicant") + '</h4>'
+      const appHtml = apps.length ? apps.map((a) => {
+        const st = a.status || "applied";
+        return '<div class="app"><h4>' + esc(a.seekerName || "Applicant") + " " + statusTag(st) + "</h4>"
         + '<p style="white-space:pre-line">' + esc(a.coverNote || "") + "</p>"
-        + '<p class="meta">Applied ' + esc(dateText(a.createdAt)) + " · Status: " + esc(a.status || "applied") + "</p>"
+        + '<p class="meta">Applied ' + esc(dateText(a.createdAt)) + "</p>"
         + (a.cvURL ? '<p><a class="btn small ghost" href="' + esc(a.cvURL) + '" target="_blank" rel="noopener">Download CV</a></p>' : "")
-        + "</div>").join("")
+        + '<p style="margin-top:10px">'
+        + '<button class="btn small" data-msg="1" data-job="' + esc(j.id) + '" data-jobtitle="' + esc(j.title) + '" data-seeker="' + esc(a.seekerId) + '" data-seekername="' + esc(a.seekerName || "") + '">Message</button> '
+        + '<button class="btn small ghost" data-viewpro="' + esc(a.seekerId) + '" data-job="' + esc(j.id) + '" data-jobtitle="' + esc(j.title) + '">View profile</button>'
+        + "</p>"
+        + '<p class="meta" style="margin-top:10px">Hiring: '
+        + '<button class="btn small ghost" data-status="shortlisted" data-app="' + esc(a.id) + '"' + (st === "shortlisted" ? " disabled" : "") + ">Shortlist</button> "
+        + '<button class="btn small" data-status="hired" data-app="' + esc(a.id) + '"' + (st === "hired" ? " disabled" : "") + ">Hire</button> "
+        + '<button class="btn small ghost" data-status="rejected" data-app="' + esc(a.id) + '"' + (st === "rejected" ? " disabled" : "") + ">Reject</button></p>"
+        + "</div>";
+      }).join("")
         : '<p class="meta">No applications yet.</p>';
       const div = document.createElement("div");
       div.className = "card";
@@ -835,6 +958,13 @@ async function loadMyJobs() {
         + appHtml;
       list.appendChild(div);
     }
+    list.querySelectorAll("[data-status]").forEach((b) => b.addEventListener("click", () => setApplicationStatus(b.getAttribute("data-app"), b.getAttribute("data-status"))));
+    list.querySelectorAll("[data-msg]").forEach((b) => b.addEventListener("click", () => openConversation({
+      jobId: b.getAttribute("data-job"), jobTitle: b.getAttribute("data-jobtitle"),
+      employerId: currentUser.uid, employerName: (currentProfile && currentProfile.name) || "",
+      seekerId: b.getAttribute("data-seeker"), seekerName: b.getAttribute("data-seekername")
+    })));
+    list.querySelectorAll("[data-viewpro]").forEach((b) => b.addEventListener("click", () => openProById(b.getAttribute("data-viewpro"), { jobId: b.getAttribute("data-job"), jobTitle: b.getAttribute("data-jobtitle") })));
   } catch (e) { toast(dataErrorText(e)); $("myjobs-empty").classList.remove("hidden"); }
 }
 
@@ -850,17 +980,190 @@ async function loadMyApplications() {
     apps.sort((a, b) => tsMillis(b.createdAt) - tsMillis(a.createdAt));
     if (!apps.length) { $("myapps-empty").classList.remove("hidden"); return; }
     for (const a of apps) {
-      let jobTitle = "Job", company = "";
-      try { const js = await getDoc(doc(db, "jobs", a.jobId)); if (js.exists()) { jobTitle = js.data().title || jobTitle; company = js.data().company || ""; } } catch (e) {}
+      let jobTitle = "Job", company = "", empName = "";
+      try { const js = await getDoc(doc(db, "jobs", a.jobId)); if (js.exists()) { jobTitle = js.data().title || jobTitle; company = js.data().company || ""; empName = js.data().employerName || ""; } } catch (e) {}
       const div = document.createElement("div");
       div.className = "card";
       div.innerHTML = "<h3>" + esc(jobTitle) + "</h3>"
         + (company ? "<p><strong>" + esc(company) + "</strong></p>" : "")
-        + '<p class="meta">Applied ' + esc(dateText(a.createdAt)) + " · Status: <strong>" + esc(a.status || "applied") + "</strong></p>"
-        + (a.coverNote ? '<p style="white-space:pre-line;margin-top:8px">' + esc(a.coverNote) + "</p>" : "");
+        + '<p class="meta">Applied ' + esc(dateText(a.createdAt)) + " · " + statusTag(a.status || "applied") + "</p>"
+        + (a.coverNote ? '<p style="white-space:pre-line;margin-top:8px">' + esc(a.coverNote) + "</p>" : "")
+        + '<p style="margin-top:12px"><button class="btn small" data-msgapp="1" data-job="' + esc(a.jobId) + '" data-jobtitle="' + esc(jobTitle) + '" data-emp="' + esc(a.employerId) + '" data-empname="' + esc(empName) + '">Message employer</button></p>';
       list.appendChild(div);
     }
+    list.querySelectorAll("[data-msgapp]").forEach((b) => b.addEventListener("click", () => openConversation({
+      jobId: b.getAttribute("data-job"), jobTitle: b.getAttribute("data-jobtitle"),
+      employerId: b.getAttribute("data-emp"), employerName: b.getAttribute("data-empname"),
+      seekerId: currentUser.uid, seekerName: (currentProfile && currentProfile.name) || ""
+    })));
   } catch (e) { toast(dataErrorText(e)); $("myapps-empty").classList.remove("hidden"); }
+}
+
+/* ================= Messages & hiring ================= */
+/* Conversations live in Firestore under conversations/{convId}, with a
+   messages subcollection. convId is employerId + "_" + seekerId + "_" + jobId,
+   so both sides always open the same thread. Only the two participants can
+   read or write a conversation (enforced by the Firestore rules). */
+let convsCache = [];
+let convUnsubs = [];
+let convListenerWarned = false;
+let currentThread = null;
+let threadUnsub = null;
+
+function statusTag(st) {
+  const s = st || "applied";
+  if (s === "hired") return '<span class="tag green">Hired</span>';
+  if (s === "shortlisted") return '<span class="tag gold">Shortlisted</span>';
+  if (s === "rejected") return '<span class="tag red">Rejected</span>';
+  return '<span class="tag grey">Applied</span>';
+}
+function convIdFor(employerId, seekerId, jobId) { return employerId + "_" + seekerId + "_" + jobId; }
+function convOtherName(c) { return currentUser.uid === c.employerId ? (c.seekerName || "Job seeker") : (c.employerName || "Employer"); }
+function convUnread(c) { return currentUser.uid === c.employerId ? (c.unreadEmployer || 0) : (c.unreadSeeker || 0); }
+function updateMsgBadge() {
+  const b = $("nav-msg-badge");
+  if (!currentUser) { b.classList.add("hidden"); return; }
+  const total = convsCache.reduce((n, c) => n + convUnread(c), 0);
+  b.textContent = total > 99 ? "99+" : String(total);
+  b.classList.toggle("hidden", total <= 0);
+}
+function renderConvList() {
+  const list = $("msg-list");
+  if (!currentUser) { list.innerHTML = ""; $("msg-empty").classList.remove("hidden"); return; }
+  const convs = convsCache.slice().sort((a, b) => tsMillis(b.updatedAt) - tsMillis(a.updatedAt));
+  $("msg-empty").classList.toggle("hidden", convs.length > 0);
+  list.innerHTML = convs.map((c) => {
+    const unread = convUnread(c);
+    return '<div class="card' + (unread ? " conv-unread" : "") + '">'
+      + "<h3>" + esc(convOtherName(c)) + "</h3>"
+      + "<p><strong>" + esc(c.jobTitle || "Job") + "</strong></p>"
+      + (c.lastMessage ? '<p style="white-space:pre-line">' + esc(c.lastMessage) + "</p>" : '<p class="meta">No messages yet.</p>')
+      + '<p class="meta">' + (c.lastMessageAt ? esc(timeText(c.lastMessageAt)) : "") + (unread ? ' · <span class="nbadge">' + unread + " unread</span>" : "") + "</p>"
+      + '<button class="btn small" data-conv="' + esc(c.id) + '">Open chat</button>'
+      + "</div>";
+  }).join("");
+  list.querySelectorAll("[data-conv]").forEach((b) => b.addEventListener("click", () => {
+    const c = convsCache.find((x) => x.id === b.getAttribute("data-conv"));
+    if (c) openConversation(c);
+  }));
+}
+function loadConversations() {
+  if (!db || !currentUser) { convsCache = []; renderConvList(); return; }
+  startConvListeners();
+  renderConvList();
+}
+function startConvListeners() {
+  if (!db || !currentUser || convUnsubs.length) return;
+  const mk = (field) => onSnapshot(query(collection(db, "conversations"), where(field, "==", currentUser.uid)),
+    (snap) => {
+      const rows = [];
+      snap.forEach((d) => rows.push(Object.assign({ id: d.id }, d.data())));
+      convsCache = convsCache.filter((c) => c[field] !== currentUser.uid).concat(rows);
+      renderConvList(); updateMsgBadge();
+    },
+    (err) => { if (!convListenerWarned) { convListenerWarned = true; console.warn("Messages listener:", err); } });
+  convUnsubs.push(mk("employerId"), mk("seekerId"));
+}
+function stopConvListeners() {
+  convUnsubs.forEach((u) => { try { u(); } catch (e) {} });
+  convUnsubs = []; convsCache = []; updateMsgBadge();
+}
+function renderThreadHead() {
+  const c = currentThread; if (!c) return;
+  const other = currentUser.uid === c.employerId ? c.seekerName : c.employerName;
+  $("thread-title").textContent = "Chat with " + (other || "…");
+  $("thread-sub").textContent = (c.jobTitle || "Job") + " · agree the job, the start date and the pay here.";
+  $("thread-hired").classList.add("hidden");
+}
+async function checkHiredNote() {
+  const c = currentThread; if (!c || !db) return;
+  try {
+    const snap = await getDocs(query(collection(db, "applications"), where("jobId", "==", c.jobId), where("seekerId", "==", c.seekerId), limit(1)));
+    let hired = false;
+    snap.forEach((d) => { if (d.data().status === "hired") hired = true; });
+    if (hired) {
+      $("thread-hired-text").textContent = (c.employerName || "The employer") + " has hired " + (c.seekerName || "you") + " for “" + (c.jobTitle || "this job") + "”. Use this chat to agree the start date and details.";
+      $("thread-hired").classList.remove("hidden");
+    }
+  } catch (e) {}
+}
+function renderThreadMessages(msgs) {
+  const box = $("thread-msgs");
+  if (!msgs.length) { box.innerHTML = '<p class="meta">No messages yet — say hello and agree the next step here.</p>'; return; }
+  box.innerHTML = msgs.map((m) => {
+    const mine = m.senderId === currentUser.uid;
+    return '<div class="msg' + (mine ? " mine" : "") + '"><div class="msg-name">' + esc(m.senderName || "Someone") + (m.createdAt ? " · " + esc(timeText(m.createdAt)) : "") + '</div><div style="white-space:pre-line">' + esc(m.text) + "</div></div>";
+  }).join("");
+  box.scrollTop = box.scrollHeight;
+}
+async function openConversation(opts) {
+  if (!needFirebase() || !currentUser) { show("signin"); toast("Sign in to message."); return; }
+  if (currentUser.uid !== opts.employerId && currentUser.uid !== opts.seekerId) { toast("This conversation is not available to you."); return; }
+  const id = convIdFor(opts.employerId, opts.seekerId, opts.jobId);
+  const ref = doc(db, "conversations", id);
+  try {
+    const snap = await getDoc(ref);
+    const myField = currentUser.uid === opts.employerId ? "unreadEmployer" : "unreadSeeker";
+    if (!snap.exists()) {
+      await setDoc(ref, {
+        jobId: opts.jobId, jobTitle: opts.jobTitle || "Job",
+        employerId: opts.employerId, employerName: opts.employerName || "",
+        seekerId: opts.seekerId, seekerName: opts.seekerName || "",
+        lastMessage: "", lastMessageAt: null, updatedAt: serverTimestamp(),
+        unreadEmployer: 0, unreadSeeker: 0
+      });
+    } else {
+      await updateDoc(ref, { [myField]: 0 });
+    }
+  } catch (err) { toast(dataErrorText(err)); return; }
+  currentThread = Object.assign({ id }, opts);
+  show("thread");
+  renderThreadHead();
+  checkHiredNote();
+  if (threadUnsub) { threadUnsub(); threadUnsub = null; }
+  threadUnsub = onSnapshot(query(collection(db, "conversations", id, "messages"), orderBy("createdAt")),
+    (snap) => {
+      if (!currentUser || !currentThread || currentThread.id !== id) return;
+      const msgs = [];
+      snap.forEach((d) => msgs.push(Object.assign({ id: d.id }, d.data())));
+      msgs.sort((a, b) => tsMillis(a.createdAt) - tsMillis(b.createdAt));
+      renderThreadMessages(msgs);
+      const last = msgs[msgs.length - 1];
+      if (last && last.senderId !== currentUser.uid) {
+        const myField = currentUser.uid === currentThread.employerId ? "unreadEmployer" : "unreadSeeker";
+        updateDoc(doc(db, "conversations", id), { [myField]: 0 }).catch(() => {});
+      }
+    },
+    (err) => { console.warn("Thread listener:", err); });
+}
+$("thread-form").addEventListener("submit", async (e) => {
+  e.preventDefault(); hideErr("thread-err");
+  const text = $("thread-input").value.trim();
+  if (!text) return;
+  if (text.length > 1000) { showErr("thread-err", "Keep messages under 1000 characters."); return; }
+  if (!currentThread || !currentUser) { showErr("thread-err", "Open a conversation first."); return; }
+  $("thread-send").disabled = true;
+  try {
+    await addDoc(collection(db, "conversations", currentThread.id, "messages"), {
+      senderId: currentUser.uid, senderName: (currentProfile && currentProfile.name) || "Me",
+      text, createdAt: serverTimestamp()
+    });
+    const otherField = currentUser.uid === currentThread.employerId ? "unreadSeeker" : "unreadEmployer";
+    const upd = { lastMessage: text.slice(0, 200), lastMessageAt: serverTimestamp(), updatedAt: serverTimestamp() };
+    upd[otherField] = increment(1);
+    await updateDoc(doc(db, "conversations", currentThread.id), upd);
+    $("thread-input").value = "";
+  } catch (err) { showErr("thread-err", dataErrorText(err)); }
+  $("thread-send").disabled = false;
+});
+async function setApplicationStatus(appId, status) {
+  if (!db || !currentUser) return;
+  if (currentProfile && currentProfile.role !== "employer") { toast("Only the employer can change the hiring status."); return; }
+  try {
+    await updateDoc(doc(db, "applications", appId), { status, updatedAt: serverTimestamp() });
+    toast(status === "hired" ? "Marked as hired." : status === "rejected" ? "Marked as rejected." : "Marked as shortlisted.");
+    loadMyJobs();
+  } catch (err) { toast(dataErrorText(err)); }
 }
 
 /* ================= Boot ================= */
