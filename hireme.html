@@ -3,9 +3,41 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HIRE ME — Free Job Marketplace</title>
-<meta name="description" content="HIRE ME — a free job marketplace. Job seekers sign up and upload a CV; employers post jobs free. No fees, ever.">
+<title>HIRE ME — Free Jobs in Pakistan | Find Work or Hire, No Fees</title>
+<meta name="description" content="HIRE ME is a free job marketplace for Pakistan and beyond. Job seekers sign up free, upload a CV and apply; employers post jobs free and hire. Teaching, writing, data, admin, design, IT, sales and more. No fees, ever.">
+<meta name="keywords" content="free jobs Pakistan, jobs in Pakistan, hire me, find work Pakistan, post a job free, upload CV, jobs Karachi Lahore Islamabad, online jobs Pakistan, teaching jobs, freelance Pakistan">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://drsahmad.github.io/hireme.html">
+<meta property="og:title" content="HIRE ME — Free Jobs in Pakistan | Find Work or Hire, No Fees">
+<meta property="og:description" content="Sign up free, upload your CV and apply — or post a job free and hire. No fees, ever. The perfect match between employers and job seekers.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://drsahmad.github.io/hireme.html">
+<meta name="twitter:card" content="summary">
 <meta name="theme-color" content="#0d5c46">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "name": "HIRE ME",
+      "url": "https://drsahmad.github.io/hireme.html",
+      "description": "A free job marketplace. Job seekers sign up and upload a CV; employers post jobs free. No fees, ever."
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {"@type": "Question", "name": "Is HIRE ME really free?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Signing up, uploading a CV, posting a job, applying and messaging are free for everyone. No fees, no commission, now or later."}},
+        {"@type": "Question", "name": "How do I find a job on HIRE ME?", "acceptedAnswer": {"@type": "Answer", "text": "Sign up free as a job seeker, complete your profile, upload your CV, then search jobs by skill or city and apply. Your match percentage shows how well each job fits your skills."}},
+        {"@type": "Question", "name": "How do I hire someone on HIRE ME?", "acceptedAnswer": {"@type": "Answer", "text": "Sign up free as an employer, post your job with a salary range and screening questions, review applicants, message them here, and mark the right person hired."}},
+        {"@type": "Question", "name": "Is HIRE ME an employer or recruitment agency?", "acceptedAnswer": {"@type": "Answer", "text": "No. HIRE ME is only the link between job seekers and employers. The job, the pay and the work are agreed between the two sides themselves."}}
+      ]
+    }
+  ]
+}
+</script>
+<!-- Google AdSense (same publisher as the hub; ads show once the AdSense account is approved) -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6074529967639717" crossorigin="anonymous"></script>
 <style>
   :root{--emerald:#0d5c46;--emerald-d:#0a4a39;--gold:#b98a1e;--ink:#1f2937;--muted:#6b7280;--bg:#f8fafc;--card:#fff;--line:#eef2f1;--red:#b91c1c}
   *{box-sizing:border-box;margin:0;padding:0}
@@ -79,6 +111,8 @@
   #thread-msgs{max-height:55vh;overflow-y:auto;padding:4px 2px}
   .hired-note{background:#f0fdf4;border:1px solid #86efac;border-radius:12px;padding:16px 20px;margin:18px 0;font-size:.93rem}
   .hired-note strong{color:#166534}
+  .meter{height:10px;background:#e5e7eb;border-radius:999px;overflow:hidden;margin:8px 0}
+  .meter div{height:100%;background:var(--emerald)}
   footer{background:#10201a;color:#cbd5d1;padding:28px 20px;text-align:center;font-size:.9rem}
   footer a{color:#9fd8c0;margin:0 10px;text-decoration:none}
   footer a:hover{text-decoration:underline}
@@ -120,6 +154,16 @@
   <section id="view-home">
     <div class="safety"><strong>Stay safe:</strong> Never pay to apply for a job. A real employer never asks for fees, and never asks for your bank details or ID photos before an interview.</div>
 
+    <div class="card">
+      <h3>How the perfect match happens</h3>
+      <p><strong>1. Join free.</strong> Seekers sign up and upload a CV; employers sign up and post a job — no fees, ever. &nbsp;<strong>2. Find each other.</strong> Search jobs by skill and place, or browse professionals by what they can do. &nbsp;<strong>3. Connect.</strong> Apply, message each other here, agree the work, the pay and the start date — and get hired. HIRE ME is only the link between you; the job itself is agreed between you both. Read the <a href="#" id="home-terms-link" style="color:var(--emerald);font-weight:700">Terms &amp; Conditions</a>.</p>
+    </div>
+
+    <div class="card">
+      <h3>Spot a scam — before it spots you</h3>
+      <p><strong>Never pay for a job.</strong> A real employer never asks for money, bank details, or photos of your ID before an interview. Be suspicious of pay that looks far too good for the work, and of anyone who pressures you to move the chat to WhatsApp or Telegram or to decide today. If a job, a message or a person feels wrong, report it — we review every report.</p>
+    </div>
+
     <h2 class="sec">Featured professional</h2>
     <div class="card featured">
       <h3>Dr. Saghir Ahmad</h3>
@@ -134,10 +178,28 @@
       <input type="text" id="job-search" placeholder="Search jobs, companies, skills…">
       <select id="job-category"><option value="">All categories</option></select>
       <label class="checkrow"><input type="checkbox" id="job-remote"> Remote only</label>
+      <label class="checkrow hidden" id="job-saved-wrap"><input type="checkbox" id="job-saved"> Saved only</label>
     </div>
     <div id="job-list" class="grid"></div>
     <div id="job-empty" class="empty hidden">No jobs posted yet — be the first employer to post one.</div>
     <div id="job-none" class="empty hidden">No jobs match your search. Try different words or clear the filters.</div>
+
+    <h2 class="sec">Free jobs in Pakistan — find work or hire</h2>
+    <div class="card">
+      <p>HIRE ME is a free job marketplace for Pakistan and beyond. If you are looking for work, sign up free, upload your CV and apply for jobs in teaching, writing, data and statistics, admin and support, design and media, software and IT, sales and marketing — in Karachi, Lahore, Islamabad, Rawalpindi, Faisalabad, Peshawar, or fully remote. If you need to hire, post your job free, read real CVs, message candidates here, and mark the right person hired. No fees for anyone, ever.</p>
+      <p style="margin-top:10px"><strong>Popular:</strong> teaching jobs · maths teacher · data entry · content writer · admin assistant · graphic designer · software developer · sales executive · remote jobs Pakistan · part-time jobs · entry-level jobs</p>
+    </div>
+    <h2 class="sec">Questions, answered</h2>
+    <div class="card">
+      <h3>Is HIRE ME really free?</h3>
+      <p>Yes. Signing up, uploading a CV, posting a job, applying and messaging are free for everyone. No fees, no commission, now or later.</p>
+      <h3 style="margin-top:14px">How do I find a job on HIRE ME?</h3>
+      <p>Sign up free as a job seeker, complete your profile, upload your CV, then search jobs by skill or city and apply. Your match percentage shows how well each job fits your skills.</p>
+      <h3 style="margin-top:14px">How do I hire someone on HIRE ME?</h3>
+      <p>Sign up free as an employer, post your job with a salary range and screening questions, review applicants, message them here, and mark the right person hired.</p>
+      <h3 style="margin-top:14px">Is HIRE ME an employer or recruitment agency?</h3>
+      <p>No. HIRE ME is only the link between job seekers and employers. The job, the pay and the work are agreed between the two sides themselves.</p>
+    </div>
   </section>
 
   <!-- ============ JOB DETAIL ============ -->
@@ -148,6 +210,7 @@
       <h3>Apply for this job</h3>
       <div class="safety"><strong>Stay safe:</strong> Never pay to apply for a job. A real employer never asks for fees, and never asks for your bank details or ID photos before an interview.</div>
       <form id="apply-form">
+        <div id="apply-screening"></div>
         <label for="apply-note">Cover note</label>
         <textarea id="apply-note" placeholder="A few lines about why you fit this role…" required></textarea>
         <p class="hint">Your CV from your profile will be attached automatically.</p>
@@ -177,6 +240,11 @@
   <section id="view-professionals" class="hidden">
     <h2 class="sec">Professionals looking for work</h2>
     <p class="lead">Real people, real CVs. Open a profile to see their skills and download their CV.</p>
+    <div class="searchrow">
+      <input type="text" id="pro-search" placeholder="Search name, title or skill…">
+      <input type="text" id="pro-skill" placeholder="Skill (e.g. Maths)">
+      <input type="text" id="pro-city" placeholder="City (e.g. Islamabad)">
+    </div>
     <div class="card featured">
       <h3>Dr. Saghir Ahmad</h3>
       <p class="who-line">Maths &amp; Statistics teacher · Islamabad, Pakistan · Remote worldwide</p>
@@ -186,6 +254,7 @@
     </div>
     <div id="pro-list" class="grid"></div>
     <div id="pro-empty" class="empty hidden">No professionals have joined yet — be the first to sign up and upload your CV.</div>
+    <div id="pro-none" class="empty hidden">No professionals match your search. Try different words or clear the filters.</div>
   </section>
 
   <!-- ============ SINGLE PROFESSIONAL ============ -->
@@ -212,6 +281,7 @@
         <label for="su-pass">Password</label>
         <input type="password" id="su-pass" required minlength="6">
         <p class="hint">At least 6 characters. Keep it somewhere safe — only you know it.</p>
+        <label class="checkrow" style="margin-top:10px"><input type="checkbox" id="su-terms"> I agree to the <a href="#" id="su-terms-link" style="color:var(--emerald);font-weight:700">Terms &amp; Conditions</a> — the same terms for seekers and employers.</label>
         <button class="btn gold" type="submit">Create my free account</button>
       </form>
       <div class="err" id="su-err"></div>
@@ -241,6 +311,8 @@
     <h2 class="sec">My Profile</h2>
     <p class="lead" id="profile-lead">This is what employers see. Keep it honest and up to date.</p>
     <div class="card">
+      <div id="pf-verify" style="margin-bottom:14px"></div>
+      <div id="pf-complete" style="margin-bottom:14px"></div>
       <form id="profile-form">
         <label for="pf-name">Name</label>
         <input type="text" id="pf-name" required>
@@ -300,16 +372,22 @@
           <option value="contract">Contract</option>
           <option value="freelance">Freelance</option>
         </select>
-        <label>Salary range</label>
+        <label>Salary range (required)</label>
         <div style="display:flex;gap:10px;flex-wrap:wrap">
-          <input type="number" id="pj-min" min="0" step="1" placeholder="Min" style="flex:1;min-width:120px">
-          <input type="number" id="pj-max" min="0" step="1" placeholder="Max" style="flex:1;min-width:120px">
+          <input type="number" id="pj-min" min="0" step="1" placeholder="Min" required style="flex:1;min-width:120px">
+          <input type="number" id="pj-max" min="0" step="1" placeholder="Max" required style="flex:1;min-width:120px">
           <select id="pj-cur" style="flex:1;min-width:120px"><option value="PKR">PKR</option><option value="USD">USD</option></select>
         </div>
+        <p class="hint">Every job must show its pay — seekers see the range on the job card.</p>
         <label for="pj-desc">Job description</label>
         <textarea id="pj-desc" required placeholder="What will the person do? What experience do you need? How will you work together?"></textarea>
         <label for="pj-skills">Skills needed (comma separated)</label>
         <input type="text" id="pj-skills" placeholder="e.g. Maths, Teaching, English">
+        <label>Screening questions (optional — up to 3)</label>
+        <p class="hint">Applicants must answer these when they apply. Short questions work best — e.g. “How many years have you taught maths?”</p>
+        <input type="text" id="pj-sq1" placeholder="Screening question 1 (optional)" style="margin-top:6px">
+        <input type="text" id="pj-sq2" placeholder="Screening question 2 (optional)" style="margin-top:6px">
+        <input type="text" id="pj-sq3" placeholder="Screening question 3 (optional)" style="margin-top:6px">
         <button class="btn gold" type="submit">Post this job — free</button>
       </form>
       <div class="err" id="pj-err"></div>
@@ -358,12 +436,39 @@
     <div class="err" id="thread-err"></div>
   </section>
 
+  <!-- ============ TERMS & CONDITIONS ============ -->
+  <section id="view-terms" class="hidden">
+    <p><a href="#" id="terms-back" style="color:var(--emerald);font-weight:700;text-decoration:none">← Back to jobs</a></p>
+    <h2 class="sec">Terms &amp; Conditions</h2>
+    <p class="lead">The same terms for everyone — job seeker and employer alike. By signing up, you agree to all of them. Last updated: 25 November 2026.</p>
+    <div class="card">
+      <h3>1. What HIRE ME is</h3>
+      <p>HIRE ME is a free website that connects job seekers and employers. It is only a source and a link between the two sides. HIRE ME is not an employer, not a recruitment agency, and not a party to any job. The job, the pay, the working hours and the work itself are agreed between the seeker and the employer — not by this website.</p>
+      <h3>2. Free — no fees, ever</h3>
+      <p>Signing up, uploading a CV, posting a job, applying and messaging are free. No fees, no commission, now or later. Nobody on HIRE ME should ever ask you for money to apply, to be hired, or to get a job. If someone does, do not pay — report them.</p>
+      <h3>3. For job seekers</h3>
+      <p>Give true information about yourself, your skills and your experience. Your profile and CV are visible to employers on this site so they can find you. You are responsible for checking an employer and a job offer before you accept anything. HIRE ME does not guarantee you a job, an interview, or any income.</p>
+      <h3>4. For employers</h3>
+      <p>Post only real jobs you genuinely intend to fill, with true details about the work, the pay and the place of work. You are responsible for checking a candidate before you hire. HIRE ME does not guarantee you a suitable candidate.</p>
+      <h3>5. The perfect match</h3>
+      <p>HIRE ME helps both sides find each other — search, skills, profiles and messages — so the right person and the right job can meet. But the match is yours to judge. Talk, ask questions, and agree everything — the work, the pay and the start date — before you start.</p>
+      <h3>6. Stay safe</h3>
+      <p>Never pay to apply or to be hired. Never share bank details, passwords, or photos of your ID with someone you met here before you have verified them. If a job, a message or a person feels wrong, stop and report it.</p>
+      <h3>7. Your data</h3>
+      <p>Your name, profile and CV are shown to other signed-in users so employers can find you and seekers can be found. Do not upload anything you do not want another user to see. To have your profile removed, email <a href="mailto:leaderoftime786@gmail.com" style="color:var(--emerald);font-weight:700">leaderoftime786@gmail.com</a>.</p>
+      <h3>8. Accounts</h3>
+      <p>One account per person. Keep your password to yourself. Do not post fake jobs, fake CVs, or anything unlawful. If you break these terms, your account can be removed without notice.</p>
+      <h3>9. Changes</h3>
+      <p>These terms can be updated. The version on this page is the one that applies.</p>
+    </div>
+  </section>
+
 </div>
 
 <footer>
   <p><strong>HIRE ME</strong> — free for job seekers and employers. No fees, no commission.</p>
   <p style="margin-top:8px">Never pay to apply for a job. A real employer never asks for fees, and never asks for your bank details or ID photos before an interview.</p>
-  <p style="margin-top:12px"><a href="https://drsahmad.github.io/">Dr. S. Ahmad — home</a><a href="https://drsahmad.github.io/hire-me.html">Hire Dr. Saghir Ahmad</a></p>
+  <p style="margin-top:12px"><a href="https://drsahmad.github.io/">Dr. S. Ahmad — home</a><a href="https://drsahmad.github.io/hire-me.html">Hire Dr. Saghir Ahmad</a><a href="#" id="footer-terms-link">Terms &amp; Conditions</a></p>
   <p style="margin-top:12px;opacity:.75">© 2026 HIRE ME · Built by Dr. S. Ahmad</p>
 </footer>
 
@@ -371,8 +476,8 @@
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, collection, doc, setDoc, getDoc, getDocs, addDoc, updateDoc, query, where, orderBy, limit, serverTimestamp, increment, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, sendPasswordResetEmail, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, collection, doc, setDoc, getDoc, getDocs, addDoc, updateDoc, query, where, orderBy, limit, serverTimestamp, increment, onSnapshot, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 /* ================= Firebase config ================= */
 /* Free Firebase project "HIRE ME" (hire-me-58146): Email/Password sign-in
@@ -468,6 +573,146 @@ function dataErrorText(err) {
   return "That didn't go through. Please try again.";
 }
 
+/* ================= Match, ratings, completeness, reports, reviews ================= */
+function normSkill(s) { return String(s || "").trim().toLowerCase(); }
+function matchInfo(seekerSkills, jobSkills) {
+  const ss = new Set((seekerSkills || []).map(normSkill).filter(Boolean));
+  const seen = new Set(); const js = [];
+  (jobSkills || []).forEach((s) => { const n = normSkill(s); if (n && !seen.has(n)) { seen.add(n); js.push(String(s).trim()); } });
+  if (!js.length) return { pct: 0, matched: [], missing: [] };
+  const matched = js.filter((s) => ss.has(normSkill(s)));
+  const missing = js.filter((s) => !ss.has(normSkill(s)));
+  return { pct: Math.round((matched.length / js.length) * 100), matched, missing };
+}
+function matchLabel(m) {
+  return "🎯 " + m.pct + "% match" + (m.matched.length ? " · " + m.matched.join(", ") : "");
+}
+function starsText(avg) {
+  const full = Math.max(0, Math.min(5, Math.round(Number(avg) || 0)));
+  return "★".repeat(full) + "☆".repeat(5 - full);
+}
+function ratingLine(r) {
+  if (!r || !r.count) return "No reviews yet";
+  return starsText(r.avg) + " " + r.avg.toFixed(1) + " · " + r.count + " review" + (r.count === 1 ? "" : "s");
+}
+let ratingsMap = null;
+async function loadRatingsMap(force) {
+  if (ratingsMap && !force) return ratingsMap;
+  ratingsMap = {};
+  if (!db) return ratingsMap;
+  try {
+    const snap = await getDocs(collection(db, "reviews"));
+    snap.forEach((d) => {
+      const r = d.data(); if (!r || !r.revieweeId) return;
+      const e = ratingsMap[r.revieweeId] || (ratingsMap[r.revieweeId] = { total: 0, count: 0, items: [] });
+      e.total += Number(r.stars) || 0; e.count++; e.items.push(Object.assign({ id: d.id }, r));
+    });
+    Object.values(ratingsMap).forEach((e) => { e.avg = e.count ? e.total / e.count : 0; e.items.sort((a, b) => tsMillis(b.createdAt) - tsMillis(a.createdAt)); });
+  } catch (e) { /* reviews not readable yet (rules) — treat as none */ }
+  return ratingsMap;
+}
+function ratingFor(uid) { return (ratingsMap && ratingsMap[uid]) || { avg: 0, count: 0, items: [] }; }
+function reviewsHtml(r) {
+  if (!r || !r.count) return '<p class="meta">No reviews yet — reviews appear here after a hire.</p>';
+  let h = "<p><strong>" + starsText(r.avg) + " " + r.avg.toFixed(1) + "</strong> <span class=\"meta\">· " + r.count + " review" + (r.count === 1 ? "" : "s") + "</span></p>";
+  h += r.items.slice(0, 5).map((rv) => '<div class="app"><p><strong>' + esc(rv.reviewerName || "Someone") + "</strong> " + starsText(Number(rv.stars) || 0) + ' <span class="meta">' + esc(dateText(rv.createdAt)) + (rv.jobTitle ? " · " + esc(rv.jobTitle) : "") + "</span></p>" + (rv.text ? '<p style="white-space:pre-line">' + esc(rv.text) + "</p>" : "") + "</div>").join("");
+  return h;
+}
+function profileCompleteness(p) {
+  if (!p) return { pct: 0, missing: [] };
+  const isEmp = p.role === "employer";
+  const fields = isEmp
+    ? [["Name", !!String(p.name || "").trim()], ["Company", !!String(p.company || "").trim()], ["Website", !!String(p.website || "").trim()], ["About the company", !!String(p.bio || "").trim()], ["Location", !!String(p.location || "").trim()]]
+    : [["Name", !!String(p.name || "").trim()], ["Title", !!String(p.title || "").trim()], ["About you", !!String(p.bio || "").trim()], ["Skills", (p.skills || []).length > 0], ["Location", !!String(p.location || "").trim()], ["Hourly rate", p.rate !== "" && p.rate !== null && p.rate !== undefined], ["CV uploaded", !!p.cvURL]];
+  const done = fields.filter((f) => f[1]).length;
+  return { pct: Math.round((done / fields.length) * 100), missing: fields.filter((f) => !f[1]).map((f) => f[0]) };
+}
+async function existingReview(jobId, reviewerId, revieweeId) {
+  if (!db) return null;
+  try {
+    const s = await getDoc(doc(db, "reviews", jobId + "_" + reviewerId + "_" + revieweeId));
+    return s.exists() ? Object.assign({ id: s.id }, s.data()) : null;
+  } catch (e) { return null; }
+}
+function reviewFormHtml(a, j, revieweeId, revieweeName) {
+  return '<form class="review-box" data-job="' + esc(j.id) + '" data-jobtitle="' + esc(j.title) + '" data-app="' + esc(a.id) + '" data-reviewee="' + esc(revieweeId) + '" data-reviewee-name="' + esc(revieweeName || "") + '" style="border-top:1px solid var(--line);padding-top:12px;margin-top:12px">'
+    + "<p><strong>Leave a review</strong> — how was working together?</p>"
+    + '<label>Stars</label><select class="rv-stars"><option value="5">★★★★★ — Excellent</option><option value="4">★★★★☆ — Good</option><option value="3">★★★☆☆ — OK</option><option value="2">★★☆☆☆ — Poor</option><option value="1">★☆☆☆☆ — Very poor</option></select>'
+    + "<label>Your review (optional)</label>"
+    + '<textarea class="rv-text" placeholder="A few honest lines…"></textarea>'
+    + '<p style="margin-top:10px"><button class="btn small gold" type="submit">Post review</button></p>'
+    + "</form>";
+}
+async function submitReviewForm(form) {
+  const jobId = form.getAttribute("data-job");
+  const appId = form.getAttribute("data-app");
+  const revieweeId = form.getAttribute("data-reviewee");
+  const revieweeName = form.getAttribute("data-reviewee-name") || "";
+  const stars = Number(form.querySelector(".rv-stars").value) || 0;
+  const text = form.querySelector(".rv-text").value.trim();
+  if (!needFirebase() || !currentUser) { toast("Sign in to leave a review."); return; }
+  if (stars < 1 || stars > 5) { toast("Pick 1 to 5 stars."); return; }
+  const btn = form.querySelector("button[type=submit]"); if (btn) btn.disabled = true;
+  try {
+    await setDoc(doc(db, "reviews", jobId + "_" + currentUser.uid + "_" + revieweeId), {
+      jobId, jobTitle: form.getAttribute("data-jobtitle") || "", applicationId: appId,
+      reviewerId: currentUser.uid, reviewerName: (currentProfile && currentProfile.name) || "",
+      reviewerRole: (currentProfile && currentProfile.role) || "",
+      revieweeId, revieweeName, stars, text, createdAt: serverTimestamp()
+    });
+    await loadRatingsMap(true);
+    toast("Thanks — your review is live.");
+    if (currentProfile && currentProfile.role === "employer") loadMyJobs(); else loadMyApplications();
+  } catch (err) { toast(dataErrorText(err)); if (btn) btn.disabled = false; }
+}
+function renderReportBox(containerId, type, targetId, targetName) {
+  const box = $(containerId); if (!box) return;
+  box.innerHTML = '<form class="report-box" style="margin-top:14px;border-top:1px solid var(--line);padding-top:14px">'
+    + "<h3>Report this " + (type === "job" ? "job" : "profile") + "</h3>"
+    + '<p class="meta">Seen something wrong — a fake job, a scam, or abusive behaviour? Tell us. We review every report.</p>'
+    + '<label>Reason</label><select class="rp-reason">'
+    + "<option>Fake job or profile</option><option>Asks for money or fees</option><option>Asks for bank details or ID</option><option>Misleading information</option><option>Spam</option><option>Harassment or abuse</option><option>Other</option>"
+    + "</select>"
+    + "<label>Details (optional)</label>"
+    + '<textarea class="rp-details" placeholder="What happened? Any detail helps."></textarea>'
+    + '<p style="margin-top:10px"><button class="btn small gold" type="submit">Send report</button> <button class="btn small ghost rp-cancel" type="button">Cancel</button></p>'
+    + '<div class="err rp-err"></div>'
+    + "</form>";
+  const form = box.querySelector("form");
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!needFirebase() || !currentUser) { toast("Sign in to report."); show("signin"); return; }
+    const reason = form.querySelector(".rp-reason").value;
+    const details = form.querySelector(".rp-details").value.trim();
+    try {
+      await addDoc(collection(db, "reports"), {
+        type, targetId, targetName: targetName || "", reporterId: currentUser.uid,
+        reporterName: (currentProfile && currentProfile.name) || "", reason, details,
+        status: "open", createdAt: serverTimestamp()
+      });
+      box.innerHTML = '<p class="okmsg" style="display:block">Thanks — reported. We review every report.</p>';
+    } catch (err) {
+      const el = form.querySelector(".rp-err"); el.textContent = dataErrorText(err); el.style.display = "block";
+    }
+  });
+  form.querySelector(".rp-cancel").addEventListener("click", () => { box.innerHTML = ""; });
+}
+function isSaved(jobId) { return !!(currentProfile && (currentProfile.savedJobIds || []).includes(jobId)); }
+async function toggleSave(jobId) {
+  if (!currentUser || !currentProfile || currentProfile.role !== "seeker") { toast("Sign in as a job seeker to save jobs."); show("signin"); return; }
+  if (!db) return;
+  try {
+    const saved = isSaved(jobId);
+    await updateDoc(doc(db, "users", currentUser.uid), { savedJobIds: saved ? arrayRemove(jobId) : arrayUnion(jobId) });
+    const arr = (currentProfile.savedJobIds || []).slice();
+    if (saved) { const i = arr.indexOf(jobId); if (i >= 0) arr.splice(i, 1); } else arr.push(jobId);
+    currentProfile.savedJobIds = arr;
+    toast(saved ? "Removed from saved jobs." : "Saved — find it under Saved only.");
+    renderJobs();
+    if (!$("view-job").classList.contains("hidden") && currentJobId === jobId) openJob(jobId);
+  } catch (err) { toast(dataErrorText(err)); }
+}
+
 /* ================= State & navigation ================= */
 let currentUser = null;      // Firebase Auth user
 let currentProfile = null;   // users/{uid} document
@@ -476,7 +721,7 @@ let prosCache = [];
 let currentJobId = null;
 let currentJob = null;
 
-const VIEWS = ["home", "job", "professionals", "pro", "signup", "signin", "profile", "postjob", "myjobs", "myapps", "messages", "thread"];
+const VIEWS = ["home", "job", "professionals", "pro", "signup", "signin", "profile", "postjob", "myjobs", "myapps", "messages", "thread", "terms"];
 function show(view) {
   VIEWS.forEach((v) => $("view-" + v).classList.toggle("hidden", v !== view));
   document.querySelectorAll("[data-nav]").forEach((b) => b.classList.toggle("active", b.getAttribute("data-nav") === view));
@@ -504,9 +749,13 @@ document.querySelectorAll("[data-nav]").forEach((b) => {
   });
 });
 $("job-back").addEventListener("click", (e) => { e.preventDefault(); show("home"); });
-$("pro-back").addEventListener("click", (e) => { e.preventDefault(); show("professionals"); });
+$("pro-back").addEventListener("click", (e) => { e.preventDefault(); show(proBackTarget); });
 $("su-to-signin").addEventListener("click", (e) => { e.preventDefault(); show("signin"); });
 $("si-to-signup").addEventListener("click", (e) => { e.preventDefault(); show("signup"); });
+$("su-terms-link").addEventListener("click", (e) => { e.preventDefault(); show("terms"); });
+$("footer-terms-link").addEventListener("click", (e) => { e.preventDefault(); show("terms"); });
+$("home-terms-link").addEventListener("click", (e) => { e.preventDefault(); show("terms"); });
+$("terms-back").addEventListener("click", (e) => { e.preventDefault(); show("home"); });
 $("apply-goto-signin").addEventListener("click", () => show("signin"));
 $("apply-goto-profile").addEventListener("click", () => show("profile"));
 $("apply-msg-employer").addEventListener("click", () => {
@@ -553,6 +802,12 @@ async function loadProfile(uid) {
   try {
     const snap = await getDoc(doc(db, "users", uid));
     currentProfile = snap.exists() ? snap.data() : null;
+    /* Keep the public "verified" flag in sync: once the user verifies their
+       email in Firebase Auth, stamp it on their own profile document so other
+       users can see the badge. */
+    if (currentProfile && auth && auth.currentUser && auth.currentUser.emailVerified && currentProfile.emailVerified !== true) {
+      try { await updateDoc(doc(db, "users", uid), { emailVerified: true }); currentProfile.emailVerified = true; } catch (e) {}
+    }
   } catch (e) { currentProfile = null; }
   setSignedInUI();
 }
@@ -565,7 +820,9 @@ if (auth) {
     /* Auth restores a moment after page load; if a signed-in view was already
        opened before that, its loader ran with no user and showed empty — rerun it. */
     if (user) {
-      if (!$("view-myjobs").classList.contains("hidden")) loadMyJobs();
+      if (!$("view-home").classList.contains("hidden")) loadJobs();
+      else if (!$("view-professionals").classList.contains("hidden")) loadProfessionals();
+      else if (!$("view-myjobs").classList.contains("hidden")) loadMyJobs();
       else if (!$("view-myapps").classList.contains("hidden")) loadMyApplications();
       else if (!$("view-messages").classList.contains("hidden")) loadConversations();
       else if (!$("view-profile").classList.contains("hidden")) fillProfileForm();
@@ -579,13 +836,15 @@ $("signup-form").addEventListener("submit", async (e) => {
   const pass = $("su-pass").value;
   const role = (document.querySelector("[name='su-role']:checked") || {}).value || "seeker";
   if (!name || !email || pass.length < 6) { showErr("su-err", "Add your name, an email, and a password of at least 6 characters."); return; }
+  if (!$("su-terms").checked) { showErr("su-err", "Please agree to the Terms & Conditions to join — they apply to seekers and employers alike."); return; }
   if (!needFirebase()) { showErr("su-err", "The job board is still being connected — please try again shortly."); return; }
   try {
     const cred = await createUserWithEmailAndPassword(auth, email, pass);
     await updateProfile(cred.user, { displayName: name + "|" + role });
     await setDoc(doc(db, "users", cred.user.uid), {
       role, name, email, bio: "", skills: [], title: "", rate: "", rateCurrency: "PKR",
-      location: "", cvURL: "", cvName: "", company: "", website: "", createdAt: serverTimestamp()
+      location: "", cvURL: "", cvName: "", company: "", website: "", createdAt: serverTimestamp(),
+      termsAcceptedAt: serverTimestamp()
     });
     toast("Welcome, " + name + " — your free account is ready.");
     show(role === "employer" ? "postjob" : "profile");
@@ -623,22 +882,37 @@ $("nav-signout").addEventListener("click", async () => {
 /* ================= Jobs: list ================= */
 function jobCard(j) {
   const tags = (j.skills || []).slice(0, 5).map((s) => '<span class="tag">' + esc(s) + "</span>").join("");
+  const isSeeker = !!(currentProfile && currentProfile.role === "seeker");
+  let matchHtml = "";
+  if (isSeeker) {
+    const m = matchInfo(currentProfile.skills, j.skills);
+    matchHtml = '<p class="meta">' + esc(matchLabel(m)) + ((currentProfile.skills || []).length ? "" : " — add skills to your profile to see matches") + "</p>";
+  }
+  const saved = isSaved(j.id);
   return '<div class="card">'
     + "<h3>" + esc(j.title) + "</h3>"
-    + "<p><strong>" + esc(j.company || "") + "</strong>" + (j.location ? " · " + esc(j.location) : "") + "</p>"
+    + "<p><strong>" + esc(j.company || "") + "</strong>" + (j.employerVerified ? ' <span class="tag green">✓ Verified</span>' : "") + (j.location ? " · " + esc(j.location) : "") + "</p>"
     + '<p class="meta">' + esc(j.type || "") + (j.remote ? ' · <span class="tag gold">Remote</span>' : "") + " · " + esc(j.category || "") + "</p>"
     + '<p class="meta">' + esc(salaryText(j)) + (j.createdAt ? " · Posted " + esc(dateText(j.createdAt)) : "") + "</p>"
+    + matchHtml
     + (tags ? '<p style="margin-top:8px">' + tags + "</p>" : "")
-    + '<button class="btn small" data-job="' + esc(j.id) + '">View &amp; Apply</button>'
+    + '<p style="margin-top:12px"><button class="btn small" data-job="' + esc(j.id) + '">View &amp; Apply</button> '
+    + '<button class="btn small ghost" data-save="' + esc(j.id) + '">' + (saved ? "✓ Saved" : "🔖 Save") + '</button>'
+    + (j.employerId ? ' <button class="btn small ghost" data-emp="' + esc(j.employerId) + '">Employer</button>' : "")
+    + "</p>"
     + "</div>";
 }
 function renderJobs() {
   const q = ($("job-search").value || "").trim().toLowerCase();
   const cat = $("job-category").value;
   const remoteOnly = $("job-remote").checked;
+  const savedOnly = $("job-saved").checked;
+  const isSeeker = !!(currentProfile && currentProfile.role === "seeker");
+  $("job-saved-wrap").classList.toggle("hidden", !isSeeker);
   const list = jobsCache.filter((j) => {
     if (cat && j.category !== cat) return false;
     if (remoteOnly && !j.remote) return false;
+    if (savedOnly && isSeeker && !isSaved(j.id)) return false;
     if (q) {
       const hay = [j.title, j.company, j.description, (j.skills || []).join(" "), j.location, j.category].join(" ").toLowerCase();
       if (!hay.includes(q)) return false;
@@ -649,6 +923,8 @@ function renderJobs() {
   $("job-empty").classList.toggle("hidden", jobsCache.length > 0);
   $("job-none").classList.toggle("hidden", jobsCache.length === 0 || list.length > 0);
   document.querySelectorAll("[data-job]").forEach((b) => b.addEventListener("click", () => openJob(b.getAttribute("data-job"))));
+  document.querySelectorAll("[data-save]").forEach((b) => b.addEventListener("click", (e) => { e.stopPropagation(); toggleSave(b.getAttribute("data-save")); }));
+  document.querySelectorAll("[data-emp]").forEach((b) => b.addEventListener("click", () => openEmployer(b.getAttribute("data-emp"))));
 }
 async function loadJobs() {
   if (!db) { jobsCache = []; renderJobs(); return; }
@@ -663,6 +939,7 @@ async function loadJobs() {
 $("job-search").addEventListener("input", renderJobs);
 $("job-category").addEventListener("change", renderJobs);
 $("job-remote").addEventListener("change", renderJobs);
+$("job-saved").addEventListener("change", renderJobs);
 
 /* ================= Job detail + Apply ================= */
 async function openJob(id) {
@@ -674,6 +951,15 @@ async function openJob(id) {
   if (!currentJob) { toast("That job could not be opened."); show("home"); return; }
   const j = currentJob;
   const tags = (j.skills || []).map((s) => '<span class="tag">' + esc(s) + "</span>").join("");
+  const isSeeker = !!(currentProfile && currentProfile.role === "seeker");
+  let matchHtml = "";
+  if (isSeeker) {
+    const m = matchInfo(currentProfile.skills, j.skills);
+    matchHtml = '<div class="card" style="margin-top:14px"><h3>Your match: ' + m.pct + '%</h3>'
+      + (m.matched.length ? "<p>Matched skills: " + m.matched.map((s) => '<span class="tag green">' + esc(s) + "</span>").join("") + "</p>" : "<p>You match none of the listed skills yet.</p>")
+      + (m.missing.length ? '<p style="margin-top:8px">Missing skills: ' + m.missing.map((s) => '<span class="tag grey">' + esc(s) + "</span>").join("") + "</p>" : "")
+      + ((currentProfile.skills || []).length ? "" : '<p class="hint">Add skills to your profile to see your match on every job.</p>') + "</div>";
+  }
   $("job-detail").innerHTML = '<div class="card">'
     + "<h3>" + esc(j.title) + "</h3>"
     + "<p><strong>" + esc(j.company || "") + "</strong>" + (j.location ? " · " + esc(j.location) : "") + "</p>"
@@ -681,8 +967,16 @@ async function openJob(id) {
     + '<p class="meta">Salary: <strong>' + esc(salaryText(j)) + "</strong></p>"
     + (tags ? '<p style="margin-top:8px">' + tags + "</p>" : "")
     + '<p style="margin-top:12px;white-space:pre-line">' + esc(j.description || "") + "</p>"
-    + '<p class="meta" style="margin-top:12px">Posted by ' + esc(j.employerName || j.company || "Employer") + "</p>"
-    + "</div>";
+    + '<p class="meta" style="margin-top:12px">Posted by ' + esc(j.employerName || j.company || "Employer") + (j.employerVerified ? ' <span class="tag green">✓ Verified</span>' : "") + "</p>"
+    + '<p style="margin-top:12px"><button class="btn small ghost" id="job-save-btn">' + (isSaved(j.id) ? "✓ Saved" : "🔖 Save job") + '</button>'
+    + (j.employerId ? ' <button class="btn small ghost" id="job-employer-btn">View employer</button>' : "")
+    + ' <button class="btn small ghost" id="job-report-btn">Report this job</button></p>'
+    + '<div id="job-report-box"></div>'
+    + "</div>"
+    + matchHtml;
+  $("job-save-btn").addEventListener("click", () => toggleSave(j.id));
+  const eb = $("job-employer-btn"); if (eb) eb.addEventListener("click", () => openEmployer(j.employerId));
+  $("job-report-btn").addEventListener("click", () => renderReportBox("job-report-box", "job", j.id, j.title));
   show("job");
   refreshJobApplyBox();
 }
@@ -690,6 +984,7 @@ async function refreshJobApplyBox() {
   const box = $("apply-box"), login = $("apply-login"), nocv = $("apply-nocv"), done = $("apply-done");
   [box, login, nocv, done].forEach((el) => el.classList.add("hidden"));
   hideErr("apply-err"); hideOk("apply-ok");
+  $("apply-screening").innerHTML = "";
   login.querySelector("p").textContent = "You need a free seeker account to apply. It takes a minute — sign up, upload your CV, then come back here.";
   $("apply-goto-signin").classList.remove("hidden");
   if (!currentJob) return;
@@ -709,6 +1004,8 @@ async function refreshJobApplyBox() {
     } catch (e) {}
   }
   if (!currentProfile.cvURL) { nocv.classList.remove("hidden"); return; }
+  const sq = currentJob.screeningQuestions || [];
+  $("apply-screening").innerHTML = sq.map((q, i) => '<label for="sq-' + i + '">' + esc(q) + ' <span style="color:var(--red)">*</span></label><textarea class="sq-answer" id="sq-' + i + '" placeholder="Your answer…" required></textarea>').join("");
   box.classList.remove("hidden");
 }
 $("apply-form").addEventListener("submit", async (e) => {
@@ -718,12 +1015,22 @@ $("apply-form").addEventListener("submit", async (e) => {
   if (!currentProfile.cvURL) { showErr("apply-err", "Add your CV on your profile first, then apply."); return; }
   const note = $("apply-note").value.trim();
   if (!note) { showErr("apply-err", "Add a short cover note."); return; }
+  const sq = currentJob.screeningQuestions || [];
+  const answers = [];
+  if (sq.length) {
+    const inputs = document.querySelectorAll("#apply-screening .sq-answer");
+    for (let i = 0; i < sq.length; i++) {
+      const a = (inputs[i] && inputs[i].value || "").trim();
+      if (!a) { showErr("apply-err", "Please answer the screening question: " + sq[i]); $("apply-btn").disabled = false; return; }
+      answers.push(a);
+    }
+  }
   $("apply-btn").disabled = true;
   try {
     await addDoc(collection(db, "applications"), {
       jobId: currentJobId, employerId: currentJob.employerId, seekerId: currentUser.uid,
       seekerName: currentProfile.name, coverNote: note, cvURL: currentProfile.cvURL,
-      status: "applied", createdAt: serverTimestamp()
+      answers, status: "applied", createdAt: serverTimestamp()
     });
     showOk("apply-ok", "Application sent — your CV went with it. Good luck!");
     $("apply-form").reset();
@@ -736,17 +1043,33 @@ $("apply-form").addEventListener("submit", async (e) => {
 function proCard(p) {
   const rate = money(p.rate, p.rateCurrency);
   const tags = (p.skills || []).slice(0, 5).map((s) => '<span class="tag">' + esc(s) + "</span>").join("");
+  const r = ratingFor(p.id);
+  const comp = profileCompleteness(p);
   return '<div class="card">'
-    + "<h3>" + esc(p.name) + "</h3>"
+    + "<h3>" + esc(p.name) + (p.emailVerified ? ' <span class="tag green">✓ Verified</span>' : "") + "</h3>"
     + "<p><strong>" + esc(p.title || "Professional") + "</strong>" + (p.location ? " · " + esc(p.location) : "") + "</p>"
     + (rate ? '<p class="meta">' + esc(rate) + " / hour</p>" : "")
+    + '<p class="meta">' + esc(ratingLine(r)) + " · Profile " + comp.pct + "% complete</p>"
     + (tags ? '<p style="margin-top:8px">' + tags + "</p>" : "")
     + '<button class="btn small" data-pro="' + esc(p.id) + '">View profile</button>'
     + "</div>";
 }
 function renderPros() {
-  $("pro-list").innerHTML = prosCache.map(proCard).join("");
+  const q = ($("pro-search").value || "").trim().toLowerCase();
+  const sk = ($("pro-skill").value || "").trim().toLowerCase();
+  const city = ($("pro-city").value || "").trim().toLowerCase();
+  const list = prosCache.filter((p) => {
+    if (q) {
+      const hay = [p.name, p.title, (p.skills || []).join(" "), p.location].join(" ").toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    if (sk && !(p.skills || []).some((s) => String(s).toLowerCase().includes(sk))) return false;
+    if (city && !String(p.location || "").toLowerCase().includes(city)) return false;
+    return true;
+  });
+  $("pro-list").innerHTML = list.map(proCard).join("");
   $("pro-empty").classList.toggle("hidden", prosCache.length > 0);
+  $("pro-none").classList.toggle("hidden", !(prosCache.length > 0 && list.length === 0));
   document.querySelectorAll("[data-pro]").forEach((b) => b.addEventListener("click", () => openPro(b.getAttribute("data-pro"))));
 }
 async function loadProfessionals() {
@@ -756,31 +1079,45 @@ async function loadProfessionals() {
     prosCache = [];
     snap.forEach((d) => prosCache.push(Object.assign({ id: d.id }, d.data())));
     prosCache.sort((a, b) => String(a.name || "").localeCompare(String(b.name || "")));
+    await loadRatingsMap();
   } catch (e) { prosCache = []; toast(dataErrorText(e)); }
   renderPros();
 }
+$("pro-search").addEventListener("input", renderPros);
+$("pro-skill").addEventListener("input", renderPros);
+$("pro-city").addEventListener("input", renderPros);
 let currentProJob = null; // { jobId, jobTitle } when a profile is opened from My Jobs
-function renderProDetail(p) {
+let proBackTarget = "professionals";
+async function renderProDetail(p) {
   const rate = money(p.rate, p.rateCurrency);
   const tags = (p.skills || []).map((s) => '<span class="tag">' + esc(s) + "</span>").join("");
+  const r = await loadRatingsMap().then(() => ratingFor(p.id));
+  const comp = profileCompleteness(p);
   const canMsg = !!(currentUser && currentProfile && currentProfile.role === "employer" && p.id !== currentUser.uid);
   $("pro-detail").innerHTML = '<div class="card">'
-    + "<h3>" + esc(p.name) + "</h3>"
+    + "<h3>" + esc(p.name) + (p.emailVerified ? ' <span class="tag green">✓ Verified</span>' : "") + "</h3>"
     + "<p><strong>" + esc(p.title || "Professional") + "</strong>" + (p.location ? " · " + esc(p.location) : "") + "</p>"
     + (rate ? '<p class="meta">Rate: <strong>' + esc(rate) + " / hour</strong></p>" : "")
+    + '<p class="meta">' + esc(ratingLine(r)) + " · Profile " + comp.pct + "% complete</p>"
     + (tags ? '<p style="margin-top:8px">' + tags + "</p>" : "")
     + (p.bio ? '<p style="margin-top:12px;white-space:pre-line">' + esc(p.bio) + "</p>" : "")
     + (p.cvURL ? '<p style="margin-top:14px"><a class="btn" href="' + esc(p.cvURL) + '" target="_blank" rel="noopener">Download CV' + (p.cvName ? " (" + esc(p.cvName) + ")" : "") + "</a></p>" : '<p class="meta" style="margin-top:14px">No CV uploaded yet.</p>')
+    + '<div style="margin-top:14px"><h3>Reviews</h3>' + reviewsHtml(r) + "</div>"
+    + '<p style="margin-top:14px"><button class="btn small ghost" id="pro-report-btn">Report this profile</button></p>'
+    + '<div id="pro-report-box"></div>'
     + (canMsg ? '<div id="pro-msg-box" style="margin-top:16px"></div>' : "")
     + "</div>";
+  proBackTarget = "professionals";
+  $("pro-back").textContent = "← Back to professionals";
   show("pro");
   wireProMessage(p);
+  $("pro-report-btn").addEventListener("click", () => renderReportBox("pro-report-box", "user", p.id, p.name));
 }
-function openPro(id) {
+async function openPro(id) {
   const p = prosCache.find((x) => x.id === id);
   if (!p) { toast("That profile could not be opened."); return; }
   currentProJob = null;
-  renderProDetail(p);
+  await renderProDetail(p);
 }
 async function openProById(id, jobCtx) {
   currentProJob = jobCtx || null;
@@ -789,7 +1126,42 @@ async function openProById(id, jobCtx) {
     try { const s = await getDoc(doc(db, "users", id)); if (s.exists()) p = Object.assign({ id: s.id }, s.data()); } catch (e) {}
   }
   if (!p) { toast("That profile could not be opened."); return; }
-  renderProDetail(p);
+  await renderProDetail(p);
+}
+async function openEmployer(id) {
+  if (!id || !db) { toast("That employer page could not be opened."); return; }
+  let p = null;
+  try { const s = await getDoc(doc(db, "users", id)); if (s.exists()) p = Object.assign({ id: s.id }, s.data()); } catch (e) {}
+  if (!p || p.role !== "employer") { toast("That employer page could not be opened."); return; }
+  proBackTarget = currentJob ? "job" : "home";
+  await renderEmployerDetail(p);
+}
+async function renderEmployerDetail(p) {
+  const r = await loadRatingsMap().then(() => ratingFor(p.id));
+  const comp = profileCompleteness(p);
+  $("pro-detail").innerHTML = '<div class="card">'
+    + "<h3>" + esc(p.company || p.name) + (p.emailVerified ? ' <span class="tag green">✓ Verified</span>' : "") + "</h3>"
+    + "<p><strong>Employer</strong>" + (p.location ? " · " + esc(p.location) : "") + "</p>"
+    + (p.website ? '<p class="meta">Website: <a href="' + esc(p.website) + '" target="_blank" rel="noopener" style="color:var(--emerald);font-weight:700">' + esc(p.website) + "</a></p>" : "")
+    + '<p class="meta">' + esc(ratingLine(r)) + " · Profile " + comp.pct + "% complete</p>"
+    + (p.bio ? '<p style="margin-top:12px;white-space:pre-line">' + esc(p.bio) + "</p>" : "")
+    + '<div style="margin-top:14px"><h3>Reviews</h3>' + reviewsHtml(r) + "</div>"
+    + '<div style="margin-top:14px"><h3>Open jobs</h3><div id="emp-jobs"><p class="meta">Loading…</p></div></div>'
+    + '<p style="margin-top:14px"><button class="btn small ghost" id="emp-report-btn">Report this employer</button></p>'
+    + '<div id="emp-report-box"></div>'
+    + "</div>";
+  $("pro-back").textContent = proBackTarget === "job" ? "← Back to job" : "← Back to jobs";
+  show("pro");
+  $("emp-report-btn").addEventListener("click", () => renderReportBox("emp-report-box", "user", p.id, p.company || p.name));
+  try {
+    const snap = await getDocs(query(collection(db, "jobs"), where("employerId", "==", p.id), where("status", "==", "open")));
+    const jobs = [];
+    snap.forEach((d) => jobs.push(Object.assign({ id: d.id }, d.data())));
+    jobs.sort((a, b) => tsMillis(b.createdAt) - tsMillis(a.createdAt));
+    const box = $("emp-jobs"); if (!box) return;
+    box.innerHTML = jobs.length ? jobs.map((j) => '<div class="app"><h4>' + esc(j.title) + '</h4><p class="meta">' + esc(salaryText(j)) + (j.location ? " · " + esc(j.location) : "") + '</p><button class="btn small" data-openjob="' + esc(j.id) + '">View job</button></div>').join("") : '<p class="meta">No open jobs right now.</p>';
+    box.querySelectorAll("[data-openjob]").forEach((b) => b.addEventListener("click", () => openJob(b.getAttribute("data-openjob"))));
+  } catch (e) { const box = $("emp-jobs"); if (box) box.innerHTML = '<p class="meta">Could not load open jobs.</p>'; }
 }
 async function wireProMessage(p) {
   const box = $("pro-msg-box");
@@ -821,8 +1193,11 @@ async function wireProMessage(p) {
 }
 
 /* ================= My Profile ================= */
-function fillProfileForm() {
+async function fillProfileForm() {
   if (!currentUser) return;
+  /* Refresh the signed-in user so an email verified in another tab (or just
+     now, via the verification link) shows up immediately. */
+  if (auth && auth.currentUser) { try { await auth.currentUser.reload(); } catch (e) {} }
   const p = currentProfile || {};
   $("pf-name").value = p.name || "";
   const isEmp = p.role === "employer";
@@ -844,6 +1219,26 @@ function fillProfileForm() {
     $("pf-bio-e").value = p.bio || "";
     $("pf-location-e").value = p.location || "";
   }
+  /* Keep the public "verified" flag in sync with Firebase Auth. */
+  if (auth && auth.currentUser && auth.currentUser.emailVerified && p.emailVerified !== true) {
+    try { await updateDoc(doc(db, "users", currentUser.uid), { emailVerified: true }); currentProfile.emailVerified = true; } catch (e) {}
+  }
+  /* Email verification block. */
+  const vbox = $("pf-verify");
+  if (auth && auth.currentUser) {
+    if (auth.currentUser.emailVerified) {
+      vbox.innerHTML = '<p><span class="tag green">✓ Email verified</span> <span class="meta">' + esc(auth.currentUser.email || "") + "</span></p>";
+    } else {
+      vbox.innerHTML = '<p><span class="tag gold">Email not verified</span></p><p class="hint">Verify your email to earn the ✓ Verified badge employers look for.</p><p style="margin-top:8px"><button class="btn small" id="pf-verify-btn" type="button">Verify your email</button></p>';
+      $("pf-verify-btn").addEventListener("click", async () => {
+        try { await sendEmailVerification(auth.currentUser); toast("Verification email sent — check your inbox (and spam folder)."); }
+        catch (err) { toast(authErrorText(err)); }
+      });
+    }
+  } else { vbox.innerHTML = ""; }
+  /* Profile-completeness meter. */
+  const comp = profileCompleteness(currentProfile || {});
+  $("pf-complete").innerHTML = "<p><strong>Profile " + comp.pct + "% complete</strong>" + (comp.missing.length ? " — still missing: " + esc(comp.missing.join(", ")) : " — looking great!") + '</p><div class="meter"><div style="width:' + comp.pct + '%"></div></div>';
 }
 $("profile-form").addEventListener("submit", async (e) => {
   e.preventDefault(); hideErr("pf-err"); hideOk("pf-ok");
@@ -901,13 +1296,16 @@ $("postjob-form").addEventListener("submit", async (e) => {
   if (!title || !company || !location || !desc) { showErr("pj-err", "Fill in the title, company, location and description."); return; }
   const min = $("pj-min").value ? Number($("pj-min").value) : null;
   const max = $("pj-max").value ? Number($("pj-max").value) : null;
-  if (min != null && max != null && max < min) { showErr("pj-err", "The maximum salary can't be lower than the minimum."); return; }
+  if (min == null || max == null || min <= 0 || max <= 0) { showErr("pj-err", "Add a salary range (min and max) — every job must show its pay."); return; }
+  if (max < min) { showErr("pj-err", "The maximum salary can't be lower than the minimum."); return; }
+  const screeningQuestions = [$("pj-sq1").value.trim(), $("pj-sq2").value.trim(), $("pj-sq3").value.trim()].filter(Boolean).slice(0, 3);
   try {
     await addDoc(collection(db, "jobs"), {
       title, company, employerId: currentUser.uid, employerName: currentProfile.name || company,
       category: $("pj-category").value, location, remote: $("pj-remote").checked,
       type: $("pj-type").value, salaryMin: min, salaryMax: max, currency: $("pj-cur").value,
       description: desc, skills: parseSkills($("pj-skills").value),
+      screeningQuestions, employerVerified: !!(auth.currentUser && auth.currentUser.emailVerified),
       status: "open", createdAt: serverTimestamp()
     });
     $("postjob-form").reset();
@@ -923,6 +1321,7 @@ async function loadMyJobs() {
   $("myjobs-empty").classList.add("hidden");
   if (!db || !currentUser) { $("myjobs-empty").classList.remove("hidden"); return; }
   try {
+    await loadRatingsMap();
     const snap = await getDocs(query(collection(db, "jobs"), where("employerId", "==", currentUser.uid)));
     const mine = [];
     snap.forEach((d) => mine.push(Object.assign({ id: d.id }, d.data())));
@@ -933,10 +1332,38 @@ async function loadMyJobs() {
       const apps = [];
       asnap.forEach((d) => apps.push(Object.assign({ id: d.id }, d.data())));
       apps.sort((a, b) => tsMillis(b.createdAt) - tsMillis(a.createdAt));
-      const appHtml = apps.length ? apps.map((a) => {
+      /* Opening My Jobs marks newly received applications as viewed, so the
+         seeker sees Received → Viewed → Shortlisted → Hired/Rejected. Only
+         this job's employer can do this (enforced by the rules too). */
+      const unseen = apps.filter((a) => (a.status || "applied") === "applied");
+      if (unseen.length) {
+        await Promise.all(unseen.map((a) => updateDoc(doc(db, "applications", a.id), { status: "viewed", updatedAt: serverTimestamp() }).catch(() => {})));
+        unseen.forEach((a) => { a.status = "viewed"; });
+      }
+      const appHtml = apps.length ? (await Promise.all(apps.map(async (a) => {
         const st = a.status || "applied";
-        return '<div class="app"><h4>' + esc(a.seekerName || "Applicant") + " " + statusTag(st) + "</h4>"
+        let seeker = null;
+        try { const s = await getDoc(doc(db, "users", a.seekerId)); if (s.exists()) seeker = s.data(); } catch (e) {}
+        const m = matchInfo(seeker ? seeker.skills : [], j.skills);
+        const r = ratingFor(a.seekerId);
+        let qaHtml = "";
+        const sq = j.screeningQuestions || [];
+        if (sq.length && a.answers && a.answers.length) {
+          qaHtml = '<div style="margin-top:10px">' + sq.map((q, i) => '<p style="font-size:.92rem"><strong>Q:</strong> ' + esc(q) + "<br><strong>A:</strong> " + esc(a.answers[i] || "—") + "</p>").join("") + "</div>";
+        }
+        let reviewHtml = "";
+        if (st === "hired") {
+          const existing = await existingReview(j.id, currentUser.uid, a.seekerId);
+          if (existing) {
+            reviewHtml = '<p class="meta" style="margin-top:10px">You reviewed this hire: ' + starsText(Number(existing.stars) || 0) + " " + (existing.stars || "") + "★</p>";
+          } else {
+            reviewHtml = reviewFormHtml(a, j, a.seekerId, a.seekerName || "");
+          }
+        }
+        return '<div class="app"><h4>' + esc(a.seekerName || "Applicant") + " " + statusTag(st) + (seeker && seeker.emailVerified ? ' <span class="tag green">✓ Verified</span>' : "") + "</h4>"
+        + '<p class="meta">Match: ' + m.pct + "% · " + esc(ratingLine(r)) + "</p>"
         + '<p style="white-space:pre-line">' + esc(a.coverNote || "") + "</p>"
+        + qaHtml
         + '<p class="meta">Applied ' + esc(dateText(a.createdAt)) + "</p>"
         + (a.cvURL ? '<p><a class="btn small ghost" href="' + esc(a.cvURL) + '" target="_blank" rel="noopener">Download CV</a></p>' : "")
         + '<p style="margin-top:10px">'
@@ -947,8 +1374,9 @@ async function loadMyJobs() {
         + '<button class="btn small ghost" data-status="shortlisted" data-app="' + esc(a.id) + '"' + (st === "shortlisted" ? " disabled" : "") + ">Shortlist</button> "
         + '<button class="btn small" data-status="hired" data-app="' + esc(a.id) + '"' + (st === "hired" ? " disabled" : "") + ">Hire</button> "
         + '<button class="btn small ghost" data-status="rejected" data-app="' + esc(a.id) + '"' + (st === "rejected" ? " disabled" : "") + ">Reject</button></p>"
+        + reviewHtml
         + "</div>";
-      }).join("")
+      }))).join("")
         : '<p class="meta">No applications yet.</p>';
       const div = document.createElement("div");
       div.className = "card";
@@ -965,6 +1393,7 @@ async function loadMyJobs() {
       seekerId: b.getAttribute("data-seeker"), seekerName: b.getAttribute("data-seekername")
     })));
     list.querySelectorAll("[data-viewpro]").forEach((b) => b.addEventListener("click", () => openProById(b.getAttribute("data-viewpro"), { jobId: b.getAttribute("data-job"), jobTitle: b.getAttribute("data-jobtitle") })));
+    list.querySelectorAll("form.review-box").forEach((f) => f.addEventListener("submit", (e) => { e.preventDefault(); submitReviewForm(f); }));
   } catch (e) { toast(dataErrorText(e)); $("myjobs-empty").classList.remove("hidden"); }
 }
 
@@ -982,13 +1411,23 @@ async function loadMyApplications() {
     for (const a of apps) {
       let jobTitle = "Job", company = "", empName = "";
       try { const js = await getDoc(doc(db, "jobs", a.jobId)); if (js.exists()) { jobTitle = js.data().title || jobTitle; company = js.data().company || ""; empName = js.data().employerName || ""; } } catch (e) {}
+      let reviewHtml = "";
+      if ((a.status || "") === "hired") {
+        const existing = await existingReview(a.jobId, currentUser.uid, a.employerId);
+        if (existing) {
+          reviewHtml = '<p class="meta" style="margin-top:10px">You reviewed this employer: ' + starsText(Number(existing.stars) || 0) + " " + (existing.stars || "") + "★</p>";
+        } else {
+          reviewHtml = reviewFormHtml({ id: a.id }, { id: a.jobId, title: jobTitle }, a.employerId, empName);
+        }
+      }
       const div = document.createElement("div");
       div.className = "card";
       div.innerHTML = "<h3>" + esc(jobTitle) + "</h3>"
         + (company ? "<p><strong>" + esc(company) + "</strong></p>" : "")
         + '<p class="meta">Applied ' + esc(dateText(a.createdAt)) + " · " + statusTag(a.status || "applied") + "</p>"
         + (a.coverNote ? '<p style="white-space:pre-line;margin-top:8px">' + esc(a.coverNote) + "</p>" : "")
-        + '<p style="margin-top:12px"><button class="btn small" data-msgapp="1" data-job="' + esc(a.jobId) + '" data-jobtitle="' + esc(jobTitle) + '" data-emp="' + esc(a.employerId) + '" data-empname="' + esc(empName) + '">Message employer</button></p>';
+        + '<p style="margin-top:12px"><button class="btn small" data-msgapp="1" data-job="' + esc(a.jobId) + '" data-jobtitle="' + esc(jobTitle) + '" data-emp="' + esc(a.employerId) + '" data-empname="' + esc(empName) + '">Message employer</button></p>'
+        + reviewHtml;
       list.appendChild(div);
     }
     list.querySelectorAll("[data-msgapp]").forEach((b) => b.addEventListener("click", () => openConversation({
@@ -996,6 +1435,7 @@ async function loadMyApplications() {
       employerId: b.getAttribute("data-emp"), employerName: b.getAttribute("data-empname"),
       seekerId: currentUser.uid, seekerName: (currentProfile && currentProfile.name) || ""
     })));
+    list.querySelectorAll("form.review-box").forEach((f) => f.addEventListener("submit", (e) => { e.preventDefault(); submitReviewForm(f); }));
   } catch (e) { toast(dataErrorText(e)); $("myapps-empty").classList.remove("hidden"); }
 }
 
@@ -1015,7 +1455,8 @@ function statusTag(st) {
   if (s === "hired") return '<span class="tag green">Hired</span>';
   if (s === "shortlisted") return '<span class="tag gold">Shortlisted</span>';
   if (s === "rejected") return '<span class="tag red">Rejected</span>';
-  return '<span class="tag grey">Applied</span>';
+  if (s === "viewed") return '<span class="tag grey">Viewed</span>';
+  return '<span class="tag grey">Received</span>';
 }
 function convIdFor(employerId, seekerId, jobId) { return employerId + "_" + seekerId + "_" + jobId; }
 function convOtherName(c) { return currentUser.uid === c.employerId ? (c.seekerName || "Job seeker") : (c.employerName || "Employer"); }
