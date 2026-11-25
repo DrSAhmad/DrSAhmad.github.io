@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HIRE ME — Free Job Marketplace</title>
+<meta name="description" content="HIRE ME — a free job marketplace. Job seekers sign up and upload a CV; employers post jobs free. No fees, ever.">
+<meta name="theme-color" content="#0d5c46">
+<style>
+  :root{--emerald:#0d5c46;--emerald-d:#0a4a39;--gold:#b98a1e;--ink:#1f2937;--muted:#6b7280;--bg:#f8fafc;--card:#fff;--line:#eef2f1;--red:#b91c1c}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,'Segoe UI',Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.7}
+  header{background:linear-gradient(135deg,var(--emerald),var(--emerald-d));color:#fff;padding:44px 20px 30px;text-align:center}
+  header h1{font-size:2rem;letter-spacing:1px}
+  header h1 span{color:var(--gold)}
+  header p{opacity:.94;max-width:620px;margin:8px auto 0;font-size:1.02rem}
+  .free-badge{display:inline-block;margin-top:14px;background:var(--gold);color:#fff;border-radius:999px;padding:5px 18px;font-weight:700;font-size:.9rem}
+  nav{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+  nav .inner{max-width:1020px;margin:0 auto;padding:10px 16px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  nav button{border:1px solid var(--line);background:#fff;color:var(--emerald);border-radius:999px;padding:7px 16px;font-weight:700;font-size:.9rem;cursor:pointer}
+  nav button:hover{background:#eef6f2}
+  nav button.active{background:var(--emerald);color:#fff;border-color:var(--emerald)}
+  nav button.primary{background:var(--gold);border-color:var(--gold);color:#fff}
+  nav .spacer{flex:1}
+  nav .who{font-size:.88rem;color:var(--muted);font-weight:700}
+  .wrap{max-width:1020px;margin:0 auto;padding:28px 20px 60px}
+  h2.sec{color:var(--emerald);font-size:1.45rem;margin:28px 0 6px}
+  p.lead{color:var(--muted);margin-bottom:16px}
+  .card{background:var(--card);border-radius:14px;padding:24px;box-shadow:0 3px 14px rgba(0,0,0,.06);border:1px solid var(--line);margin-bottom:16px}
+  .card h3{color:var(--emerald);margin-bottom:6px;font-size:1.15rem}
+  .card p{font-size:.94rem;color:var(--muted)}
+  .card p strong{color:var(--ink)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px}
+  .grid .card{margin-bottom:0;display:flex;flex-direction:column}
+  .grid .card p{flex:1}
+  .btn{display:inline-block;margin-top:12px;background:var(--emerald);color:#fff;text-decoration:none;border:none;border-radius:9px;padding:11px 22px;font-weight:700;text-align:center;cursor:pointer;font-size:.95rem}
+  .btn:hover{background:var(--emerald-d)}
+  .btn.gold{background:var(--gold)}
+  .btn.gold:hover{background:#a37a18}
+  .btn.ghost{background:#fff;color:var(--emerald);border:2px solid var(--emerald)}
+  .btn.ghost:hover{background:#eef6f2}
+  .btn.small{padding:7px 16px;font-size:.88rem}
+  .btn:disabled{opacity:.55;cursor:not-allowed}
+  .tag{display:inline-block;background:#eef6f2;color:var(--emerald);border-radius:999px;padding:3px 12px;margin:3px 3px 0 0;font-size:.82rem;font-weight:700}
+  .tag.gold{background:#fdf6e0;color:#8a6508}
+  .tag.grey{background:#f1f5f9;color:var(--muted)}
+  .meta{font-size:.88rem;color:var(--muted);margin-top:6px}
+  .safety{background:#fffbeb;border:1px solid #fde68a;border-radius:12px;padding:16px 20px;margin:18px 0;font-size:.93rem}
+  .safety strong{color:#92400e}
+  .searchrow{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}
+  .searchrow input[type=text],.searchrow select{flex:1;min-width:160px;padding:11px 14px;border:1px solid #d1d5db;border-radius:9px;font-size:1rem;font-family:inherit}
+  .checkrow{display:flex;align-items:center;gap:8px;font-size:.95rem;color:var(--ink);padding:11px 4px}
+  form label{display:block;font-weight:700;font-size:.92rem;margin:14px 0 4px}
+  form input[type=text],form input[type=email],form input[type=password],form input[type=number],form input[type=url],form select,form textarea{width:100%;padding:11px 14px;border:1px solid #d1d5db;border-radius:9px;font-size:1rem;font-family:inherit}
+  form textarea{min-height:120px;resize:vertical}
+  .hint{font-size:.86rem;color:var(--muted);margin-top:4px}
+  .err{display:none;background:#fef2f2;border:1px solid #fecaca;color:var(--red);border-radius:9px;padding:12px 16px;margin-top:14px;font-size:.93rem}
+  .okmsg{display:none;background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46;border-radius:9px;padding:12px 16px;margin-top:14px;font-size:.93rem}
+  .empty{text-align:center;color:var(--muted);padding:36px 16px;background:var(--card);border:1px dashed #d1d5db;border-radius:14px}
+  .rolepick{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px}
+  .rolepick label{flex:1;min-width:180px;border:2px solid #d1d5db;border-radius:12px;padding:16px;cursor:pointer;margin:0}
+  .rolepick input{margin-right:8px}
+  .rolepick label.sel{border-color:var(--emerald);background:#eef6f2}
+  .featured{border:2px solid var(--gold);background:linear-gradient(180deg,#fffdf5,#fff)}
+  .featured .who-line{font-size:.9rem;color:var(--muted)}
+  .hidden{display:none!important}
+  #toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#10201a;color:#fff;padding:12px 22px;border-radius:999px;font-size:.93rem;box-shadow:0 4px 18px rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:opacity .25s;z-index:50;max-width:92vw;text-align:center}
+  #toast.show{opacity:1}
+  .app{border-top:1px solid var(--line);padding-top:14px;margin-top:14px}
+  .app h4{color:var(--emerald);margin-bottom:4px}
+  .app p{font-size:.93rem}
+  footer{background:#10201a;color:#cbd5d1;padding:28px 20px;text-align:center;font-size:.9rem}
+  footer a{color:#9fd8c0;margin:0 10px;text-decoration:none}
+  footer a:hover{text-decoration:underline}
+  @media (max-width:560px){header h1{font-size:1.6rem}.wrap{padding:20px 14px 48px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>HIRE <span>ME</span></h1>
+  <p>100% free for job seekers and employers. Just sign up and upload your CV.</p>
+  <span class="free-badge">FREE — no fees, ever</span>
+</header>
+
+<nav>
+  <div class="inner">
+    <button data-nav="home" class="active">Jobs</button>
+    <button data-nav="professionals">Professionals</button>
+    <button data-nav="postjob" id="nav-postjob" class="hidden">Post a Job</button>
+    <button data-nav="myjobs" id="nav-myjobs" class="hidden">My Jobs</button>
+    <button data-nav="myapps" id="nav-myapps" class="hidden">My Applications</button>
+    <button data-nav="profile" id="nav-profile" class="hidden">My Profile</button>
+    <span class="spacer"></span>
+    <span class="who hidden" id="nav-who"></span>
+    <button data-nav="signin" id="nav-signin">Sign in</button>
+    <button data-nav="signup" id="nav-signup" class="primary">Join free</button>
+    <button id="nav-signout" class="hidden">Sign out</button>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <div id="setup-note" class="card hidden">
+    <h3>Job board setup in progress</h3>
+    <p>This marketplace is being connected. You can browse the featured professional below, but signing up and job posting will switch on once the Firebase project is linked.</p>
+  </div>
+
+  <!-- ============ HOME ============ -->
+  <section id="view-home">
+    <div class="safety"><strong>Stay safe:</strong> Never pay to apply for a job. A real employer never asks for fees, and never asks for your bank details or ID photos before an interview.</div>
+
+    <h2 class="sec">Featured professional</h2>
+    <div class="card featured">
+      <h3>Dr. Saghir Ahmad</h3>
+      <p class="who-line">Maths &amp; Statistics teacher · Islamabad, Pakistan · Remote worldwide</p>
+      <p>Almost 30 years teaching mathematics and statistics — Matric to university, entry tests, SPSS and data analysis. Founder of Shaheen Academy and author of books on decision-making, fear and faith.</p>
+      <p style="margin-top:8px"><span class="tag">Maths</span><span class="tag">Statistics</span><span class="tag">SPSS</span><span class="tag">Teaching</span><span class="tag">Curriculum</span></p>
+      <a class="btn gold" href="https://drsahmad.github.io/hire-me.html">Hire Dr. Saghir Ahmad</a>
+    </div>
+
+    <h2 class="sec">Open jobs</h2>
+    <div class="searchrow">
+      <input type="text" id="job-search" placeholder="Search jobs, companies, skills…">
+      <select id="job-category"><option value="">All categories</option></select>
+      <label class="checkrow"><input type="checkbox" id="job-remote"> Remote only</label>
+    </div>
+    <div id="job-list" class="grid"></div>
+    <div id="job-empty" class="empty hidden">No jobs posted yet — be the first employer to post one.</div>
+    <div id="job-none" class="empty hidden">No jobs match your search. Try different words or clear the filters.</div>
+  </section>
+
+  <!-- ============ JOB DETAIL ============ -->
+  <section id="view-job" class="hidden">
+    <p><a href="#" id="job-back" style="color:var(--emerald);font-weight:700;text-decoration:none">← Back to jobs</a></p>
+    <div id="job-detail"></div>
+    <div id="apply-box" class="card hidden">
+      <h3>Apply for this job</h3>
+      <div class="safety"><strong>Stay safe:</strong> Never pay to apply for a job. A real employer never asks for fees, and never asks for your bank details or ID photos before an interview.</div>
+      <form id="apply-form">
+        <label for="apply-note">Cover note</label>
+        <textarea id="apply-note" placeholder="A few lines about why you fit this role…" required></textarea>
+        <p class="hint">Your CV from your profile will be attached automatically.</p>
+        <button class="btn gold" type="submit" id="apply-btn">Apply with my CV</button>
+      </form>
+      <div class="err" id="apply-err"></div>
+      <div class="okmsg" id="apply-ok"></div>
+    </div>
+    <div id="apply-login" class="card hidden">
+      <h3>Sign in to apply</h3>
+      <p>You need a free seeker account to apply. It takes a minute — sign up, upload your CV, then come back here.</p>
+      <button class="btn" id="apply-goto-signin">Sign in / Join free</button>
+    </div>
+    <div id="apply-nocv" class="card hidden">
+      <h3>Add your CV first</h3>
+      <p>Your application needs a CV attached. Upload it on your profile, then come back to apply.</p>
+      <button class="btn" id="apply-goto-profile">Go to My Profile</button>
+    </div>
+    <div id="apply-done" class="card hidden">
+      <h3>Application sent</h3>
+      <p>You have already applied for this job. You can follow it under <strong>My Applications</strong>.</p>
+    </div>
+  </section>
+
+  <!-- ============ PROFESSIONALS ============ -->
+  <section id="view-professionals" class="hidden">
+    <h2 class="sec">Professionals looking for work</h2>
+    <p class="lead">Real people, real CVs. Open a profile to see their skills and download their CV.</p>
+    <div class="card featured">
+      <h3>Dr. Saghir Ahmad</h3>
+      <p class="who-line">Maths &amp; Statistics teacher · Islamabad, Pakistan · Remote worldwide</p>
+      <p>Almost 30 years teaching mathematics and statistics — Matric to university, entry tests, SPSS and data analysis.</p>
+      <p style="margin-top:8px"><span class="tag">Maths</span><span class="tag">Statistics</span><span class="tag">SPSS</span><span class="tag">Teaching</span></p>
+      <a class="btn gold" href="https://drsahmad.github.io/hire-me.html">Hire Dr. Saghir Ahmad</a>
+    </div>
+    <div id="pro-list" class="grid"></div>
+    <div id="pro-empty" class="empty hidden">No professionals have joined yet — be the first to sign up and upload your CV.</div>
+  </section>
+
+  <!-- ============ SINGLE PROFESSIONAL ============ -->
+  <section id="view-pro" class="hidden">
+    <p><a href="#" id="pro-back" style="color:var(--emerald);font-weight:700;text-decoration:none">← Back to professionals</a></p>
+    <div id="pro-detail"></div>
+  </section>
+
+  <!-- ============ SIGN UP ============ -->
+  <section id="view-signup" class="hidden">
+    <h2 class="sec">Join free</h2>
+    <p class="lead">One account, free forever. Seekers upload a CV and apply; employers post jobs and see applicants.</p>
+    <div class="card">
+      <form id="signup-form">
+        <label>I am joining as</label>
+        <div class="rolepick">
+          <label class="sel" id="role-seeker-label"><input type="radio" name="su-role" value="seeker" checked> Job seeker — I want work</label>
+          <label id="role-employer-label"><input type="radio" name="su-role" value="employer"> Employer — I want to hire</label>
+        </div>
+        <label for="su-name">Your name</label>
+        <input type="text" id="su-name" required>
+        <label for="su-email">Email</label>
+        <input type="email" id="su-email" required>
+        <label for="su-pass">Password</label>
+        <input type="password" id="su-pass" required minlength="6">
+        <p class="hint">At least 6 characters. Keep it somewhere safe — only you know it.</p>
+        <button class="btn gold" type="submit">Create my free account</button>
+      </form>
+      <div class="err" id="su-err"></div>
+      <p class="meta" style="margin-top:14px">Already have an account? <a href="#" id="su-to-signin" style="color:var(--emerald);font-weight:700">Sign in</a></p>
+    </div>
+  </section>
+
+  <!-- ============ SIGN IN ============ -->
+  <section id="view-signin" class="hidden">
+    <h2 class="sec">Sign in</h2>
+    <p class="lead">Welcome back.</p>
+    <div class="card">
+      <form id="signin-form">
+        <label for="si-email">Email</label>
+        <input type="email" id="si-email" required>
+        <label for="si-pass">Password</label>
+        <input type="password" id="si-pass" required>
+        <button class="btn" type="submit">Sign in</button>
+      </form>
+      <div class="err" id="si-err"></div>
+      <p class="meta" style="margin-top:14px"><a href="#" id="forgot-btn" style="color:var(--emerald);font-weight:700">Forgot your password?</a> · No account yet? <a href="#" id="si-to-signup" style="color:var(--emerald);font-weight:700">Join free</a></p>
+    </div>
+  </section>
+
+  <!-- ============ MY PROFILE ============ -->
+  <section id="view-profile" class="hidden">
+    <h2 class="sec">My Profile</h2>
+    <p class="lead" id="profile-lead">This is what employers see. Keep it honest and up to date.</p>
+    <div class="card">
+      <form id="profile-form">
+        <label for="pf-name">Name</label>
+        <input type="text" id="pf-name" required>
+        <div id="pf-seeker-fields">
+          <label for="pf-title">Professional title</label>
+          <input type="text" id="pf-title" placeholder="e.g. Maths Teacher, Data Analyst, Content Writer">
+          <label for="pf-bio">About you</label>
+          <textarea id="pf-bio" placeholder="A few lines about your experience and what you do best…"></textarea>
+          <label for="pf-skills">Skills (comma separated)</label>
+          <input type="text" id="pf-skills" placeholder="e.g. Maths, Statistics, SPSS, Teaching">
+          <label for="pf-location">Location</label>
+          <input type="text" id="pf-location" placeholder="e.g. Islamabad, Pakistan">
+          <label for="pf-rate">Hourly rate</label>
+          <input type="number" id="pf-rate" min="0" step="1" placeholder="e.g. 2000">
+          <label for="pf-ratecur">Rate currency</label>
+          <select id="pf-ratecur"><option value="PKR">PKR — Pakistani Rupee</option><option value="USD">USD — US Dollar</option></select>
+          <label for="pf-cv">Upload your CV (PDF, DOC or DOCX, max 600 KB)</label>
+          <input type="file" id="pf-cv" accept=".pdf,.doc,.docx">
+          <p class="hint" id="pf-cv-current">No CV uploaded yet.</p>
+        </div>
+        <div id="pf-employer-fields" class="hidden">
+          <label for="pf-company">Company / organisation</label>
+          <input type="text" id="pf-company" placeholder="e.g. Shaheen Academy">
+          <label for="pf-website">Website</label>
+          <input type="url" id="pf-website" placeholder="https://example.com">
+          <label for="pf-bio-e">About the company</label>
+          <textarea id="pf-bio-e" placeholder="What does your company do?"></textarea>
+          <label for="pf-location-e">Location</label>
+          <input type="text" id="pf-location-e" placeholder="e.g. Islamabad, Pakistan">
+        </div>
+        <button class="btn gold" type="submit">Save my profile</button>
+      </form>
+      <div class="err" id="pf-err"></div>
+      <div class="okmsg" id="pf-ok"></div>
+    </div>
+  </section>
+
+  <!-- ============ POST A JOB ============ -->
+  <section id="view-postjob" class="hidden">
+    <h2 class="sec">Post a job — free</h2>
+    <p class="lead">Free to post, free for seekers to apply. No commission, no fees.</p>
+    <div class="card">
+      <form id="postjob-form">
+        <label for="pj-title">Job title</label>
+        <input type="text" id="pj-title" required placeholder="e.g. Online Maths Teacher">
+        <label for="pj-company">Company</label>
+        <input type="text" id="pj-company" required placeholder="Your company or organisation">
+        <label for="pj-category">Category</label>
+        <select id="pj-category"></select>
+        <label for="pj-location">Location</label>
+        <input type="text" id="pj-location" required placeholder="e.g. Islamabad, Pakistan — or Worldwide">
+        <label class="checkrow"><input type="checkbox" id="pj-remote"> Remote — this job can be done from anywhere</label>
+        <label for="pj-type">Job type</label>
+        <select id="pj-type">
+          <option value="full-time">Full-time</option>
+          <option value="part-time">Part-time</option>
+          <option value="contract">Contract</option>
+          <option value="freelance">Freelance</option>
+        </select>
+        <label>Salary range</label>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <input type="number" id="pj-min" min="0" step="1" placeholder="Min" style="flex:1;min-width:120px">
+          <input type="number" id="pj-max" min="0" step="1" placeholder="Max" style="flex:1;min-width:120px">
+          <select id="pj-cur" style="flex:1;min-width:120px"><option value="PKR">PKR</option><option value="USD">USD</option></select>
+        </div>
+        <label for="pj-desc">Job description</label>
+        <textarea id="pj-desc" required placeholder="What will the person do? What experience do you need? How will you work together?"></textarea>
+        <label for="pj-skills">Skills needed (comma separated)</label>
+        <input type="text" id="pj-skills" placeholder="e.g. Maths, Teaching, English">
+        <button class="btn gold" type="submit">Post this job — free</button>
+      </form>
+      <div class="err" id="pj-err"></div>
+      <div class="okmsg" id="pj-ok"></div>
+    </div>
+  </section>
+
+  <!-- ============ MY JOBS (EMPLOYER) ============ -->
+  <section id="view-myjobs" class="hidden">
+    <h2 class="sec">My Jobs</h2>
+    <p class="lead">Jobs you posted, with the people who applied.</p>
+    <div id="myjobs-list"></div>
+    <div id="myjobs-empty" class="empty hidden">You have not posted a job yet.</div>
+  </section>
+
+  <!-- ============ MY APPLICATIONS (SEEKER) ============ -->
+  <section id="view-myapps" class="hidden">
+    <h2 class="sec">My Applications</h2>
+    <p class="lead">Jobs you applied for, and their status.</p>
+    <div id="myapps-list"></div>
+    <div id="myapps-empty" class="empty hidden">You have not applied for any job yet.</div>
+  </section>
+
+</div>
+
+<footer>
+  <p><strong>HIRE ME</strong> — free for job seekers and employers. No fees, no commission.</p>
+  <p style="margin-top:8px">Never pay to apply for a job. A real employer never asks for fees, and never asks for your bank details or ID photos before an interview.</p>
+  <p style="margin-top:12px"><a href="https://drsahmad.github.io/">Dr. S. Ahmad — home</a><a href="https://drsahmad.github.io/hire-me.html">Hire Dr. Saghir Ahmad</a></p>
+  <p style="margin-top:12px;opacity:.75">© 2026 HIRE ME · Built by Dr. S. Ahmad</p>
+</footer>
+
+<div id="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, collection, doc, setDoc, getDoc, getDocs, addDoc, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+/* ================= Firebase config ================= */
+/* Free Firebase project "HIRE ME" (hire-me-58146): Email/Password sign-in
+   and Firestore enabled. Cloud Storage needs the paid Blaze plan, so CVs
+   are stored as data URLs inside the user's Firestore profile document
+   (max 600 KB per CV) instead of in Storage. */
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyCNmS-HAry2I130erq_kIr6rCzUEWZM6P8",
+  authDomain: "hire-me-58146.firebaseapp.com",
+  projectId: "hire-me-58146",
+  storageBucket: "hire-me-58146.firebasestorage.app",
+  messagingSenderId: "978697184190",
+  appId: "1:978697184190:web:a44f12ac44b594a93b4fef"
+};
+
+const CONFIGURED = !!(FIREBASE_CONFIG && FIREBASE_CONFIG.apiKey);
+let app = null, auth = null, db = null;
+if (CONFIGURED) {
+  try {
+    app = initializeApp(FIREBASE_CONFIG);
+    auth = getAuth(app);
+    db = getFirestore(app);
+  } catch (e) { auth = null; db = null; }
+}
+
+/* ================= Helpers ================= */
+const $ = (id) => document.getElementById(id);
+const CATEGORIES = ["Teaching", "Writing & Content", "Data & Statistics", "Admin & Support", "Design & Media", "Software & IT", "Sales & Marketing", "Other"];
+const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const money = (n, cur) => {
+  const v = Number(n);
+  if (!isFinite(v) || v <= 0) return "";
+  const sym = cur === "USD" ? "$" : "Rs ";
+  return sym + v.toLocaleString("en-US");
+};
+function salaryText(j) {
+  const lo = money(j.salaryMin, j.currency), hi = money(j.salaryMax, j.currency);
+  if (lo && hi) return lo + " – " + hi + " " + (j.currency || "");
+  if (lo) return "From " + lo + " " + (j.currency || "");
+  if (hi) return "Up to " + hi + " " + (j.currency || "");
+  return "Salary on application";
+}
+function dateText(ts) {
+  try {
+    const d = ts && ts.toDate ? ts.toDate() : (ts ? new Date(ts) : null);
+    if (!d || isNaN(d)) return "";
+    return d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+  } catch (e) { return ""; }
+}
+function tsMillis(ts) {
+  try { return ts && ts.toMillis ? ts.toMillis() : (ts ? new Date(ts).getTime() : 0); } catch (e) { return 0; }
+}
+function parseSkills(s) {
+  return String(s || "").split(",").map((x) => x.trim()).filter(Boolean).slice(0, 20);
+}
+let toastTimer = null;
+function toast(msg) {
+  const t = $("toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), 3200);
+}
+function showErr(id, msg) { const el = $(id); el.textContent = msg; el.style.display = "block"; }
+function hideErr(id) { const el = $(id); el.style.display = "none"; }
+function showOk(id, msg) { const el = $(id); el.textContent = msg; el.style.display = "block"; }
+function hideOk(id) { const el = $(id); el.style.display = "none"; }
+function needFirebase() {
+  if (!db) { toast("The job board is still being connected — please check back soon."); return false; }
+  return true;
+}
+function authErrorText(err) {
+  const code = err && err.code ? err.code : "";
+  if (code === "auth/email-already-in-use") return "That email already has an account — try signing in instead.";
+  if (code === "auth/invalid-email") return "That email address doesn't look right.";
+  if (code === "auth/weak-password") return "Password needs at least 6 characters.";
+  if (code === "auth/user-not-found" || code === "auth/wrong-password" || code === "auth/invalid-credential") return "That email and password don't match an account.";
+  if (code === "auth/too-many-requests") return "Too many attempts just now — wait a moment and try again.";
+  if (code === "auth/network-request-failed") return "No connection — check your internet and try again.";
+  return "Something went wrong. Please try again.";
+}
+function dataErrorText(err) {
+  const code = err && err.code ? err.code : "";
+  if (code === "permission-denied") return "You don't have permission to do that. Please sign in again — if it keeps happening, the board may still be setting up.";
+  if (code === "unavailable" || code === "failed-precondition") return "The job board is unreachable right now — check your connection and try again.";
+  return "That didn't go through. Please try again.";
+}
+
+/* ================= State & navigation ================= */
+let currentUser = null;      // Firebase Auth user
+let currentProfile = null;   // users/{uid} document
+let jobsCache = [];
+let prosCache = [];
+let currentJobId = null;
+let currentJob = null;
+
+const VIEWS = ["home", "job", "professionals", "pro", "signup", "signin", "profile", "postjob", "myjobs", "myapps"];
+function show(view) {
+  VIEWS.forEach((v) => $("view-" + v).classList.toggle("hidden", v !== view));
+  document.querySelectorAll("[data-nav]").forEach((b) => b.classList.toggle("active", b.getAttribute("data-nav") === view));
+  window.scrollTo(0, 0);
+  if (view === "home") loadJobs();
+  if (view === "professionals") loadProfessionals();
+  if (view === "myjobs") loadMyJobs();
+  if (view === "myapps") loadMyApplications();
+  if (view === "profile") fillProfileForm();
+}
+document.querySelectorAll("[data-nav]").forEach((b) => {
+  b.addEventListener("click", () => {
+    const v = b.getAttribute("data-nav");
+    if ((v === "postjob" || v === "myjobs") && !(currentProfile && currentProfile.role === "employer")) {
+      show("signup"); toast("Employers post jobs — create a free employer account first."); return;
+    }
+    if (v === "myapps" && !(currentProfile && currentProfile.role === "seeker")) {
+      show("signup"); toast("Create a free seeker account to apply for jobs."); return;
+    }
+    if (v === "profile" && !currentUser) { show("signin"); toast("Sign in to open your profile."); return; }
+    show(v);
+  });
+});
+$("job-back").addEventListener("click", (e) => { e.preventDefault(); show("home"); });
+$("pro-back").addEventListener("click", (e) => { e.preventDefault(); show("professionals"); });
+$("su-to-signin").addEventListener("click", (e) => { e.preventDefault(); show("signin"); });
+$("si-to-signup").addEventListener("click", (e) => { e.preventDefault(); show("signup"); });
+$("apply-goto-signin").addEventListener("click", () => show("signin"));
+$("apply-goto-profile").addEventListener("click", () => show("profile"));
+if (!CONFIGURED) $("setup-note").classList.remove("hidden");
+
+// Category dropdowns
+CATEGORIES.forEach((c) => {
+  const o1 = document.createElement("option"); o1.value = c; o1.textContent = c; $("job-category").appendChild(o1);
+  const o2 = document.createElement("option"); o2.value = c; o2.textContent = c; $("pj-category").appendChild(o2);
+});
+
+// Role picker styling
+document.querySelectorAll("[name='su-role']").forEach((r) => {
+  r.addEventListener("change", () => {
+    $("role-seeker-label").classList.toggle("sel", r.value === "seeker" && r.checked);
+    $("role-employer-label").classList.toggle("sel", r.value === "employer" && r.checked);
+  });
+});
+
+/* ================= Auth ================= */
+function setSignedInUI() {
+  const in_ = !!currentUser;
+  $("nav-signin").classList.toggle("hidden", in_);
+  $("nav-signup").classList.toggle("hidden", in_);
+  $("nav-signout").classList.toggle("hidden", !in_);
+  $("nav-profile").classList.toggle("hidden", !in_);
+  const isEmp = !!(currentProfile && currentProfile.role === "employer");
+  const isSeek = !!(currentProfile && currentProfile.role === "seeker");
+  $("nav-postjob").classList.toggle("hidden", !isEmp);
+  $("nav-myjobs").classList.toggle("hidden", !isEmp);
+  $("nav-myapps").classList.toggle("hidden", !isSeek);
+  if (in_ && currentProfile) {
+    $("nav-who").classList.remove("hidden");
+    $("nav-who").textContent = currentProfile.name + " · " + (currentProfile.role === "employer" ? "Employer" : "Seeker");
+  } else { $("nav-who").classList.add("hidden"); }
+}
+async function loadProfile(uid) {
+  try {
+    const snap = await getDoc(doc(db, "users", uid));
+    currentProfile = snap.exists() ? snap.data() : null;
+  } catch (e) { currentProfile = null; }
+  setSignedInUI();
+}
+if (auth) {
+  onAuthStateChanged(auth, async (user) => {
+    currentUser = user;
+    if (user) { await loadProfile(user.uid); }
+    else { currentProfile = null; setSignedInUI(); }
+    refreshJobApplyBox();
+  });
+}
+$("signup-form").addEventListener("submit", async (e) => {
+  e.preventDefault(); hideErr("su-err");
+  const name = $("su-name").value.trim();
+  const email = $("su-email").value.trim();
+  const pass = $("su-pass").value;
+  const role = (document.querySelector("[name='su-role']:checked") || {}).value || "seeker";
+  if (!name || !email || pass.length < 6) { showErr("su-err", "Add your name, an email, and a password of at least 6 characters."); return; }
+  if (!needFirebase()) { showErr("su-err", "The job board is still being connected — please try again shortly."); return; }
+  try {
+    const cred = await createUserWithEmailAndPassword(auth, email, pass);
+    await updateProfile(cred.user, { displayName: name + "|" + role });
+    await setDoc(doc(db, "users", cred.user.uid), {
+      role, name, email, bio: "", skills: [], title: "", rate: "", rateCurrency: "PKR",
+      location: "", cvURL: "", cvName: "", company: "", website: "", createdAt: serverTimestamp()
+    });
+    toast("Welcome, " + name + " — your free account is ready.");
+    show(role === "employer" ? "postjob" : "profile");
+  } catch (err) { showErr("su-err", authErrorText(err)); }
+});
+$("signin-form").addEventListener("submit", async (e) => {
+  e.preventDefault(); hideErr("si-err");
+  const email = $("si-email").value.trim();
+  const pass = $("si-pass").value;
+  if (!email || !pass) { showErr("si-err", "Add your email and password."); return; }
+  if (!needFirebase()) { showErr("si-err", "The job board is still being connected — please try again shortly."); return; }
+  try {
+    await signInWithEmailAndPassword(auth, email, pass);
+    toast("Welcome back.");
+    show("home");
+  } catch (err) { showErr("si-err", authErrorText(err)); }
+});
+$("forgot-btn").addEventListener("click", async (e) => {
+  e.preventDefault();
+  const email = $("si-email").value.trim();
+  if (!email) { showErr("si-err", "Type your email above first, then tap “Forgot your password?”"); return; }
+  if (!auth) { showErr("si-err", "Accounts are unavailable right now — please try again in a moment."); return; }
+  try { await sendPasswordResetEmail(auth, email); toast("Password reset email sent to " + email + "."); }
+  catch (err) { showErr("si-err", authErrorText(err)); }
+});
+$("nav-signout").addEventListener("click", async () => {
+  try { if (auth) await signOut(auth); } catch (e) {}
+  currentUser = null; currentProfile = null; setSignedInUI(); show("home");
+  toast("Signed out. See you soon.");
+});
+
+/* ================= Jobs: list ================= */
+function jobCard(j) {
+  const tags = (j.skills || []).slice(0, 5).map((s) => '<span class="tag">' + esc(s) + "</span>").join("");
+  return '<div class="card">'
+    + "<h3>" + esc(j.title) + "</h3>"
+    + "<p><strong>" + esc(j.company || "") + "</strong>" + (j.location ? " · " + esc(j.location) : "") + "</p>"
+    + '<p class="meta">' + esc(j.type || "") + (j.remote ? ' · <span class="tag gold">Remote</span>' : "") + " · " + esc(j.category || "") + "</p>"
+    + '<p class="meta">' + esc(salaryText(j)) + (j.createdAt ? " · Posted " + esc(dateText(j.createdAt)) : "") + "</p>"
+    + (tags ? '<p style="margin-top:8px">' + tags + "</p>" : "")
+    + '<button class="btn small" data-job="' + esc(j.id) + '">View &amp; Apply</button>'
+    + "</div>";
+}
+function renderJobs() {
+  const q = ($("job-search").value || "").trim().toLowerCase();
+  const cat = $("job-category").value;
+  const remoteOnly = $("job-remote").checked;
+  const list = jobsCache.filter((j) => {
+    if (cat && j.category !== cat) return false;
+    if (remoteOnly && !j.remote) return false;
+    if (q) {
+      const hay = [j.title, j.company, j.description, (j.skills || []).join(" "), j.location, j.category].join(" ").toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  });
+  $("job-list").innerHTML = list.map(jobCard).join("");
+  $("job-empty").classList.toggle("hidden", jobsCache.length > 0);
+  $("job-none").classList.toggle("hidden", jobsCache.length === 0 || list.length > 0);
+  document.querySelectorAll("[data-job]").forEach((b) => b.addEventListener("click", () => openJob(b.getAttribute("data-job"))));
+}
+async function loadJobs() {
+  if (!db) { jobsCache = []; renderJobs(); return; }
+  try {
+    const snap = await getDocs(query(collection(db, "jobs"), where("status", "==", "open")));
+    jobsCache = [];
+    snap.forEach((d) => jobsCache.push(Object.assign({ id: d.id }, d.data())));
+    jobsCache.sort((a, b) => tsMillis(b.createdAt) - tsMillis(a.createdAt));
+  } catch (e) { jobsCache = []; toast(dataErrorText(e)); }
+  renderJobs();
+}
+$("job-search").addEventListener("input", renderJobs);
+$("job-category").addEventListener("change", renderJobs);
+$("job-remote").addEventListener("change", renderJobs);
+
+/* ================= Job detail + Apply ================= */
+async function openJob(id) {
+  currentJobId = id;
+  currentJob = jobsCache.find((j) => j.id === id) || null;
+  if (!currentJob && db) {
+    try { const s = await getDoc(doc(db, "jobs", id)); if (s.exists()) currentJob = Object.assign({ id: s.id }, s.data()); } catch (e) {}
+  }
+  if (!currentJob) { toast("That job could not be opened."); show("home"); return; }
+  const j = currentJob;
+  const tags = (j.skills || []).map((s) => '<span class="tag">' + esc(s) + "</span>").join("");
+  $("job-detail").innerHTML = '<div class="card">'
+    + "<h3>" + esc(j.title) + "</h3>"
+    + "<p><strong>" + esc(j.company || "") + "</strong>" + (j.location ? " · " + esc(j.location) : "") + "</p>"
+    + '<p class="meta">' + esc(j.type || "") + (j.remote ? ' · <span class="tag gold">Remote</span>' : "") + " · " + esc(j.category || "") + " · Posted " + esc(dateText(j.createdAt)) + "</p>"
+    + '<p class="meta">Salary: <strong>' + esc(salaryText(j)) + "</strong></p>"
+    + (tags ? '<p style="margin-top:8px">' + tags + "</p>" : "")
+    + '<p style="margin-top:12px;white-space:pre-line">' + esc(j.description || "") + "</p>"
+    + '<p class="meta" style="margin-top:12px">Posted by ' + esc(j.employerName || j.company || "Employer") + "</p>"
+    + "</div>";
+  show("job");
+  refreshJobApplyBox();
+}
+async function refreshJobApplyBox() {
+  const box = $("apply-box"), login = $("apply-login"), nocv = $("apply-nocv"), done = $("apply-done");
+  [box, login, nocv, done].forEach((el) => el.classList.add("hidden"));
+  hideErr("apply-err"); hideOk("apply-ok");
+  login.querySelector("p").textContent = "You need a free seeker account to apply. It takes a minute — sign up, upload your CV, then come back here.";
+  $("apply-goto-signin").classList.remove("hidden");
+  if (!currentJob) return;
+  if (!currentUser) { login.classList.remove("hidden"); return; }
+  if (!currentProfile || currentProfile.role !== "seeker") {
+    if (currentProfile && currentProfile.role === "employer") {
+      login.classList.remove("hidden");
+      login.querySelector("p").textContent = "This account is an employer account — applications need a seeker account.";
+      $("apply-goto-signin").classList.add("hidden");
+    } else { login.classList.remove("hidden"); }
+    return;
+  }
+  if (db) {
+    try {
+      const snap = await getDocs(query(collection(db, "applications"), where("jobId", "==", currentJobId), where("seekerId", "==", currentUser.uid)));
+      if (!snap.empty) { done.classList.remove("hidden"); return; }
+    } catch (e) {}
+  }
+  if (!currentProfile.cvURL) { nocv.classList.remove("hidden"); return; }
+  box.classList.remove("hidden");
+}
+$("apply-form").addEventListener("submit", async (e) => {
+  e.preventDefault(); hideErr("apply-err"); hideOk("apply-ok");
+  if (!needFirebase() || !currentUser || !currentJob) return;
+  if (!currentProfile || currentProfile.role !== "seeker") { showErr("apply-err", "Only seeker accounts can apply."); return; }
+  if (!currentProfile.cvURL) { showErr("apply-err", "Add your CV on your profile first, then apply."); return; }
+  const note = $("apply-note").value.trim();
+  if (!note) { showErr("apply-err", "Add a short cover note."); return; }
+  $("apply-btn").disabled = true;
+  try {
+    await addDoc(collection(db, "applications"), {
+      jobId: currentJobId, employerId: currentJob.employerId, seekerId: currentUser.uid,
+      seekerName: currentProfile.name, coverNote: note, cvURL: currentProfile.cvURL,
+      status: "applied", createdAt: serverTimestamp()
+    });
+    showOk("apply-ok", "Application sent — your CV went with it. Good luck!");
+    $("apply-form").reset();
+    setTimeout(refreshJobApplyBox, 600);
+  } catch (err) { showErr("apply-err", dataErrorText(err)); }
+  $("apply-btn").disabled = false;
+});
+
+/* ================= Professionals ================= */
+function proCard(p) {
+  const rate = money(p.rate, p.rateCurrency);
+  const tags = (p.skills || []).slice(0, 5).map((s) => '<span class="tag">' + esc(s) + "</span>").join("");
+  return '<div class="card">'
+    + "<h3>" + esc(p.name) + "</h3>"
+    + "<p><strong>" + esc(p.title || "Professional") + "</strong>" + (p.location ? " · " + esc(p.location) : "") + "</p>"
+    + (rate ? '<p class="meta">' + esc(rate) + " / hour</p>" : "")
+    + (tags ? '<p style="margin-top:8px">' + tags + "</p>" : "")
+    + '<button class="btn small" data-pro="' + esc(p.id) + '">View profile</button>'
+    + "</div>";
+}
+function renderPros() {
+  $("pro-list").innerHTML = prosCache.map(proCard).join("");
+  $("pro-empty").classList.toggle("hidden", prosCache.length > 0);
+  document.querySelectorAll("[data-pro]").forEach((b) => b.addEventListener("click", () => openPro(b.getAttribute("data-pro"))));
+}
+async function loadProfessionals() {
+  if (!db) { prosCache = []; renderPros(); return; }
+  try {
+    const snap = await getDocs(query(collection(db, "users"), where("role", "==", "seeker")));
+    prosCache = [];
+    snap.forEach((d) => prosCache.push(Object.assign({ id: d.id }, d.data())));
+    prosCache.sort((a, b) => String(a.name || "").localeCompare(String(b.name || "")));
+  } catch (e) { prosCache = []; toast(dataErrorText(e)); }
+  renderPros();
+}
+function openPro(id) {
+  const p = prosCache.find((x) => x.id === id);
+  if (!p) { toast("That profile could not be opened."); return; }
+  const rate = money(p.rate, p.rateCurrency);
+  const tags = (p.skills || []).map((s) => '<span class="tag">' + esc(s) + "</span>").join("");
+  $("pro-detail").innerHTML = '<div class="card">'
+    + "<h3>" + esc(p.name) + "</h3>"
+    + "<p><strong>" + esc(p.title || "Professional") + "</strong>" + (p.location ? " · " + esc(p.location) : "") + "</p>"
+    + (rate ? '<p class="meta">Rate: <strong>' + esc(rate) + " / hour</strong></p>" : "")
+    + (tags ? '<p style="margin-top:8px">' + tags + "</p>" : "")
+    + (p.bio ? '<p style="margin-top:12px;white-space:pre-line">' + esc(p.bio) + "</p>" : "")
+    + (p.cvURL ? '<p style="margin-top:14px"><a class="btn" href="' + esc(p.cvURL) + '" target="_blank" rel="noopener">Download CV' + (p.cvName ? " (" + esc(p.cvName) + ")" : "") + "</a></p>" : '<p class="meta" style="margin-top:14px">No CV uploaded yet.</p>')
+    + "</div>";
+  show("pro");
+}
+
+/* ================= My Profile ================= */
+function fillProfileForm() {
+  if (!currentUser) return;
+  const p = currentProfile || {};
+  $("pf-name").value = p.name || "";
+  const isEmp = p.role === "employer";
+  $("pf-seeker-fields").classList.toggle("hidden", isEmp);
+  $("pf-employer-fields").classList.toggle("hidden", !isEmp);
+  if (!isEmp) {
+    $("pf-title").value = p.title || "";
+    $("pf-bio").value = p.bio || "";
+    $("pf-skills").value = (p.skills || []).join(", ");
+    $("pf-location").value = p.location || "";
+    $("pf-rate").value = p.rate || "";
+    $("pf-ratecur").value = p.rateCurrency || "PKR";
+    $("pf-cv-current").innerHTML = p.cvURL
+      ? 'CV on file: <a href="' + esc(p.cvURL) + '" target="_blank" rel="noopener">' + esc(p.cvName || "Download CV") + "</a> — choose a new file below to replace it."
+      : "No CV uploaded yet.";
+  } else {
+    $("pf-company").value = p.company || "";
+    $("pf-website").value = p.website || "";
+    $("pf-bio-e").value = p.bio || "";
+    $("pf-location-e").value = p.location || "";
+  }
+}
+$("profile-form").addEventListener("submit", async (e) => {
+  e.preventDefault(); hideErr("pf-err"); hideOk("pf-ok");
+  if (!needFirebase() || !currentUser) { showErr("pf-err", "Sign in first, then save your profile."); return; }
+  const isEmp = currentProfile && currentProfile.role === "employer";
+  const data = { name: $("pf-name").value.trim(), updatedAt: serverTimestamp() };
+  if (!data.name) { showErr("pf-err", "Add your name."); return; }
+  if (!isEmp) {
+    data.title = $("pf-title").value.trim();
+    data.bio = $("pf-bio").value.trim();
+    data.skills = parseSkills($("pf-skills").value);
+    data.location = $("pf-location").value.trim();
+    data.rate = $("pf-rate").value ? Number($("pf-rate").value) : "";
+    data.rateCurrency = $("pf-ratecur").value;
+  } else {
+    data.company = $("pf-company").value.trim();
+    data.website = $("pf-website").value.trim();
+    data.bio = $("pf-bio-e").value.trim();
+    data.location = $("pf-location-e").value.trim();
+  }
+  try {
+    const file = $("pf-cv") && $("pf-cv").files ? $("pf-cv").files[0] : null;
+    if (file && !isEmp) {
+      const ext = (file.name.split(".").pop() || "").toLowerCase();
+      if (["pdf", "doc", "docx"].indexOf(ext) === -1) { showErr("pf-err", "CV must be a PDF, DOC or DOCX file."); return; }
+      if (file.size > 600 * 1024) { showErr("pf-err", "CV is over 600 KB — please use a smaller or compressed PDF (most CVs are under 300 KB)."); return; }
+      /* No Cloud Storage on the free plan: store the CV as a data URL inside
+         the Firestore profile document. The cvURL value is a data: link, so
+         every existing Download CV link keeps working unchanged. */
+      data.cvURL = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = () => reject(new Error("Could not read that file."));
+        reader.readAsDataURL(file);
+      });
+      data.cvName = file.name;
+    }
+    await setDoc(doc(db, "users", currentUser.uid), data, { merge: true });
+    await loadProfile(currentUser.uid);
+    fillProfileForm();
+    showOk("pf-ok", "Profile saved.");
+    toast("Profile saved.");
+  } catch (err) { showErr("pf-err", dataErrorText(err)); }
+});
+
+/* ================= Post a Job ================= */
+$("postjob-form").addEventListener("submit", async (e) => {
+  e.preventDefault(); hideErr("pj-err"); hideOk("pj-ok");
+  if (!needFirebase() || !currentUser) { showErr("pj-err", "Sign in first, then post a job."); return; }
+  if (!currentProfile || currentProfile.role !== "employer") { showErr("pj-err", "Only employer accounts can post jobs."); return; }
+  const title = $("pj-title").value.trim();
+  const company = $("pj-company").value.trim();
+  const location = $("pj-location").value.trim();
+  const desc = $("pj-desc").value.trim();
+  if (!title || !company || !location || !desc) { showErr("pj-err", "Fill in the title, company, location and description."); return; }
+  const min = $("pj-min").value ? Number($("pj-min").value) : null;
+  const max = $("pj-max").value ? Number($("pj-max").value) : null;
+  if (min != null && max != null && max < min) { showErr("pj-err", "The maximum salary can't be lower than the minimum."); return; }
+  try {
+    await addDoc(collection(db, "jobs"), {
+      title, company, employerId: currentUser.uid, employerName: currentProfile.name || company,
+      category: $("pj-category").value, location, remote: $("pj-remote").checked,
+      type: $("pj-type").value, salaryMin: min, salaryMax: max, currency: $("pj-cur").value,
+      description: desc, skills: parseSkills($("pj-skills").value),
+      status: "open", createdAt: serverTimestamp()
+    });
+    $("postjob-form").reset();
+    showOk("pj-ok", "Your job is live — seekers can apply now, free.");
+    toast("Job posted.");
+    setTimeout(() => show("home"), 900);
+  } catch (err) { showErr("pj-err", dataErrorText(err)); }
+});
+
+/* ================= My Jobs (employer) ================= */
+async function loadMyJobs() {
+  const list = $("myjobs-list"); list.innerHTML = "";
+  $("myjobs-empty").classList.add("hidden");
+  if (!db || !currentUser) { $("myjobs-empty").classList.remove("hidden"); return; }
+  try {
+    const snap = await getDocs(query(collection(db, "jobs"), where("employerId", "==", currentUser.uid)));
+    const mine = [];
+    snap.forEach((d) => mine.push(Object.assign({ id: d.id }, d.data())));
+    mine.sort((a, b) => tsMillis(b.createdAt) - tsMillis(a.createdAt));
+    if (!mine.length) { $("myjobs-empty").classList.remove("hidden"); return; }
+    for (const j of mine) {
+      const asnap = await getDocs(query(collection(db, "applications"), where("jobId", "==", j.id)));
+      const apps = [];
+      asnap.forEach((d) => apps.push(Object.assign({ id: d.id }, d.data())));
+      apps.sort((a, b) => tsMillis(b.createdAt) - tsMillis(a.createdAt));
+      const appHtml = apps.length ? apps.map((a) =>
+        '<div class="app"><h4>' + esc(a.seekerName || "Applicant") + '</h4>'
+        + '<p style="white-space:pre-line">' + esc(a.coverNote || "") + "</p>"
+        + '<p class="meta">Applied ' + esc(dateText(a.createdAt)) + " · Status: " + esc(a.status || "applied") + "</p>"
+        + (a.cvURL ? '<p><a class="btn small ghost" href="' + esc(a.cvURL) + '" target="_blank" rel="noopener">Download CV</a></p>' : "")
+        + "</div>").join("")
+        : '<p class="meta">No applications yet.</p>';
+      const div = document.createElement("div");
+      div.className = "card";
+      div.innerHTML = "<h3>" + esc(j.title) + "</h3>"
+        + "<p><strong>" + esc(j.company || "") + "</strong>" + (j.location ? " · " + esc(j.location) : "") + " · " + esc(j.status || "open") + "</p>"
+        + '<p class="meta">' + esc(salaryText(j)) + " · " + apps.length + " applicant" + (apps.length === 1 ? "" : "s") + "</p>"
+        + appHtml;
+      list.appendChild(div);
+    }
+  } catch (e) { toast(dataErrorText(e)); $("myjobs-empty").classList.remove("hidden"); }
+}
+
+/* ================= My Applications (seeker) ================= */
+async function loadMyApplications() {
+  const list = $("myapps-list"); list.innerHTML = "";
+  $("myapps-empty").classList.add("hidden");
+  if (!db || !currentUser) { $("myapps-empty").classList.remove("hidden"); return; }
+  try {
+    const snap = await getDocs(query(collection(db, "applications"), where("seekerId", "==", currentUser.uid)));
+    const apps = [];
+    snap.forEach((d) => apps.push(Object.assign({ id: d.id }, d.data())));
+    apps.sort((a, b) => tsMillis(b.createdAt) - tsMillis(a.createdAt));
+    if (!apps.length) { $("myapps-empty").classList.remove("hidden"); return; }
+    for (const a of apps) {
+      let jobTitle = "Job", company = "";
+      try { const js = await getDoc(doc(db, "jobs", a.jobId)); if (js.exists()) { jobTitle = js.data().title || jobTitle; company = js.data().company || ""; } } catch (e) {}
+      const div = document.createElement("div");
+      div.className = "card";
+      div.innerHTML = "<h3>" + esc(jobTitle) + "</h3>"
+        + (company ? "<p><strong>" + esc(company) + "</strong></p>" : "")
+        + '<p class="meta">Applied ' + esc(dateText(a.createdAt)) + " · Status: <strong>" + esc(a.status || "applied") + "</strong></p>"
+        + (a.coverNote ? '<p style="white-space:pre-line;margin-top:8px">' + esc(a.coverNote) + "</p>" : "");
+      list.appendChild(div);
+    }
+  } catch (e) { toast(dataErrorText(e)); $("myapps-empty").classList.remove("hidden"); }
+}
+
+/* ================= Boot ================= */
+show("home");
+</script>
+</body>
+</html>
