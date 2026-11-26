@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fantasy Worldbuilding Toolkit — Dr. Saghir Ahmad</title>
+<meta name="description" content="Build your world, name your people, track your timeline — a free fantasy worldbuilding toolkit in your browser.">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif; background: #f3f2ec; color: #1d211a; line-height: 1.55; }
+  header { background: #0d5c46; color: #fff; padding: 28px 16px 22px; text-align: center; }
+  header h1 { margin: 0 0 6px; font-size: 28px; }
+  header p { margin: 0; color: #cfe6dc; font-size: 15px; }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 16px; }
+  .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 16px; }
+  .tabbtn { flex: 1 1 40%; padding: 12px 10px; border: 2px solid #0d5c46; background: #fff; color: #0d5c46; font-size: 15px; font-weight: 700; border-radius: 10px; cursor: pointer; }
+  .tabbtn.active { background: #0d5c46; color: #fff; }
+  .panel { display: none; }
+  .panel.active { display: block; }
+  .card { background: #fff; border: 1px solid #e2e0d4; border-radius: 12px; padding: 18px; margin-bottom: 16px; }
+  .card h2 { margin: 0 0 10px; color: #0d5c46; font-size: 20px; }
+  .card h3 { margin: 14px 0 6px; color: #0d5c46; font-size: 16px; }
+  label { display: block; font-weight: 700; font-size: 14px; margin: 10px 0 4px; }
+  input[type=text], input[type=number], select, textarea { width: 100%; padding: 10px; border: 1px solid #c9c7b8; border-radius: 8px; font-size: 15px; font-family: inherit; background: #fff; }
+  textarea { min-height: 80px; resize: vertical; }
+  .row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .row > * { flex: 1 1 45%; }
+  .btn { display: inline-block; padding: 11px 18px; border: none; border-radius: 8px; background: #0d5c46; color: #fff; font-size: 15px; font-weight: 700; cursor: pointer; margin: 8px 6px 0 0; }
+  .btn.gold { background: #b98a1e; }
+  .btn.ghost { background: #fff; color: #0d5c46; border: 2px solid #0d5c46; }
+  .btn.small { padding: 7px 12px; font-size: 14px; }
+  .checkrow { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 6px 0; }
+  .checkrow label { display: inline-flex; align-items: center; gap: 6px; font-weight: 400; margin: 0; }
+  .result { background: #eef5f1; border-left: 4px solid #b98a1e; border-radius: 8px; padding: 14px; margin-top: 12px; font-size: 17px; }
+  .result small { display: block; color: #5a6b63; font-size: 13px; margin-top: 4px; }
+  .note { font-size: 13px; color: #6b6f66; }
+  .saved-item { border: 1px solid #e2e0d4; border-radius: 8px; padding: 12px; margin-top: 10px; }
+  .saved-item h4 { margin: 0 0 4px; color: #0d5c46; }
+  .saved-item p { margin: 4px 0; font-size: 14px; }
+  .gen-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media (max-width: 560px) { .gen-grid { grid-template-columns: 1fr; } }
+  .gen-btn { padding: 14px 10px; border: 2px solid #0d5c46; background: #fff; color: #0d5c46; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; }
+  .gen-btn:hover { background: #eef5f1; }
+  .partcol { flex: 1 1 30%; }
+  .partcol h4 { margin: 6px 0; color: #0d5c46; font-size: 14px; }
+  .part { display: block; width: 100%; text-align: left; padding: 8px 10px; margin: 4px 0; border: 1px solid #c9c7b8; border-radius: 8px; background: #fff; cursor: pointer; font-size: 14px; }
+  .part:hover { border-color: #0d5c46; }
+  .part.sel { background: #0d5c46; color: #fff; border-color: #0d5c46; }
+  .word-out { font-size: 26px; font-weight: 700; color: #0d5c46; text-align: center; margin: 12px 0 4px; }
+  .word-mean { text-align: center; color: #5a6b63; }
+  .cal-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin-top: 12px; }
+  .month-box { border: 1px solid #e2e0d4; border-radius: 8px; padding: 10px; background: #fff; }
+  .month-box h4 { margin: 0 0 6px; color: #0d5c46; font-size: 14px; }
+  .days { display: flex; flex-wrap: wrap; gap: 3px; }
+  .days span { width: 22px; height: 22px; line-height: 22px; text-align: center; font-size: 11px; border-radius: 4px; background: #eef5f1; }
+  .days span.today { background: #b98a1e; color: #fff; font-weight: 700; }
+  .month-row { display: flex; gap: 8px; margin-bottom: 8px; align-items: center; }
+  .month-row input[type=text] { flex: 2; }
+  .month-row input[type=number] { flex: 1; }
+  footer { text-align: center; padding: 24px 16px 32px; color: #6b6f66; font-size: 14px; }
+  footer a { color: #0d5c46; }
+  .goldline { height: 3px; background: #b98a1e; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Fantasy Worldbuilding Toolkit</h1>
+  <p>Build your world, name your people, track your timeline — free, in your browser.</p>
+</header>
+<div class="goldline"></div>
+
+<div class="wrap">
+  <p class="note">Saved on this device only — your worlds and calendars are stored in this browser (localStorage), nothing is sent anywhere.</p>
+
+  <div class="tabs">
+    <button class="tabbtn active" data-tab="world">World Builder</button>
+    <button class="tabbtn" data-tab="gen">Generators</button>
+    <button class="tabbtn" data-tab="cal">Fantasy Calendar</button>
+    <button class="tabbtn" data-tab="forge">Word Forge</button>
+  </div>
+
+  <!-- ============ WORLD BUILDER ============ -->
+  <section class="panel active" id="panel-world">
+    <div class="card">
+      <h2>World Builder</h2>
+      <label for="w-name">World name</label>
+      <input type="text" id="w-name" placeholder="e.g. Aethermoor">
+      <label for="w-premise">One-line premise</label>
+      <input type="text" id="w-premise" placeholder="e.g. A land where the rivers remember everything.">
+      <h3>Continents (up to 5)</h3>
+      <div id="continents"></div>
+      <button class="btn ghost small" id="add-continent" type="button">+ Add continent</button>
+      <h3>Terrain features</h3>
+      <div class="checkrow" id="terrain">
+        <label><input type="checkbox" value="Mountains"> Mountains</label>
+        <label><input type="checkbox" value="Rivers"> Rivers</label>
+        <label><input type="checkbox" value="Forests"> Forests</label>
+        <label><input type="checkbox" value="Deserts"> Deserts</label>
+        <label><input type="checkbox" value="Oceans"> Oceans</label>
+        <label><input type="checkbox" value="Islands"> Islands</label>
+      </div>
+      <label for="w-notes">Notes</label>
+      <textarea id="w-notes" placeholder="History, peoples, magic rules, anything else about your world."></textarea>
+      <button class="btn" id="save-world" type="button">Save world</button>
+      <p class="note" id="world-msg"></p>
+    </div>
+    <div class="card">
+      <h2>Saved Worlds</h2>
+      <div id="world-list"><p class="note">No worlds saved yet.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ GENERATORS ============ -->
+  <section class="panel" id="panel-gen">
+    <div class="card">
+      <h2>Generators</h2>
+      <p class="note">Tap a button to roll. Every list is original — invented here for your stories.</p>
+      <div class="gen-grid">
+        <button class="gen-btn" data-gen="name" type="button">Fantasy Name</button>
+        <button class="gen-btn" data-gen="race" type="button">Fantasy Race</button>
+        <button class="gen-btn" data-gen="char" type="button">Character Seed</button>
+        <button class="gen-btn" data-gen="twist" type="button">Plot Twist</button>
+        <button class="gen-btn" data-gen="prompt" type="button">Writing Prompt</button>
+      </div>
+      <div class="result" id="gen-result" style="display:none"></div>
+      <div id="gen-actions" style="display:none">
+        <button class="btn small" id="gen-copy" type="button">Copy</button>
+        <button class="btn gold small" id="gen-again" type="button">Roll again</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FANTASY CALENDAR ============ -->
+  <section class="panel" id="panel-cal">
+    <div class="card">
+      <h2>Fantasy Calendar</h2>
+      <label for="c-name">Calendar name</label>
+      <input type="text" id="c-name" placeholder="e.g. Calendar of Aethermoor">
+      <div class="row">
+        <div>
+          <label for="c-months">Number of months (2–12)</label>
+          <input type="number" id="c-months" min="2" max="12" value="8">
+        </div>
+        <div>
+          <label for="c-week">Days per week</label>
+          <input type="number" id="c-week" min="2" max="14" value="7">
+        </div>
+      </div>
+      <button class="btn ghost small" id="c-make-months" type="button">Set up months</button>
+      <div id="month-fields" style="margin-top:10px"></div>
+      <h3>Seasons</h3>
+      <div class="checkrow" id="c-seasons">
+        <label><input type="checkbox" value="Spring" checked> Spring</label>
+        <label><input type="checkbox" value="Summer" checked> Summer</label>
+        <label><input type="checkbox" value="Autumn" checked> Autumn</label>
+        <label><input type="checkbox" value="Winter" checked> Winter</label>
+      </div>
+      <label for="c-custom-season">Custom season (optional)</label>
+      <input type="text" id="c-custom-season" placeholder="e.g. The Long Rain">
+      <button class="btn" id="c-build" type="button">Build calendar</button>
+      <p class="note">Seasons are assigned by month order: the first quarter of the year is Spring, the second Summer, the third Autumn, the fourth Winter.</p>
+    </div>
+    <div class="card" id="cal-view" style="display:none">
+      <h2 id="cal-title"></h2>
+      <div class="row">
+        <div>
+          <label for="t-month">Today — month</label>
+          <select id="t-month"></select>
+        </div>
+        <div>
+          <label for="t-day">Today — day</label>
+          <input type="number" id="t-day" min="1" value="1">
+        </div>
+      </div>
+      <button class="btn small" id="t-set" type="button">Set today</button>
+      <p id="t-out" style="font-weight:700; color:#0d5c46"></p>
+      <div class="cal-grid" id="cal-grid"></div>
+      <button class="btn gold" id="c-save" type="button">Save calendar</button>
+      <p class="note" id="cal-msg"></p>
+    </div>
+    <div class="card">
+      <h2>Saved Calendar</h2>
+      <div id="cal-list"><p class="note">No calendar saved yet.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ WORD FORGE ============ -->
+  <section class="panel" id="panel-forge">
+    <div class="card">
+      <h2>Word Forge</h2>
+      <p>Build invented words from made-up roots. Pick one part from each column and your word assembles itself below.</p>
+      <p class="note">Invented roots for fiction — not real etymology.</p>
+      <div class="row">
+        <div class="partcol">
+          <h4>Prefix — the beginning</h4>
+          <div id="forge-pre"></div>
+        </div>
+        <div class="partcol">
+          <h4>Root — the middle</h4>
+          <div id="forge-root"></div>
+        </div>
+        <div class="partcol">
+          <h4>Suffix — the ending</h4>
+          <div id="forge-suf"></div>
+        </div>
+      </div>
+      <div class="word-out" id="forge-word">—</div>
+      <div class="word-mean" id="forge-mean">Pick one part from each column.</div>
+      <button class="btn" id="forge-random" type="button">Random word</button>
+      <button class="btn ghost" id="forge-clear" type="button">Clear</button>
+    </div>
+  </section>
+</div>
+
+<footer>
+  Fantasy Worldbuilding Toolkit | Dr. Saghir Ahmad | <a href="https://drsahmad.github.io/">drsahmad.github.io</a><br>
+  Learn the craft: <a href="https://mindfuldesignes.gumroad.com/l/gcrekg">Teach Yourself Creative Writing — $2</a>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---------- helpers ---------- */
+  function $(id) { return document.getElementById(id); }
+  function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+  function esc(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+  function loadJSON(key, fallback) {
+    try { var v = JSON.parse(localStorage.getItem(key)); return v == null ? fallback : v; }
+    catch (e) { return fallback; }
+  }
+  function saveJSON(key, val) { localStorage.setItem(key, JSON.stringify(val)); }
+
+  /* ---------- tabs ---------- */
+  var tabBtns = document.querySelectorAll(".tabbtn");
+  tabBtns.forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      tabBtns.forEach(function (b) { b.classList.remove("active"); });
+      document.querySelectorAll(".panel").forEach(function (p) { p.classList.remove("active"); });
+      btn.classList.add("active");
+      $("panel-" + btn.getAttribute("data-tab")).classList.add("active");
+    });
+  });
+
+  /* ---------- 1. WORLD BUILDER ---------- */
+  var CLIMATES = ["Tropical", "Temperate", "Arid", "Frozen", "Varied"];
+  var continentCount = 0;
+
+  function addContinent(name, climate, note) {
+    if (continentCount >= 5) { $("world-msg").textContent = "A world can have at most 5 continents."; return; }
+    continentCount++;
+    var div = document.createElement("div");
+    div.className = "month-row";
+    div.innerHTML =
+      '<input type="text" class="ct-name" placeholder="Continent ' + continentCount + ' name" value="' + esc(name || "") + '">' +
+      '<select class="ct-climate">' + CLIMATES.map(function (c) {
+        return '<option' + (c === (climate || "Temperate") ? " selected" : "") + ">" + c + "</option>";
+      }).join("") + "</select>" +
+      '<input type="text" class="ct-note" placeholder="Short note" value="' + esc(note || "") + '">';
+    $("continents").appendChild(div);
+  }
+  $("add-continent").addEventListener("click", function () { addContinent(); });
+  addContinent();
+  addContinent();
+
+  function renderWorlds() {
+    var worlds = loadJSON("fwt_worlds", []);
+    var list = $("world-list");
+    if (!worlds.length) { list.innerHTML = '<p class="note">No worlds saved yet.</p>'; return; }
+    list.innerHTML = "";
+    worlds.forEach(function (w, i) {
+      var div = document.createElement("div");
+      div.className = "saved-item";
+      var html = "<h4>" + esc(w.name) + "</h4>";
+      if (w.premise) html += "<p><em>" + esc(w.premise) + "</em></p>";
+      if (w.continents && w.continents.length) {
+        html += "<p><strong>Continents:</strong> " + w.continents.map(function (c) {
+          return esc(c.name) + " (" + esc(c.climate) + (c.note ? " — " + esc(c.note) : "") + ")";
+        }).join("; ") + "</p>";
+      }
+      if (w.terrain && w.terrain.length) html += "<p><strong>Terrain:</strong> " + esc(w.terrain.join(", ")) + "</p>";
+      if (w.notes) html += "<p>" + esc(w.notes) + "</p>";
+      html += '<button class="btn small ghost" data-del="' + i + '">Delete</button>';
+      div.innerHTML = html;
+      list.appendChild(div);
+    });
+    list.querySelectorAll("[data-del]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var worlds = loadJSON("fwt_worlds", []);
+        worlds.splice(parseInt(b.getAttribute("data-del"), 10), 1);
+        saveJSON("fwt_worlds", worlds);
+        renderWorlds();
+      });
+    });
+  }
+
+  $("save-world").addEventListener("click", function () {
+    var name = $("w-name").value.trim();
+    if (!name) { $("world-msg").textContent = "Give your world a name first."; return; }
+    var continents = [];
+    document.querySelectorAll("#continents .month-row").forEach(function (row) {
+      var n = row.querySelector(".ct-name").value.trim();
+      if (!n) return;
+      continents.push({
+        name: n,
+        climate: row.querySelector(".ct-climate").value,
+        note: row.querySelector(".ct-note").value.trim()
+      });
+    });
+    var terrain = [];
+    document.querySelectorAll("#terrain input:checked").forEach(function (c) { terrain.push(c.value); });
+    var worlds = loadJSON("fwt_worlds", []);
+    worlds.push({
+      name: name,
+      premise: $("w-premise").value.trim(),
+      continents: continents,
+      terrain: terrain,
+      notes: $("w-notes").value.trim()
+    });
+    saveJSON("fwt_worlds", worlds);
+    $("world-msg").textContent = "World saved: " + name + ".";
+    renderWorlds();
+  });
+  renderWorlds();
+
+  /* ---------- 2. GENERATORS ---------- */
+  var FIRST = ["Ael", "Mor", "Tha", "Vor", "Sil", "Dra", "Kael", "Ryn", "El", "Ash", "Bran", "Cor", "Dain", "Eir", "Fen", "Gal", "Hal", "Is", "Jor", "Kel", "Lor", "Mael", "Nym", "Or", "Pell", "Quin", "Row", "Sar", "Tor", "Wyn"];
+  var LAST = ["dor", "mir", "keth", "lorn", "vale", "wyn", "thorn", "fall", "mere", "brook", "stone", "wind", "ash", "ford", "gard", "helm", "lock", "moor", "ness", "ral", "shire", "thane", "wick", "born", "field", "heart", "song", "blade", "crest", "hollow"];
+  var RACES = [
+    ["Ember-born", "People whose skin glows faintly when they are angry or afraid."],
+    ["Tide-folk", "Coastal dwellers who can hold their breath for an hour and hear the sea in shells."],
+    ["Root-keepers", "Forest folk who plant a tree at every birth and tend it for life."],
+    ["Sky-herders", "Nomads who follow migrating cloud-whales across the high plains."],
+    ["Stone-singers", "Mountain folk who shape rock by humming the right note."],
+    ["Moth-kin", "Night people with dusted wings who trade in dreams and small secrets."],
+    ["Glass-blooded", "A pale people whose veins shine like cracked glass in moonlight."],
+    ["Salt-wives", "Desert traders who carry their water in sealed clay and never waste a drop."],
+    ["Thorn-crowned", "Warrior gardeners who grow their armour from living briar."],
+    ["Lantern-eyes", "Cave folk who see in the dark and fear the open sun."],
+    ["River-jacks", "Boat people who are born, married and buried on the water."],
+    ["Frost-weavers", "Northern folk who spin winter into cloth that never melts."]
+  ];
+  var ROLES = ["a runaway prince", "a retired map-maker", "a young healer", "a disgraced knight", "a travelling cook", "an orphan thief", "a lighthouse keeper", "a scholar of dead languages", "a blacksmith's apprentice", "a river ferryman", "a court spy", "a shepherd who talks to storms"];
+  var TRAITS = ["never lies, even when it costs her", "collects other people's lost buttons", "is afraid of the dark, though he denies it", "laughs at the worst moments", "remembers every debt", "cannot read, but hides it well", "talks to animals and insists they answer", "is always cold, no matter the weather", "keeps a list of everyone who has wronged him", "hums old songs when nervous", "trusts strangers too quickly", "counts everything — steps, coins, heartbeats"];
+  var SECRETS = ["she once stole a king's crown and gave it back", "he is the last of his bloodline", "she can hear the thoughts of the dead", "he betrayed his best friend for a map", "she is not who her family thinks she is", "he made a bargain with the river and it is coming due", "she burned the only copy of a sacred book", "he knows where the lost city is — and will not tell", "she is older than she looks by a hundred years", "he is running from a name he no longer uses", "she carries a letter she has never opened", "he once let a village burn to save one person"];
+  var TWISTS = [
+    "The villain has been protecting the hero all along.",
+    "The map is wrong on purpose — someone redrew it.",
+    "The prophecy was about the wrong person.",
+    "The magic only works when the caster tells the truth.",
+    "The enemy army is made of people the hero already knows.",
+    "The treasure is a door, not a chest.",
+    "The hero's mentor faked his own death twice.",
+    "The kingdom's greatest weapon is a song nobody can finish.",
+    "The river flows backwards once a year — and tomorrow is that day.",
+    "The crown chooses its wearer, and it just chose a thief.",
+    "The war ended years ago; nobody told the soldiers.",
+    "The safe city is the most dangerous place in the world.",
+    "The hero's closest friend is the one who wrote the prophecy.",
+    "The monster under the mountain is guarding something, not hunting.",
+    "The spell that saves the kingdom will erase the caster's name from history."
+  ];
+  var PROMPTS = [
+    "A cartographer discovers a town on her map that does not exist — and it is waiting for her.",
+    "The last dragon in the world applies for a job as a lighthouse keeper.",
+    "Two rival healers must cross a desert together to save the same patient.",
+    "A thief steals a crown and finds it whispering instructions.",
+    "A village holds a festival every year for a god who left a century ago — this year, he comes back.",
+    "A young sailor finds a message in a bottle written in her own handwriting.",
+    "The kingdom's best swordsman loses his sword — and his memory — on the same night.",
+    "A cook in a castle kitchen learns the king's food is being poisoned, one pinch at a time.",
+    "A shepherd's flock starts speaking in riddles every full moon.",
+    "An apprentice mage's first spell works perfectly — on the wrong person.",
+    "A lighthouse goes dark for the first time in a hundred years, and the ships keep coming.",
+    "A map-maker is hired to chart a forest that moves when no one is looking.",
+    "A retired knight takes in a runaway — who turns out to be the heir to the enemy throne.",
+    "A scholar finds a book that rewrites itself every morning.",
+    "A ferryman refuses to carry one passenger across the river, and the whole kingdom notices."
+  ];
+
+  var lastGen = "";
+  var lastGenKind = "";
+  function genName() { return pick(FIRST) + pick(LAST); }
+  function genRace() { var r = pick(RACES); return r[0] + " — " + r[1]; }
+  function genChar() { return pick(ROLES) + " who " + pick(TRAITS) + ". Secret: " + pick(SECRETS) + "."; }
+  function genTwist() { return pick(TWISTS); }
+  function genPrompt() { return pick(PROMPTS); }
+
+  function showGen(kind) {
+    var text = "";
+    if (kind === "name") text = genName();
+    else if (kind === "race") text = genRace();
+    else if (kind === "char") text = genChar();
+    else if (kind === "twist") text = genTwist();
+    else if (kind === "prompt") text = genPrompt();
+    lastGen = text;
+    lastGenKind = kind;
+    var box = $("gen-result");
+    box.style.display = "block";
+    box.innerHTML = esc(text);
+    $("gen-actions").style.display = "block";
+  }
+  document.querySelectorAll(".gen-btn").forEach(function (b) {
+    b.addEventListener("click", function () { showGen(b.getAttribute("data-gen")); });
+  });
+  $("gen-again").addEventListener("click", function () { if (lastGenKind) showGen(lastGenKind); });
+  $("gen-copy").addEventListener("click", function () {
+    if (!lastGen) return;
+    var done = function () { $("gen-copy").textContent = "Copied!"; setTimeout(function () { $("gen-copy").textContent = "Copy"; }, 1500); };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(lastGen).then(done, done);
+    } else { done(); }
+  });
+
+  /* ---------- 3. FANTASY CALENDAR ---------- */
+  var currentCal = null;
+
+  function buildMonthFields() {
+    var n = parseInt($("c-months").value, 10);
+    if (isNaN(n) || n < 2) n = 2;
+    if (n > 12) n = 12;
+    $("c-months").value = n;
+    var wrap = $("month-fields");
+    wrap.innerHTML = "<h3>Months</h3>";
+    for (var i = 0; i < n; i++) {
+      var div = document.createElement("div");
+      div.className = "month-row";
+      div.innerHTML =
+        '<input type="text" class="m-name" placeholder="Month ' + (i + 1) + ' name" value="Month ' + (i + 1) + '">' +
+        '<input type="number" class="m-days" min="1" max="60" value="30">';
+      wrap.appendChild(div);
+    }
+  }
+  $("c-make-months").addEventListener("click", buildMonthFields);
+  buildMonthFields();
+
+  function seasonForMonth(idx, total, seasons) {
+    if (!seasons.length) return "";
+    var quarter = Math.floor(idx / total * 4);
+    if (quarter > 3) quarter = 3;
+    return seasons[quarter % seasons.length];
+  }
+
+  function renderCalendar() {
+    if (!currentCal) return;
+    $("cal-view").style.display = "block";
+    $("cal-title").textContent = currentCal.name + " — " + currentCal.totalDays + " days in the year";
+    var sel = $("t-month");
+    sel.innerHTML = "";
+    currentCal.months.forEach(function (m, i) {
+      var opt = document.createElement("option");
+      opt.value = i;
+      opt.textContent = m.name + " (" + m.days + " days)";
+      sel.appendChild(opt);
+    });
+    var grid = $("cal-grid");
+    grid.innerHTML = "";
+    var todayMonth = parseInt(sel.value, 10) || 0;
+    var todayDay = parseInt($("t-day").value, 10) || 1;
+    currentCal.months.forEach(function (m, i) {
+      var box = document.createElement("div");
+      box.className = "month-box";
+      var season = seasonForMonth(i, currentCal.months.length, currentCal.seasons);
+      var html = "<h4>" + esc(m.name) + " — " + m.days + " days" + (season ? " · " + esc(season) : "") + "</h4><div class='days'>";
+      for (var d = 1; d <= m.days; d++) {
+        html += '<span' + (i === todayMonth && d === todayDay ? ' class="today"' : "") + ">" + d + "</span>";
+      }
+      html += "</div>";
+      box.innerHTML = html;
+      grid.appendChild(box);
+    });
+  }
+
+  $("c-build").addEventListener("click", function () {
+    var name = $("c-name").value.trim() || "My Fantasy Calendar";
+    var week = parseInt($("c-week").value, 10) || 7;
+    var months = [];
+    document.querySelectorAll("#month-fields .month-row").forEach(function (row) {
+      var nm = row.querySelector(".m-name").value.trim() || "Month";
+      var dy = parseInt(row.querySelector(".m-days").value, 10);
+      if (isNaN(dy) || dy < 1) dy = 30;
+      months.push({ name: nm, days: dy });
+    });
+    if (!months.length) { $("cal-msg").textContent = "Press 'Set up months' first."; return; }
+    var seasons = [];
+    document.querySelectorAll("#c-seasons input:checked").forEach(function (c) { seasons.push(c.value); });
+    var custom = $("c-custom-season").value.trim();
+    if (custom) seasons.push(custom);
+    var total = months.reduce(function (a, m) { return a + m.days; }, 0);
+    currentCal = { name: name, week: week, months: months, seasons: seasons, totalDays: total };
+    renderCalendar();
+    $("cal-msg").textContent = "Calendar built: " + months.length + " months, " + total + " days in the year.";
+  });
+
+  $("t-set").addEventListener("click", function () {
+    if (!currentCal) return;
+    var mi = parseInt($("t-month").value, 10);
+    var day = parseInt($("t-day").value, 10);
+    if (isNaN(mi) || isNaN(day) || day < 1) { $("t-out").textContent = "Pick a month and a day first."; return; }
+    var m = currentCal.months[mi];
+    if (day > m.days) day = m.days;
+    var before = 0;
+    for (var i = 0; i < mi; i++) before += currentCal.months[i].days;
+    var dayOfYear = before + day;
+    var season = seasonForMonth(mi, currentCal.months.length, currentCal.seasons);
+    $("t-out").textContent = "Day " + dayOfYear + " of " + currentCal.totalDays + " — " + m.name + " " + day +
+      (season ? " · Season: " + season : "");
+    renderCalendar();
+  });
+
+  $("c-save").addEventListener("click", function () {
+    if (!currentCal) return;
+    saveJSON("fwt_calendar", currentCal);
+    $("cal-msg").textContent = "Calendar saved: " + currentCal.name + ".";
+    renderSavedCal();
+  });
+
+  function renderSavedCal() {
+    var cal = loadJSON("fwt_calendar", null);
+    var list = $("cal-list");
+    if (!cal) { list.innerHTML = '<p class="note">No calendar saved yet.</p>'; return; }
+    list.innerHTML = '<div class="saved-item"><h4>' + esc(cal.name) + '</h4>' +
+      "<p>" + cal.months.length + " months · " + cal.totalDays + " days in the year · " + cal.week + " days per week</p>" +
+      "<p><strong>Months:</strong> " + esc(cal.months.map(function (m) { return m.name + " (" + m.days + ")"; }).join(", ")) + "</p>" +
+      '<button class="btn small ghost" id="cal-del">Delete</button></div>';
+    $("cal-del").addEventListener("click", function () {
+      localStorage.removeItem("fwt_calendar");
+      renderSavedCal();
+    });
+  }
+  renderSavedCal();
+
+  /* ---------- 4. WORD FORGE ---------- */
+  var PREFIXES = [
+    ["ael-", "light"], ["mor-", "dark"], ["thal-", "sea"], ["vor-", "fire"],
+    ["sil-", "silver / moon"], ["drak-", "dragon"], ["keth-", "stone"],
+    ["wyn-", "wind"], ["nor-", "north"], ["sol-", "sun"], ["um-", "shadow"], ["bel-", "bright / beautiful"]
+  ];
+  var ROOTS = [
+    ["-dor", "land"], ["-mir", "peace"], ["-keth", "stone"], ["-lorn", "lost"],
+    ["-vale", "valley"], ["-mere", "lake"], ["-thorn", "thorn / defence"],
+    ["-wyn", "song"], ["-fal", "fall / cliff"], ["-gar", "spear / guard"],
+    ["-neth", "night"], ["-bor", "home / hearth"]
+  ];
+  var SUFFIXES = [
+    ["-ia", "place"], ["-or", "person"], ["-eth", "old / ancient"],
+    ["-an", "people"], ["-is", "small"], ["-ar", "great"],
+    ["-el", "blessed"], ["-um", "deep"], ["-a", "daughter / of"],
+    ["-on", "son / of"], ["-ir", "star"], ["-ath", "land of"]
+  ];
+  var selPre = null, selRoot = null, selSuf = null;
+
+  function buildParts(containerId, list, which) {
+    var wrap = $(containerId);
+    list.forEach(function (p, i) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "part";
+      b.textContent = p[0] + " — " + p[1];
+      b.addEventListener("click", function () {
+        wrap.querySelectorAll(".part").forEach(function (x) { x.classList.remove("sel"); });
+        b.classList.add("sel");
+        if (which === "pre") selPre = i;
+        else if (which === "root") selRoot = i;
+        else selSuf = i;
+        updateWord();
+      });
+      wrap.appendChild(b);
+    });
+  }
+  buildParts("forge-pre", PREFIXES, "pre");
+  buildParts("forge-root", ROOTS, "root");
+  buildParts("forge-suf", SUFFIXES, "suf");
+
+  function updateWord() {
+    if (selPre == null || selRoot == null || selSuf == null) return;
+    var p = PREFIXES[selPre], r = ROOTS[selRoot], s = SUFFIXES[selSuf];
+    var word = p[0].replace(/-$/, "") + r[0].replace(/^-/, "") + s[0].replace(/^-/, "");
+    word = word.charAt(0).toUpperCase() + word.slice(1);
+    $("forge-word").textContent = word;
+    $("forge-mean").textContent = "“" + p[1] + " " + r[1] + "” — " + s[1] + ".";
+  }
+
+  $("forge-random").addEventListener("click", function () {
+    selPre = Math.floor(Math.random() * PREFIXES.length);
+    selRoot = Math.floor(Math.random() * ROOTS.length);
+    selSuf = Math.floor(Math.random() * SUFFIXES.length);
+    [["forge-pre", selPre], ["forge-root", selRoot], ["forge-suf", selSuf]].forEach(function (pair) {
+      var btns = $(pair[0]).querySelectorAll(".part");
+      btns.forEach(function (x) { x.classList.remove("sel"); });
+      btns[pair[1]].classList.add("sel");
+    });
+    updateWord();
+  });
+
+  $("forge-clear").addEventListener("click", function () {
+    selPre = selRoot = selSuf = null;
+    document.querySelectorAll(".part").forEach(function (x) { x.classList.remove("sel"); });
+    $("forge-word").textContent = "—";
+    $("forge-mean").textContent = "Pick one part from each column.";
+  });
+})();
+</script>
+</body>
+</html>
