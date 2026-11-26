@@ -25,6 +25,9 @@
   .hero-img { flex: 1 1 300px; }
   .hero-img img { width: 100%; max-width: 380px; display: block; margin: 0 auto; border-radius: 12px; box-shadow: 0 6px 22px rgba(13, 92, 70, 0.25); border: 3px solid #b98a1e; }
   .hero-img figcaption { text-align: center; color: #6b6b6b; font-size: 14px; margin-top: 8px; }
+  .video-wrap { max-width: 420px; margin: 18px auto 0; }
+  .video-wrap video { width: 100%; display: block; border-radius: 12px; border: 3px solid #b98a1e; box-shadow: 0 6px 22px rgba(13, 92, 70, 0.25); }
+  .video-wrap figcaption { text-align: center; color: #6b6b6b; font-size: 14px; margin-top: 8px; }
   .btn { display: inline-block; background: #0d5c46; color: #fff; border: none; padding: 12px 22px; font-size: 16px; border-radius: 8px; cursor: pointer; text-decoration: none; }
   .btn:hover { background: #0a4a39; }
   .btn-gold { background: #b98a1e; color: #fff; }
@@ -151,6 +154,17 @@
     </div>
   </section>
 
+  <!-- Video invitations -->
+  <section>
+    <h2>Video invitations</h2>
+    <p class="lede">Your invitation as a short video &mdash; your design, gently moving, with a spoken invitation. Made from your soft-copy design, ready to share on WhatsApp.</p>
+    <figure class="video-wrap">
+      <video controls preload="metadata" poster="template-mayun.jpg" src="sample-video-invitation.mp4"></video>
+      <figcaption>Sample: Aisha ki Mayun &mdash; video invitation with voiceover (12 seconds)</figcaption>
+    </figure>
+    <p class="lede">Video invitations are priced individually &mdash; choose &ldquo;Video invitation&rdquo; in the order form below and we will reply with your price.</p>
+  </section>
+
   <!-- Custom designs -->
   <section>
     <h2>Want it made just for you?</h2>
@@ -205,6 +219,12 @@
         <option>Other</option>
       </select>
 
+      <label for="f-format">Design type</label>
+      <select id="f-format">
+        <option>Image invitation (soft copy)</option>
+        <option>Video invitation with audio</option>
+      </select>
+
       <label for="f-date">Event date</label>
       <input id="f-date" type="date">
 
@@ -241,6 +261,7 @@ function sendOrder(event) {
   event.preventDefault();
   var name = document.getElementById('f-name').value.trim();
   var eventType = document.getElementById('f-event').value;
+  var format = document.getElementById('f-format').value;
   var date = document.getElementById('f-date').value;
   var colours = document.getElementById('f-colours').value.trim();
   var wording = document.getElementById('f-wording').value.trim();
@@ -261,6 +282,7 @@ function sendOrder(event) {
     '',
     'Your name: ' + name,
     'Event type: ' + eventType,
+    'Design type: ' + format,
     'Event date: ' + (date || 'Not given'),
     'Colours / theme: ' + (colours || 'Not given'),
     'Names & wording for the invitation:',
