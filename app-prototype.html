@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matric Maths Practice App — Interactive Prototype</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    background: #f3f2ec;
+    color: #1d211a;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 16px 40px;
+  }
+  h1 { color: #0d5c46; font-size: 1.5rem; text-align: center; margin-bottom: 6px; }
+  .sub { text-align: center; color: #555; font-size: 0.95rem; margin-bottom: 20px; }
+  .proto-label {
+    display: inline-block;
+    background: #b98a1e; color: #fff;
+    font-size: 0.85rem; font-weight: 600;
+    padding: 6px 14px; border-radius: 20px;
+    margin-bottom: 22px; text-align: center;
+  }
+  /* Phone frame */
+  .phone {
+    width: 100%; max-width: 380px;
+    background: #111;
+    border-radius: 42px;
+    padding: 12px;
+    box-shadow: 0 18px 40px rgba(0,0,0,0.25);
+  }
+  .screen {
+    background: #ffffff;
+    border-radius: 32px;
+    overflow: hidden;
+    min-height: 560px;
+    display: flex; flex-direction: column;
+  }
+  .appbar {
+    background: #0d5c46; color: #fff;
+    padding: 18px 18px 14px;
+  }
+  .appbar h2 { font-size: 1.15rem; }
+  .appbar p { font-size: 0.85rem; opacity: 0.9; margin-top: 2px; }
+  .body { padding: 18px; flex: 1; display: flex; flex-direction: column; }
+  .card {
+    background: #f8f7f2; border: 1px solid #e5e2d8;
+    border-radius: 14px; padding: 16px; margin-bottom: 14px;
+  }
+  .card h3 { color: #0d5c46; font-size: 1rem; margin-bottom: 6px; }
+  .streak { font-size: 2rem; font-weight: 700; color: #b98a1e; }
+  .streak small { font-size: 0.85rem; color: #555; font-weight: 400; display: block; }
+  .progress-wrap { margin: 6px 0 2px; }
+  .progress-wrap label { font-size: 0.85rem; color: #555; display: flex; justify-content: space-between; }
+  .bar { height: 10px; background: #e5e2d8; border-radius: 6px; overflow: hidden; margin-top: 6px; }
+  .bar > div { height: 100%; background: #0d5c46; width: 0%; transition: width 0.3s; }
+  .btn {
+    display: block; width: 100%;
+    background: #0d5c46; color: #fff;
+    border: none; border-radius: 12px;
+    padding: 14px; font-size: 1rem; font-weight: 700;
+    cursor: pointer; text-align: center; text-decoration: none;
+    margin-top: auto;
+  }
+  .btn.gold { background: #b98a1e; }
+  .btn.ghost { background: #fff; color: #0d5c46; border: 2px solid #0d5c46; margin-top: 10px; }
+  .btn:disabled { opacity: 0.55; cursor: default; }
+  .qcount { font-size: 0.85rem; color: #b98a1e; font-weight: 700; letter-spacing: 0.05em; }
+  .qtext { font-size: 1.15rem; font-weight: 600; margin: 10px 0 16px; line-height: 1.4; }
+  .opt {
+    display: block; width: 100%;
+    background: #fff; border: 2px solid #e5e2d8; border-radius: 12px;
+    padding: 13px 14px; font-size: 1rem; text-align: left;
+    cursor: pointer; margin-bottom: 10px;
+  }
+  .opt.correct { background: #e6f4ea; border-color: #1e8e3e; color: #137333; font-weight: 700; }
+  .opt.wrong { background: #fce8e6; border-color: #c5221f; color: #a50e0e; font-weight: 700; }
+  .opt:disabled { cursor: default; }
+  .feedback { font-size: 0.95rem; font-weight: 600; margin: 4px 0 12px; min-height: 1.2em; }
+  .feedback.good { color: #137333; }
+  .feedback.bad { color: #a50e0e; }
+  .score-big { font-size: 3rem; font-weight: 800; color: #0d5c46; text-align: center; }
+  .score-note { text-align: center; color: #555; margin-top: 4px; }
+  .nav { display: flex; gap: 8px; margin-top: 14px; }
+  .nav button {
+    flex: 1; padding: 10px; border-radius: 10px; border: 2px solid #0d5c46;
+    background: #fff; color: #0d5c46; font-weight: 700; cursor: pointer; font-size: 0.9rem;
+  }
+  .nav button.active { background: #0d5c46; color: #fff; }
+  .links { margin-top: 26px; text-align: center; max-width: 380px; }
+  .links a { color: #0d5c46; font-weight: 600; display: block; margin: 8px 0; }
+  footer { margin-top: 26px; font-size: 0.85rem; color: #777; text-align: center; }
+  footer a { color: #0d5c46; }
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<h1>Matric Maths Practice App</h1>
+<p class="sub">Interactive prototype — idea 3 from the reel: test an app idea in minutes.</p>
+<span class="proto-label">Prototype for testing — tap through it like the real app.</span>
+
+<div class="phone">
+  <div class="screen">
+    <div class="appbar">
+      <h2>Matric Maths Practice</h2>
+      <p>Class 9–10 · 5 quick questions a day</p>
+    </div>
+
+    <!-- HOME -->
+    <div class="body" id="screen-home">
+      <div class="card">
+        <h3>Today's streak</h3>
+        <div class="streak"><span id="streak-num">0</span> <span style="font-size:1.2rem;">&#128293;</span><small id="streak-note">days in a row</small></div>
+      </div>
+      <div class="card">
+        <h3>Your best score</h3>
+        <div class="streak" style="color:#0d5c46;"><span id="best-num">–</span><small>out of 5 questions</small></div>
+      </div>
+      <div class="progress-wrap">
+        <label><span>Daily practice</span><span id="prog-label">0 / 5</span></label>
+        <div class="bar"><div id="prog-bar"></div></div>
+      </div>
+      <button class="btn" id="btn-start">Start practice</button>
+      <div class="nav">
+        <button class="active" data-nav="home">Home</button>
+        <button data-nav="progress">Progress</button>
+      </div>
+    </div>
+
+    <!-- PRACTICE -->
+    <div class="body hidden" id="screen-quiz">
+      <div class="qcount" id="q-count">QUESTION 1 OF 5</div>
+      <div class="qtext" id="q-text"></div>
+      <div id="q-options"></div>
+      <div class="feedback" id="q-feedback"></div>
+      <button class="btn hidden" id="btn-next">Next</button>
+      <button class="btn ghost" id="btn-quit">Quit to home</button>
+    </div>
+
+    <!-- RESULT -->
+    <div class="body hidden" id="screen-result">
+      <div class="card" style="text-align:center;">
+        <h3>Practice complete!</h3>
+        <div class="score-big"><span id="score-num">0</span> / 5</div>
+        <p class="score-note" id="score-note"></p>
+      </div>
+      <div class="card">
+        <h3>Best score</h3>
+        <div class="streak" style="color:#0d5c46;"><span id="best-num-2">–</span><small>out of 5 · saved on this device</small></div>
+      </div>
+      <button class="btn" id="btn-again">Practice again</button>
+      <button class="btn ghost" id="btn-home-2">Back to home</button>
+    </div>
+
+    <!-- PROGRESS -->
+    <div class="body hidden" id="screen-progress">
+      <div class="card">
+        <h3>Streak</h3>
+        <div class="streak"><span id="streak-num-2">0</span> <span style="font-size:1.2rem;">&#128293;</span><small id="streak-note-2">days in a row — practice daily to keep it going</small></div>
+      </div>
+      <div class="card">
+        <h3>Best score</h3>
+        <div class="streak" style="color:#0d5c46;"><span id="best-num-3">–</span><small>out of 5 questions</small></div>
+      </div>
+      <div class="card">
+        <h3>Total questions answered</h3>
+        <div class="streak" style="color:#0d5c46;"><span id="total-num">0</span><small>all time, on this device</small></div>
+      </div>
+      <button class="btn" id="btn-start-2">Start practice</button>
+      <div class="nav">
+        <button data-nav="home">Home</button>
+        <button class="active" data-nav="progress">Progress</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="links">
+  <a href="https://drsahmad.github.io/matric-maths-exam-simulator.html">Try the full Exam Simulator</a>
+  <a href="https://mindfuldesignes.gumroad.com/l/krfvnw">Get the Matric Maths Study Pack ($5)</a>
+</div>
+
+<footer>
+  A prototype by Dr. Saghir Ahmad · <a href="https://drsahmad.github.io/">drsahmad.github.io</a>
+</footer>
+
+<script>
+var QUESTIONS = [
+  { q: "What is 15% of 200?", opts: ["20", "25", "30", "35"], correct: 2 },
+  { q: "Solve: 2x + 6 = 14. What is x?", opts: ["3", "4", "5", "6"], correct: 1 },
+  { q: "What is the square root of 144?", opts: ["11", "12", "13", "14"], correct: 1 },
+  { q: "Simplify: 3\u00B2 \u00D7 3\u00B3.", opts: ["243", "81", "27", "729"], correct: 0 },
+  { q: "What is the next prime number after 7?", opts: ["9", "10", "11", "13"], correct: 2 }
+];
+
+function todayStr() { return new Date().toISOString().slice(0, 10); }
+function yesterdayStr() { var d = new Date(); d.setDate(d.getDate() - 1); return d.toISOString().slice(0, 10); }
+function store(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } }
+function save(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+
+function getStreak() { var s = store("mmp_streak"); return s ? s : { count: 0, last: null }; }
+function getBest() { var b = store("mmp_best"); return (b === null || b === undefined) ? null : b; }
+function getTotal() { var t = store("mmp_total"); return t ? t : 0; }
+
+function refreshHome() {
+  var s = getStreak(), b = getBest();
+  document.getElementById("streak-num").textContent = s.count;
+  document.getElementById("streak-num-2").textContent = s.count;
+  document.getElementById("best-num").textContent = (b === null ? "\u2013" : b);
+  document.getElementById("best-num-2").textContent = (b === null ? "\u2013" : b);
+  document.getElementById("best-num-3").textContent = (b === null ? "\u2013" : b);
+  document.getElementById("total-num").textContent = getTotal();
+  var done = store("mmp_today_done") === todayStr() ? 5 : 0;
+  document.getElementById("prog-label").textContent = done + " / 5";
+  document.getElementById("prog-bar").style.width = (done / 5 * 100) + "%";
+}
+
+function show(id) {
+  ["screen-home", "screen-quiz", "screen-result", "screen-progress"].forEach(function (s) {
+    document.getElementById(s).classList.toggle("hidden", s !== id);
+  });
+}
+
+var qi = 0, score = 0, answered = false;
+
+function startQuiz() {
+  qi = 0; score = 0;
+  show("screen-quiz");
+  renderQ();
+}
+
+function renderQ() {
+  answered = false;
+  var q = QUESTIONS[qi];
+  document.getElementById("q-count").textContent = "QUESTION " + (qi + 1) + " OF 5";
+  document.getElementById("q-text").textContent = q.q;
+  document.getElementById("q-feedback").textContent = "";
+  document.getElementById("q-feedback").className = "feedback";
+  document.getElementById("btn-next").classList.add("hidden");
+  var box = document.getElementById("q-options");
+  box.innerHTML = "";
+  q.opts.forEach(function (opt, i) {
+    var b = document.createElement("button");
+    b.className = "opt";
+    b.textContent = opt;
+    b.onclick = function () { answer(i, b); };
+    box.appendChild(b);
+  });
+}
+
+function answer(i, btn) {
+  if (answered) return;
+  answered = true;
+  var q = QUESTIONS[qi];
+  var btns = document.querySelectorAll("#q-options .opt");
+  btns.forEach(function (b) { b.disabled = true; });
+  var fb = document.getElementById("q-feedback");
+  if (i === q.correct) {
+    btn.classList.add("correct");
+    fb.textContent = "Correct! Well done.";
+    fb.className = "feedback good";
+    score++;
+  } else {
+    btn.classList.add("wrong");
+    btns[q.correct].classList.add("correct");
+    fb.textContent = "Not quite — the correct answer is " + q.opts[q.correct] + ".";
+    fb.className = "feedback bad";
+  }
+  var next = document.getElementById("btn-next");
+  next.textContent = (qi === QUESTIONS.length - 1) ? "See my score" : "Next";
+  next.classList.remove("hidden");
+}
+
+function finishQuiz() {
+  var b = getBest();
+  if (b === null || score > b) save("mmp_best", score);
+  save("mmp_total", getTotal() + QUESTIONS.length);
+  save("mmp_today_done", todayStr());
+  var s = getStreak();
+  if (s.last !== todayStr()) {
+    s.count = (s.last === yesterdayStr()) ? s.count + 1 : 1;
+    s.last = todayStr();
+    save("mmp_streak", s);
+  }
+  document.getElementById("score-num").textContent = score;
+  var note = score === 5 ? "Perfect score — excellent work!"
+    : score >= 3 ? "Good work — a little more practice and you'll ace it."
+    : "Keep practising — try again tomorrow to build your streak.";
+  document.getElementById("score-note").textContent = note;
+  refreshHome();
+  show("screen-result");
+}
+
+document.getElementById("btn-next").onclick = function () {
+  if (qi < QUESTIONS.length - 1) { qi++; renderQ(); } else { finishQuiz(); }
+};
+document.getElementById("btn-start").onclick = startQuiz;
+document.getElementById("btn-start-2").onclick = startQuiz;
+document.getElementById("btn-again").onclick = startQuiz;
+document.getElementById("btn-quit").onclick = function () { refreshHome(); show("screen-home"); };
+document.getElementById("btn-home-2").onclick = function () { refreshHome(); show("screen-home"); };
+document.querySelectorAll("[data-nav]").forEach(function (b) {
+  b.onclick = function () {
+    refreshHome();
+    show(b.getAttribute("data-nav") === "progress" ? "screen-progress" : "screen-home");
+  };
+});
+
+refreshHome();
+</script>
+</body>
+</html>

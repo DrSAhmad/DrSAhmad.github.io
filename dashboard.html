@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Tracker — Dr. Saghir Ahmad</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: #f6f4ee;
+    color: #1d211a;
+    line-height: 1.5;
+    padding: 0 0 32px;
+  }
+  header {
+    background: #0d5c46;
+    color: #fff;
+    padding: 22px 18px 18px;
+    text-align: center;
+  }
+  header h1 { font-size: 1.5rem; letter-spacing: 0.3px; }
+  header p { color: #d9e8df; font-size: 0.9rem; margin-top: 4px; }
+  .gold-rule { height: 4px; background: #b98a1e; }
+  main { max-width: 640px; margin: 0 auto; padding: 16px 14px 0; }
+  section { margin-bottom: 18px; }
+  h2 { font-size: 1.05rem; color: #0d5c46; margin-bottom: 10px; }
+  .card {
+    background: #fff;
+    border: 1px solid #e4e0d4;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .stats { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  @media (min-width: 520px) { .stats { grid-template-columns: 1fr 1fr; } }
+  .stat .label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.6px; color: #6b6f66; }
+  .stat .big { font-size: 1.9rem; font-weight: 700; color: #0d5c46; line-height: 1.2; }
+  .stat .sub { font-size: 0.9rem; color: #3c4038; }
+  .stat .gold { color: #b98a1e; }
+  .asof { font-size: 0.8rem; color: #6b6f66; text-align: center; margin-top: 2px; }
+  .device-note {
+    font-size: 0.8rem; color: #6b6f66; background: #fdf6e3;
+    border: 1px solid #e8d9a8; border-radius: 8px; padding: 8px 10px; margin-bottom: 10px;
+  }
+  .check-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 4px; border-bottom: 1px solid #efead9; font-size: 1rem;
+  }
+  .check-item:last-of-type { border-bottom: none; }
+  .check-item input { width: 20px; height: 20px; accent-color: #0d5c46; flex-shrink: 0; }
+  .check-item.done span { text-decoration: line-through; color: #8a8d84; }
+  button {
+    font-family: inherit; font-size: 0.95rem; cursor: pointer;
+    border-radius: 8px; border: none; padding: 10px 16px;
+  }
+  .btn-primary { background: #0d5c46; color: #fff; width: 100%; margin-top: 12px; }
+  .btn-primary:hover { background: #0a4a38; }
+  .btn-ghost { background: #f0ede4; color: #0d5c46; width: 100%; margin-top: 12px; }
+  .counter-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 0; border-bottom: 1px solid #efead9;
+  }
+  .counter-row:last-of-type { border-bottom: none; }
+  .counter-row .name { font-size: 1rem; }
+  .counter-row .count {
+    font-size: 1.4rem; font-weight: 700; color: #0d5c46; min-width: 40px; text-align: center;
+  }
+  .counter-row .actions { display: flex; gap: 8px; align-items: center; }
+  .btn-add { background: #0d5c46; color: #fff; padding: 8px 14px; font-weight: 700; }
+  .btn-reset-small { background: none; color: #b98a1e; padding: 8px 6px; font-size: 0.85rem; text-decoration: underline; }
+  textarea {
+    width: 100%; min-height: 110px; resize: vertical;
+    font-family: inherit; font-size: 1rem; line-height: 1.5;
+    border: 1px solid #d8d2c0; border-radius: 8px; padding: 10px;
+    background: #fffdf7; color: #1d211a;
+  }
+  textarea:focus { outline: 2px solid #b98a1e; outline-offset: 0; }
+  .saved-hint { font-size: 0.8rem; color: #6b6f66; margin-top: 6px; }
+  footer { text-align: center; padding: 18px 14px 0; font-size: 0.9rem; color: #6b6f66; }
+  footer a { color: #0d5c46; font-weight: 600; text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<header>
+  <h1>My Tracker</h1>
+  <p>Dr. Saghir Ahmad &mdash; track anything, one day at a time</p>
+</header>
+<div class="gold-rule"></div>
+
+<main>
+  <section>
+    <h2>At a glance</h2>
+    <div class="stats">
+      <div class="card stat">
+        <div class="label">Gumroad store</div>
+        <div class="big">53 <span style="font-size:1rem;font-weight:600;">products</span></div>
+        <div class="sub">48 published &middot; 0 sales</div>
+      </div>
+      <div class="card stat">
+        <div class="label">HIRE ME</div>
+        <div class="big">4 <span style="font-size:1rem;font-weight:600;">jobs live</span></div>
+        <div class="sub">on the board</div>
+      </div>
+      <div class="card stat" style="grid-column: 1 / -1;">
+        <div class="label">Product Hunt</div>
+        <div class="big gold">HIRE ME launches today</div>
+        <div class="sub">26 Nov 2026, 1:01 PM PKT</div>
+      </div>
+    </div>
+    <p class="asof">Numbers as of 26 Nov 2026</p>
+  </section>
+
+  <section>
+    <h2>Today&rsquo;s checklist</h2>
+    <div class="device-note">Saved on this device only.</div>
+    <div class="card" id="checklist">
+      <label class="check-item"><input type="checkbox" data-key="blog"><span>Published today&rsquo;s blog post</span></label>
+      <label class="check-item"><input type="checkbox" data-key="hireme"><span>Checked HIRE ME applications</span></label>
+      <label class="check-item"><input type="checkbox" data-key="pins"><span>Posted today&rsquo;s pins</span></label>
+      <label class="check-item"><input type="checkbox" data-key="taught"><span>Taught / studied</span></label>
+      <label class="check-item"><input type="checkbox" data-key="read"><span>Read 10 pages</span></label>
+      <button class="btn-ghost" id="reset-day" type="button">Reset day</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>Log a win</h2>
+    <div class="device-note">Saved on this device only.</div>
+    <div class="card">
+      <div class="counter-row">
+        <span class="name">Sales</span>
+        <span class="actions">
+          <span class="count" id="count-sales">0</span>
+          <button class="btn-add" type="button" data-counter="sales">+1</button>
+          <button class="btn-reset-small" type="button" data-reset="sales">reset</button>
+        </span>
+      </div>
+      <div class="counter-row">
+        <span class="name">Job applications</span>
+        <span class="actions">
+          <span class="count" id="count-apps">0</span>
+          <button class="btn-add" type="button" data-counter="apps">+1</button>
+          <button class="btn-reset-small" type="button" data-reset="apps">reset</button>
+        </span>
+      </div>
+      <div class="counter-row">
+        <span class="name">New signups</span>
+        <span class="actions">
+          <span class="count" id="count-signups">0</span>
+          <button class="btn-add" type="button" data-counter="signups">+1</button>
+          <button class="btn-reset-small" type="button" data-reset="signups">reset</button>
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Notes</h2>
+    <div class="device-note">Saved on this device only.</div>
+    <textarea id="notes" placeholder="Write anything you want to remember&hellip;"></textarea>
+    <p class="saved-hint" id="notes-hint">Notes save automatically as you type.</p>
+  </section>
+</main>
+
+<footer>
+  <a href="https://drsahmad.github.io/">&larr; Back to drsahmad.github.io</a>
+</footer>
+
+<script>
+(function () {
+  var PREFIX = "mytracker-";
+
+  function get(key, fallback) {
+    try {
+      var v = localStorage.getItem(PREFIX + key);
+      return v === null ? fallback : v;
+    } catch (e) { return fallback; }
+  }
+  function set(key, value) {
+    try { localStorage.setItem(PREFIX + key, value); } catch (e) {}
+  }
+
+  /* Checklist */
+  var boxes = document.querySelectorAll("#checklist input[type=checkbox]");
+  boxes.forEach(function (box) {
+    var key = "check-" + box.getAttribute("data-key");
+    box.checked = get(key, "0") === "1";
+    box.closest(".check-item").classList.toggle("done", box.checked);
+    box.addEventListener("change", function () {
+      set(key, box.checked ? "1" : "0");
+      box.closest(".check-item").classList.toggle("done", box.checked);
+    });
+  });
+  document.getElementById("reset-day").addEventListener("click", function () {
+    boxes.forEach(function (box) {
+      box.checked = false;
+      set("check-" + box.getAttribute("data-key"), "0");
+      box.closest(".check-item").classList.remove("done");
+    });
+  });
+
+  /* Counters */
+  var counters = { sales: 0, apps: 0, signups: 0 };
+  Object.keys(counters).forEach(function (name) {
+    counters[name] = parseInt(get("count-" + name, "0"), 10) || 0;
+    document.getElementById("count-" + name).textContent = counters[name];
+  });
+  document.querySelectorAll("[data-counter]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var name = btn.getAttribute("data-counter");
+      counters[name] += 1;
+      set("count-" + name, String(counters[name]));
+      document.getElementById("count-" + name).textContent = counters[name];
+    });
+  });
+  document.querySelectorAll("[data-reset]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var name = btn.getAttribute("data-reset");
+      counters[name] = 0;
+      set("count-" + name, "0");
+      document.getElementById("count-" + name).textContent = "0";
+    });
+  });
+
+  /* Notes */
+  var notes = document.getElementById("notes");
+  var hint = document.getElementById("notes-hint");
+  notes.value = get("notes", "");
+  notes.addEventListener("input", function () {
+    set("notes", notes.value);
+    hint.textContent = "Saved just now.";
+  });
+})();
+</script>
+</body>
+</html>

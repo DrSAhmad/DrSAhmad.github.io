@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Book a Class — Dr. Saghir Ahmad | Maths &amp; Statistics Tutoring</title>
+<meta name="description" content="Book online maths and statistics classes with Dr. Saghir Ahmad — nearly 30 years teaching experience. Booking by email.">
+<style>
+  :root{
+    --emerald:#0d5c46;
+    --emerald-dark:#0a4837;
+    --gold:#b98a1e;
+    --bg:#f7f5ef;
+    --card:#ffffff;
+    --ink:#1d211a;
+    --muted:#5c665e;
+    --border:#e3ded0;
+    --radius:14px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    line-height:1.55;
+  }
+  header{
+    background:var(--emerald);
+    color:#fff;
+    padding:28px 18px 24px;
+    text-align:center;
+  }
+  header h1{margin:0 0 6px;font-size:1.55rem;line-height:1.25}
+  header p{margin:0;font-size:1rem;opacity:.92}
+  .badge{
+    display:inline-block;
+    margin-top:12px;
+    background:var(--gold);
+    color:#fff;
+    font-weight:700;
+    font-size:.85rem;
+    padding:5px 14px;
+    border-radius:999px;
+  }
+  main{max-width:720px;margin:0 auto;padding:18px 14px 40px}
+  .card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:18px;
+    margin-bottom:16px;
+    box-shadow:0 1px 3px rgba(0,0,0,.05);
+  }
+  h2{color:var(--emerald);margin:0 0 10px;font-size:1.2rem}
+  h2 .rule{display:block;width:44px;height:3px;background:var(--gold);border-radius:2px;margin-top:6px}
+  p{margin:0 0 10px}
+  .muted{color:var(--muted);font-size:.95rem}
+  table{width:100%;border-collapse:collapse;font-size:.98rem}
+  th,td{padding:9px 8px;text-align:left;border-bottom:1px solid var(--border)}
+  th{background:var(--emerald);color:#fff}
+  th:first-child{border-radius:8px 0 0 0}
+  th:last-child{border-radius:0 8px 0 0}
+  tr:last-child td{border-bottom:none}
+  td.num,th.num{text-align:right;white-space:nowrap}
+  .steps{margin:0;padding-left:20px}
+  .steps li{margin-bottom:6px}
+  label{display:block;font-weight:600;margin:12px 0 4px}
+  input[type=text],input[type=email],input[type=date],select,textarea{
+    width:100%;
+    padding:10px 12px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    font:inherit;
+    background:#fff;
+  }
+  textarea{min-height:90px;resize:vertical}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media (max-width:520px){.row{grid-template-columns:1fr}}
+  .estimate{
+    margin-top:16px;
+    background:#f2f7f3;
+    border:1px solid #cfe3d4;
+    border-left:4px solid var(--emerald);
+    border-radius:10px;
+    padding:14px;
+  }
+  .estimate h3{margin:0 0 6px;color:var(--emerald);font-size:1.05rem}
+  .estimate .big{font-size:1.15rem;font-weight:700}
+  .estimate p{margin:0 0 4px}
+  button{
+    display:block;
+    width:100%;
+    margin-top:16px;
+    padding:13px;
+    border:none;
+    border-radius:10px;
+    background:var(--emerald);
+    color:#fff;
+    font:inherit;
+    font-weight:700;
+    font-size:1.05rem;
+    cursor:pointer;
+  }
+  button:hover{background:var(--emerald-dark)}
+  button.secondary{
+    background:#fff;
+    color:var(--emerald);
+    border:2px solid var(--emerald);
+    font-size:.95rem;
+    margin-top:10px;
+  }
+  #summary{display:none}
+  #summary pre{
+    white-space:pre-wrap;
+    word-wrap:break-word;
+    background:#f7f5ef;
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:12px;
+    font:inherit;
+    font-size:.95rem;
+    margin:10px 0;
+  }
+  .notice{
+    background:#fdf6e0;
+    border:1px solid #ecd98a;
+    border-left:4px solid var(--gold);
+    border-radius:10px;
+    padding:12px 14px;
+    margin-bottom:16px;
+    font-size:.98rem;
+  }
+  .links{list-style:none;margin:0;padding:0}
+  .links li{margin-bottom:8px}
+  .links a{color:var(--emerald);font-weight:600}
+  footer{
+    text-align:center;
+    padding:22px 16px 30px;
+    color:var(--muted);
+    font-size:.92rem;
+  }
+  footer a{color:var(--emerald);font-weight:700}
+</style>
+</head>
+<body>
+<header>
+  <h1>Book a Class</h1>
+  <p>Dr. Saghir Ahmad &mdash; Maths &amp; Statistics Tutoring</p>
+  <span class="badge">Nearly 30 years teaching experience</span>
+</header>
+
+<main>
+  <div class="notice">
+    <strong>Booking by email.</strong> Fill in the form below and send it by email &mdash; no payment is taken on this page. Dr. Saghir Ahmad confirms every booking by email.
+  </div>
+
+  <section class="card">
+    <h2>How booking works<span class="rule"></span></h2>
+    <ol class="steps">
+      <li>Choose your level, class length and days per week &mdash; the fee estimate updates live.</li>
+      <li>Fill in your details and press <strong>Send booking by email</strong>.</li>
+      <li>Your email app opens with the booking ready to send to <strong>leaderoftime786@gmail.com</strong>.</li>
+      <li>Dr. Saghir Ahmad confirms your booking by email.</li>
+    </ol>
+  </section>
+
+  <section class="card">
+    <h2>Rates per hour<span class="rule"></span></h2>
+    <table>
+      <thead>
+        <tr><th>Level</th><th class="num">PKR / hour</th><th class="num">USD / hour</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Matric</td><td class="num">Rs 1,500</td><td class="num">$15</td></tr>
+        <tr><td>FSc</td><td class="num">Rs 2,000</td><td class="num">$20</td></tr>
+        <tr><td>O Level</td><td class="num">Rs 2,000</td><td class="num">$20</td></tr>
+        <tr><td>A Level</td><td class="num">Rs 2,500</td><td class="num">$25</td></tr>
+        <tr><td>Entry Tests</td><td class="num">Rs 2,500</td><td class="num">$25</td></tr>
+        <tr><td>University Statistics / SPSS</td><td class="num">Rs 3,000</td><td class="num">$30</td></tr>
+      </tbody>
+    </table>
+    <p class="muted" style="margin-top:12px">Class lengths: 25, 35, 45 or 60 minutes. Monthly fee = per-class fee &times; days per week &times; 4 weeks. 4 days a week saves 5%, 5 days a week saves 10%. Group classes: Rs 2,000&ndash;3,000 per student per month.</p>
+  </section>
+
+  <section class="card">
+    <h2>Book your class<span class="rule"></span></h2>
+    <form id="booking-form">
+      <label for="name">Student name *</label>
+      <input type="text" id="name" name="name" required placeholder="Your full name">
+
+      <div class="row">
+        <div>
+          <label for="level">Level *</label>
+          <select id="level" name="level" required>
+            <option value="Matric">Matric</option>
+            <option value="FSc">FSc</option>
+            <option value="O Level">O Level</option>
+            <option value="A Level">A Level</option>
+            <option value="Entry Tests">Entry Tests</option>
+            <option value="University Statistics / SPSS">University Statistics / SPSS</option>
+          </select>
+        </div>
+        <div>
+          <label for="subject">Subject</label>
+          <input type="text" id="subject" name="subject" placeholder="e.g. Mathematics, Statistics">
+        </div>
+      </div>
+
+      <div class="row">
+        <div>
+          <label for="length">Class length</label>
+          <select id="length" name="length">
+            <option value="25">25 minutes</option>
+            <option value="35">35 minutes</option>
+            <option value="45">45 minutes</option>
+            <option value="60" selected>60 minutes</option>
+          </select>
+        </div>
+        <div>
+          <label for="days">Days per week</label>
+          <select id="days" name="days">
+            <option value="3" selected>3 days</option>
+            <option value="4">4 days (5% off)</option>
+            <option value="5">5 days (10% off)</option>
+          </select>
+        </div>
+      </div>
+
+      <label for="times">Preferred days / times</label>
+      <input type="text" id="times" name="times" placeholder="e.g. Mon, Wed, Fri — 5:00 PM PKT">
+
+      <div class="row">
+        <div>
+          <label for="start">Start date</label>
+          <input type="date" id="start" name="start">
+        </div>
+        <div>
+          <label for="email">Your email *</label>
+          <input type="email" id="email" name="email" required placeholder="you@example.com">
+        </div>
+      </div>
+
+      <label for="message">Message</label>
+      <textarea id="message" name="message" placeholder="Anything you want the teacher to know — topics, exam date, goals."></textarea>
+
+      <div class="estimate" id="estimate" aria-live="polite">
+        <h3>Your fee estimate</h3>
+        <p class="big" id="est-per-class"></p>
+        <p class="big" id="est-monthly"></p>
+        <p class="muted" id="est-note"></p>
+      </div>
+
+      <button type="submit">Send booking by email</button>
+    </form>
+
+    <div id="summary" class="card" style="border:1px solid var(--border);box-shadow:none;margin-top:16px">
+      <h2>Your booking details<span class="rule"></span></h2>
+      <p class="muted">Your email app should have opened with this booking ready to send to <strong>leaderoftime786@gmail.com</strong>. If it did not open, copy the details below and email them yourself.</p>
+      <pre id="summary-text"></pre>
+      <button type="button" class="secondary" id="copy-btn">Copy booking details</button>
+      <p class="muted" id="copy-status" style="margin-top:8px"></p>
+      <p><a id="mailto-link" href="#">Open the email again</a></p>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>More from Dr. Saghir Ahmad<span class="rule"></span></h2>
+    <ul class="links">
+      <li><a href="https://drsahmad.github.io/teaching-platform.html">Teaching platform</a> &mdash; levels, services and fees</li>
+      <li><a href="https://drsahmad.github.io/matric-maths-exam-simulator.html">Matric Maths Exam Simulator</a> &mdash; timed board-exam practice</li>
+    </ul>
+  </section>
+</main>
+
+<footer>
+  <p>Dr. Saghir Ahmad &mdash; Maths &amp; Statistics Tutoring<br>
+  Booking by email: <a href="mailto:leaderoftime786@gmail.com">leaderoftime786@gmail.com</a><br>
+  <a href="https://drsahmad.github.io/">Back to drsahmad.github.io</a></p>
+</footer>
+
+<script>
+(function(){
+  var RATES = {
+    "Matric": {pkr: 1500, usd: 15},
+    "FSc": {pkr: 2000, usd: 20},
+    "O Level": {pkr: 2000, usd: 20},
+    "A Level": {pkr: 2500, usd: 25},
+    "Entry Tests": {pkr: 2500, usd: 25},
+    "University Statistics / SPSS": {pkr: 3000, usd: 30}
+  };
+
+  function fmtPKR(n){ return "Rs " + Math.round(n).toLocaleString("en-US"); }
+  function fmtUSD(n){ return "$" + n.toFixed(2); }
+
+  function calc(){
+    var level = document.getElementById("level").value;
+    var minutes = parseInt(document.getElementById("length").value, 10);
+    var days = parseInt(document.getElementById("days").value, 10);
+    var rate = RATES[level];
+    var perClassPKR = rate.pkr * minutes / 60;
+    var perClassUSD = rate.usd * minutes / 60;
+    var discount = days === 4 ? 0.05 : (days === 5 ? 0.10 : 0);
+    var monthlyPKR = perClassPKR * days * 4 * (1 - discount);
+    var monthlyUSD = perClassUSD * days * 4 * (1 - discount);
+
+    document.getElementById("est-per-class").textContent =
+      "Per class (" + minutes + " min): " + fmtPKR(perClassPKR) + " / " + fmtUSD(perClassUSD);
+    document.getElementById("est-monthly").textContent =
+      "Per month (" + days + " days/week): " + fmtPKR(monthlyPKR) + " / " + fmtUSD(monthlyUSD);
+    document.getElementById("est-note").textContent =
+      discount > 0
+        ? "Includes the " + (discount * 100) + "% discount for " + days + " days a week. Monthly fee = per-class fee \u00D7 days per week \u00D7 4 weeks."
+        : "Monthly fee = per-class fee \u00D7 days per week \u00D7 4 weeks. 4 days a week saves 5%, 5 days a week saves 10%.";
+    return {level: level, minutes: minutes, days: days, perClassPKR: perClassPKR, perClassUSD: perClassUSD, monthlyPKR: monthlyPKR, monthlyUSD: monthlyUSD, discount: discount};
+  }
+
+  ["level","length","days"].forEach(function(id){
+    document.getElementById(id).addEventListener("change", calc);
+  });
+  calc();
+
+  document.getElementById("booking-form").addEventListener("submit", function(e){
+    e.preventDefault();
+    var est = calc();
+    var name = document.getElementById("name").value.trim();
+    var subject = document.getElementById("subject").value.trim();
+    var times = document.getElementById("times").value.trim();
+    var start = document.getElementById("start").value;
+    var email = document.getElementById("email").value.trim();
+    var message = document.getElementById("message").value.trim();
+
+    if(!name || !email){
+      alert("Please fill in your name and email so the booking can be confirmed.");
+      return;
+    }
+
+    var lines = [
+      "Class booking request",
+      "",
+      "Student name: " + name,
+      "Level: " + est.level,
+      "Subject: " + (subject || "-"),
+      "Class length: " + est.minutes + " minutes",
+      "Days per week: " + est.days,
+      "Preferred days / times: " + (times || "-"),
+      "Start date: " + (start || "-"),
+      "Email: " + email,
+      "",
+      "Estimated fee:",
+      "Per class: " + fmtPKR(est.perClassPKR) + " / " + fmtUSD(est.perClassUSD),
+      "Per month: " + fmtPKR(est.monthlyPKR) + " / " + fmtUSD(est.monthlyUSD) +
+        (est.discount > 0 ? " (includes " + (est.discount * 100) + "% discount)" : ""),
+      "",
+      "Message:",
+      message || "-"
+    ];
+    var body = lines.join("\n");
+    var mailto = "mailto:leaderoftime786@gmail.com?subject=" +
+      encodeURIComponent("Class booking request") + "&body=" + encodeURIComponent(body);
+
+    var summary = document.getElementById("summary");
+    document.getElementById("summary-text").textContent = body;
+    document.getElementById("mailto-link").href = mailto;
+    summary.style.display = "block";
+    summary.scrollIntoView({behavior: "smooth", block: "start"});
+    window.location.href = mailto;
+  });
+
+  document.getElementById("copy-btn").addEventListener("click", function(){
+    var text = document.getElementById("summary-text").textContent;
+    var status = document.getElementById("copy-status");
+    function done(){ status.textContent = "Copied — paste it into an email to leaderoftime786@gmail.com."; }
+    function fallback(){
+      var ta = document.createElement("textarea");
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand("copy"); done(); }
+      catch (err) { status.textContent = "Copy did not work in this browser — please select the text above and copy it manually."; }
+      document.body.removeChild(ta);
+    }
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(done, fallback);
+    } else {
+      fallback();
+    }
+  });
+})();
+</script>
+</body>
+</html>
