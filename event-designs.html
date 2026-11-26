@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Event Invitations &amp; Designs — Mindful Designes</title>
+<meta name="description" content="Beautiful invitations for your big day — Wedding, Mayun, Mehndi, Nikkah, Barat, Walima, Convocation and more, designed for you by Mindful Designes.">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #fdf8f0; color: #2b2b2b; line-height: 1.6; }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 0 18px; }
+  header { background: #0d5c46; color: #fff; padding: 26px 0 20px; text-align: center; }
+  header h1 { margin: 0; font-size: 30px; letter-spacing: 0.5px; }
+  header p { margin: 6px 0 0; color: #d9e8df; font-size: 16px; }
+  .gold-rule { height: 4px; background: #b98a1e; }
+  section { padding: 34px 0 10px; }
+  h2 { color: #0d5c46; font-size: 25px; margin: 0 0 8px; }
+  h2::after { content: ""; display: block; width: 54px; height: 3px; background: #b98a1e; margin-top: 8px; }
+  .lede { font-size: 17px; color: #4a4a4a; max-width: 640px; }
+
+  /* Hero */
+  .hero { display: flex; flex-wrap: wrap; gap: 26px; align-items: center; }
+  .hero-text { flex: 1 1 340px; }
+  .hero-text h2 { font-size: 29px; }
+  .hero-img { flex: 1 1 300px; }
+  .hero-img img { width: 100%; max-width: 380px; display: block; margin: 0 auto; border-radius: 12px; box-shadow: 0 6px 22px rgba(13, 92, 70, 0.25); border: 3px solid #b98a1e; }
+  .hero-img figcaption { text-align: center; color: #6b6b6b; font-size: 14px; margin-top: 8px; }
+  .btn { display: inline-block; background: #0d5c46; color: #fff; border: none; padding: 12px 22px; font-size: 16px; border-radius: 8px; cursor: pointer; text-decoration: none; }
+  .btn:hover { background: #0a4a39; }
+  .btn-gold { background: #b98a1e; color: #fff; }
+  .btn-gold:hover { background: #a1761a; }
+
+  /* Gallery */
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; margin-top: 18px; }
+  .card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 3px 14px rgba(0,0,0,0.08); border: 1px solid #eee3cd; display: flex; flex-direction: column; }
+  .card img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; display: block; }
+  .card-body { padding: 14px 16px 18px; flex: 1; display: flex; flex-direction: column; }
+  .card-body h3 { margin: 0 0 4px; color: #0d5c46; font-size: 19px; }
+  .card-body p { margin: 0 0 14px; color: #555; font-size: 15px; flex: 1; }
+  .badge { display: inline-block; background: #b98a1e; color: #fff; font-size: 12px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; padding: 3px 9px; border-radius: 20px; margin-left: 6px; vertical-align: middle; }
+
+  /* Custom banner */
+  .offer { background: #0d5c46; color: #fff; border-radius: 12px; padding: 22px 24px; margin-top: 18px; border-left: 6px solid #b98a1e; }
+  .offer h3 { margin: 0 0 6px; font-size: 21px; }
+  .offer p { margin: 0; color: #e6f0ea; }
+
+  /* Steps */
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; margin-top: 18px; }
+  .step { background: #fff; border: 1px solid #eee3cd; border-radius: 12px; padding: 18px; }
+  .step-num { width: 38px; height: 38px; border-radius: 50%; background: #0d5c46; color: #fff; font-weight: 700; font-size: 18px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; }
+  .step h3 { margin: 0 0 4px; color: #0d5c46; font-size: 18px; }
+  .step p { margin: 0; color: #555; font-size: 15px; }
+
+  /* Form */
+  form { background: #fff; border: 1px solid #eee3cd; border-radius: 12px; padding: 22px; margin-top: 16px; }
+  label { display: block; font-weight: 600; color: #0d5c46; margin: 14px 0 5px; }
+  label:first-child { margin-top: 0; }
+  input, select, textarea { width: 100%; padding: 11px 12px; font-size: 16px; font-family: inherit; border: 1px solid #cfc4ae; border-radius: 8px; background: #fffdf9; color: #2b2b2b; }
+  textarea { min-height: 110px; resize: vertical; }
+  input:focus, select:focus, textarea:focus { outline: 2px solid #b98a1e; border-color: #b98a1e; }
+  .hint { font-size: 14px; color: #777; margin: 4px 0 0; }
+  .error { color: #a33; font-size: 15px; margin: 10px 0 0; display: none; }
+  form .btn { margin-top: 18px; width: 100%; }
+  .note { font-size: 14px; color: #777; margin-top: 12px; text-align: center; }
+
+  footer { background: #0d5c46; color: #d9e8df; text-align: center; padding: 22px 18px; margin-top: 44px; font-size: 15px; }
+  footer a { color: #f2d98c; }
+  @media (max-width: 600px) {
+    header h1 { font-size: 25px; }
+    .hero-text h2 { font-size: 24px; }
+    h2 { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <h1>Mindful Designes</h1>
+    <p>Event Invitations &amp; Designs</p>
+  </div>
+</header>
+<div class="gold-rule"></div>
+
+<div class="wrap">
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-text">
+      <h2>Beautiful invitations for your big day</h2>
+      <p class="lede">Wedding, Mayun, Mehndi, Nikkah, Barat, Walima, Convocation and more &mdash; designed for you by Mindful Designes.</p>
+      <p><a class="btn" href="#gallery">Browse templates</a></p>
+    </div>
+    <figure class="hero-img">
+      <img src="template-mayun.jpg" alt="Mayun invitation design in gold and green with marigolds">
+      <figcaption>Featured: Aisha ki Mayun &mdash; gold and green, marigolds and palm leaves</figcaption>
+    </figure>
+  </section>
+
+  <!-- Gallery -->
+  <section id="gallery">
+    <h2>Choose a template</h2>
+    <p class="lede">Pick a design you love, then send us your details. We place your names, date and wording on the template and send it back to you as a digital file.</p>
+    <div class="grid">
+
+      <article class="card">
+        <img src="template-mayun.jpg" alt="Mayun invitation — gold and green with marigolds">
+        <div class="card-body">
+          <h3>Mayun <span class="badge">Featured</span></h3>
+          <p>Gold and green with marigolds and palm leaves, in a classic Mughal arch.</p>
+          <button class="btn btn-gold" type="button" onclick="orderTemplate('Mayun')">Order this template</button>
+        </div>
+      </article>
+
+      <article class="card">
+        <img src="template-nikkah.jpg" alt="Nikkah invitation — emerald and gold mosque arch">
+        <div class="card-body">
+          <h3>Nikkah</h3>
+          <p>Emerald and gold, mosque arch — calm and elegant for the Nikkah.</p>
+          <button class="btn btn-gold" type="button" onclick="orderTemplate('Nikkah')">Order this template</button>
+        </div>
+      </article>
+
+      <article class="card">
+        <img src="template-mehndi.jpg" alt="Mehndi invitation — green and yellow marigolds with paisley">
+        <div class="card-body">
+          <h3>Mehndi</h3>
+          <p>Green and yellow marigolds with paisley — bright and joyful for Mehndi night.</p>
+          <button class="btn btn-gold" type="button" onclick="orderTemplate('Mehndi')">Order this template</button>
+        </div>
+      </article>
+
+      <article class="card">
+        <img src="template-barat.jpg" alt="Barat invitation — red and gold palace arch with roses">
+        <div class="card-body">
+          <h3>Barat</h3>
+          <p>Red and gold palace arch with roses — grand and festive for the Barat.</p>
+          <button class="btn btn-gold" type="button" onclick="orderTemplate('Barat')">Order this template</button>
+        </div>
+      </article>
+
+      <article class="card">
+        <img src="template-convocation.jpg" alt="Convocation invitation — navy and gold graduation cap with laurel">
+        <div class="card-body">
+          <h3>Convocation</h3>
+          <p>Navy and gold with a graduation cap and laurel — proud and formal for graduation day.</p>
+          <button class="btn btn-gold" type="button" onclick="orderTemplate('Convocation')">Order this template</button>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- Custom designs -->
+  <section>
+    <h2>Want it made just for you?</h2>
+    <p class="lede">Tell us your event, your colours and your wording, and we design an invitation that is yours alone.</p>
+    <div class="offer">
+      <h3>Launch Offer</h3>
+      <p>Custom designs at a special discounted price &mdash; send your details and get your price.</p>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section>
+    <h2>How it works</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Choose</h3>
+        <p>Choose a template or ask for a custom design.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Send your details</h3>
+        <p>Send your event details with the form below.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Receive your design</h3>
+        <p>Receive your design as a digital file, ready to print and share on WhatsApp.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Enquiry form -->
+  <section id="order">
+    <h2>Order your design</h2>
+    <p class="lede">Fill in the form and your order opens in your email app, ready to send to us.</p>
+    <form id="orderForm" onsubmit="return sendOrder(event)">
+      <label for="f-name">Your name *</label>
+      <input id="f-name" type="text" placeholder="e.g. Aisha Khan" autocomplete="name">
+
+      <label for="f-event">Event type *</label>
+      <select id="f-event">
+        <option value="">Select an event&hellip;</option>
+        <option>Mayun</option>
+        <option>Mehndi</option>
+        <option>Nikkah</option>
+        <option>Barat</option>
+        <option>Walima</option>
+        <option>Engagement</option>
+        <option>Convocation</option>
+        <option>Birthday</option>
+        <option>Other</option>
+      </select>
+
+      <label for="f-date">Event date</label>
+      <input id="f-date" type="date">
+
+      <label for="f-colours">Colours / theme</label>
+      <input id="f-colours" type="text" placeholder="e.g. Emerald and gold, or rose pink and white">
+
+      <label for="f-wording">Names &amp; wording for the invitation</label>
+      <textarea id="f-wording" placeholder="e.g. Aisha &amp; Bilal — Monday, 12th January, 8:00 PM, at the bride's residence"></textarea>
+
+      <label for="f-message">Your message</label>
+      <textarea id="f-message" placeholder="Anything else — a custom design idea, a reference photo, or a question."></textarea>
+
+      <p class="error" id="formError">Please fill in your name and choose an event type.</p>
+      <button class="btn" type="submit">Send order by email</button>
+      <p class="note">Your order is sent by email to Mindful Designes. We reply with your price and your design.</p>
+    </form>
+  </section>
+
+</div>
+
+<footer>
+  Mindful Designes &nbsp;|&nbsp; Dr. Saghir Ahmad &nbsp;|&nbsp; <a href="https://drsahmad.github.io/">drsahmad.github.io</a>
+</footer>
+
+<script>
+function orderTemplate(name) {
+  var select = document.getElementById('f-event');
+  select.value = name;
+  document.getElementById('order').scrollIntoView({ behavior: 'smooth' });
+  document.getElementById('f-name').focus();
+}
+
+function sendOrder(event) {
+  event.preventDefault();
+  var name = document.getElementById('f-name').value.trim();
+  var eventType = document.getElementById('f-event').value;
+  var date = document.getElementById('f-date').value;
+  var colours = document.getElementById('f-colours').value.trim();
+  var wording = document.getElementById('f-wording').value.trim();
+  var message = document.getElementById('f-message').value.trim();
+  var error = document.getElementById('formError');
+
+  if (!name || !eventType) {
+    error.style.display = 'block';
+    if (!name) { document.getElementById('f-name').focus(); }
+    else { document.getElementById('f-event').focus(); }
+    return false;
+  }
+  error.style.display = 'none';
+
+  var subject = 'Event Design Order — Mindful Designes';
+  var lines = [
+    'Event Design Order — Mindful Designes',
+    '',
+    'Your name: ' + name,
+    'Event type: ' + eventType,
+    'Event date: ' + (date || 'Not given'),
+    'Colours / theme: ' + (colours || 'Not given'),
+    'Names & wording for the invitation:',
+    wording || 'Not given',
+    '',
+    'Your message:',
+    message || 'None',
+    '',
+    '— Sent from the Mindful Designes event designs page'
+  ];
+  var mailto = 'mailto:leaderoftime786@gmail.com'
+    + '?subject=' + encodeURIComponent(subject)
+    + '&body=' + encodeURIComponent(lines.join('\n'));
+  window.location.href = mailto;
+  return false;
+}
+</script>
+
+</body>
+</html>
