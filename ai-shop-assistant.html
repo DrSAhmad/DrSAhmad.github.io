@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Shop Assistant — Free AI Help for Small Shop Owners</title>
+<meta name="description" content="A free AI tool for small shop owners: reply to customers, write product posts, make discount offers and translate shop notices. Works with your own free Gemini API key.">
+<style>
+  :root{--emerald:#0D5C46;--emerald-dark:#093d2f;--gold:#B98A1E;--cream:#FDF8F0;--ink:#1D211A;--sage:#DCE9E2;--white:#fff}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--cream);color:var(--ink);line-height:1.6}
+  header{background:var(--emerald);color:#fff;padding:28px 18px 24px;text-align:center}
+  header h1{font-size:26px;line-height:1.25}
+  header h1 span{color:#E8C86A}
+  header p{margin-top:8px;opacity:.92;font-size:15px}
+  .wrap{max-width:760px;margin:0 auto;padding:18px 16px 40px}
+  .card{background:var(--white);border:1px solid #e6dfd2;border-radius:12px;padding:18px;margin-bottom:16px}
+  .card h2{font-size:18px;color:var(--emerald);margin-bottom:6px}
+  .card p{font-size:14px;color:#4a4a44}
+  .keybox{background:#fff8e6;border:1px solid #e8c86a}
+  .keyrow{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+  input[type=password],input[type=text],textarea,select{width:100%;padding:10px 12px;border:1px solid #c9c2b2;border-radius:8px;font-size:15px;font-family:inherit;background:#fff;color:var(--ink)}
+  textarea{min-height:90px;resize:vertical}
+  label{font-size:13px;font-weight:600;color:#4a4a44;display:block;margin:12px 0 4px}
+  button{cursor:pointer;border:0;border-radius:8px;font-size:15px;font-weight:700;padding:11px 18px}
+  .btn-go{background:var(--emerald);color:#fff}
+  .btn-go:hover{background:var(--emerald-dark)}
+  .btn-gold{background:var(--gold);color:#fff}
+  .btn-ghost{background:var(--sage);color:var(--emerald)}
+  .btnrow{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+  .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+  .tabs button{background:#fff;border:1px solid #c9c2b2;color:var(--ink);padding:9px 14px;font-size:14px}
+  .tabs button.active{background:var(--emerald);color:#fff;border-color:var(--emerald)}
+  .tool{display:none}
+  .tool.active{display:block}
+  .out{white-space:pre-wrap;background:var(--cream);border:1px solid #e6dfd2;border-radius:8px;padding:12px;margin-top:12px;font-size:15px;min-height:60px}
+  .out:empty::before{content:"Your result will appear here.";color:#8a8578}
+  .status{font-size:13px;margin-top:8px;min-height:18px}
+  .status.err{color:#b3261e}
+  .status.ok{color:var(--emerald)}
+  .small{font-size:13px;color:#6b665c}
+  a{color:var(--emerald)}
+  footer{text-align:center;font-size:13px;color:#6b665c;padding:24px 16px 32px}
+  footer a{color:var(--emerald)}
+</style>
+</head>
+<body>
+<header>
+  <h1>AI Shop Assistant<br><span>Free AI Help for Small Shop Owners</span></h1>
+  <p>Reply to customers, write product posts, make offers and translate notices — in seconds, with AI.</p>
+</header>
+
+<div class="wrap">
+
+  <div class="card keybox">
+    <h2>Your free Gemini API key</h2>
+    <p>This tool runs on Google's Gemini AI using <b>your own free key</b>. Your key is saved only in this browser on your device — it is never sent to us or to anyone else.</p>
+    <div class="keyrow">
+      <input type="password" id="apiKey" placeholder="Paste your Gemini API key here">
+      <button class="btn-go" onclick="saveKey()">Save key</button>
+    </div>
+    <p class="small" style="margin-top:8px">No key yet? <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Get a free key from Google AI Studio</a> (sign in with Google, click “Create API key”). No card needed.</p>
+    <p class="status ok" id="keyStatus"></p>
+  </div>
+
+  <div class="tabs">
+    <button class="active" onclick="showTool('reply',this)">💬 Reply to a Customer</button>
+    <button onclick="showTool('post',this)">🛍️ Product Post</button>
+    <button onclick="showTool('offer',this)">🏷️ Discount Offer</button>
+    <button onclick="showTool('translate',this)">🌐 Translate Notice</button>
+  </div>
+
+  <!-- REPLY -->
+  <div class="card tool active" id="tool-reply">
+    <h2>Reply to a Customer</h2>
+    <p>A customer messaged your shop. Paste their message and get a polite reply to send back.</p>
+    <label for="replyIn">Customer's message</label>
+    <textarea id="replyIn" placeholder="e.g. Do you have this kurta in blue, size medium? And what is the delivery time to DHA?"></textarea>
+    <label for="replyTone">Tone</label>
+    <select id="replyTone"><option>Polite</option><option>Friendly</option><option>Short and direct</option></select>
+    <div class="btnrow">
+      <button class="btn-go" onclick="runTool('reply')">Write reply</button>
+      <button class="btn-ghost" onclick="demo('reply')">Try a demo</button>
+    </div>
+    <div class="out" id="replyOut"></div>
+    <div class="btnrow"><button class="btn-gold" onclick="copyOut('replyOut')">Copy result</button></div>
+    <p class="status" id="replyStatus"></p>
+  </div>
+
+  <!-- POST -->
+  <div class="card tool" id="tool-post">
+    <h2>Product Post</h2>
+    <p>Turn a product into a ready social media post for Facebook, WhatsApp or Instagram.</p>
+    <label for="postProduct">Product</label>
+    <input type="text" id="postProduct" placeholder="e.g. Handmade lawn suits">
+    <label for="postPrice">Price</label>
+    <input type="text" id="postPrice" placeholder="e.g. Rs 3,500">
+    <label for="postDetails">Details (delivery, sizes, colours…)</label>
+    <textarea id="postDetails" placeholder="e.g. Free delivery in DHA, Islamabad"></textarea>
+    <div class="btnrow">
+      <button class="btn-go" onclick="runTool('post')">Write post</button>
+      <button class="btn-ghost" onclick="demo('post')">Try a demo</button>
+    </div>
+    <div class="out" id="postOut"></div>
+    <div class="btnrow"><button class="btn-gold" onclick="copyOut('postOut')">Copy result</button></div>
+    <p class="status" id="postStatus"></p>
+  </div>
+
+  <!-- OFFER -->
+  <div class="card tool" id="tool-offer">
+    <h2>Discount Offer</h2>
+    <p>Write a short offer message for your customers — a sale, a weekend deal, a bundle.</p>
+    <label for="offerIn">What is the offer?</label>
+    <textarea id="offerIn" placeholder="e.g. 10% off all cooking oil, this Saturday and Sunday only"></textarea>
+    <div class="btnrow">
+      <button class="btn-go" onclick="runTool('offer')">Write offer</button>
+      <button class="btn-ghost" onclick="demo('offer')">Try a demo</button>
+    </div>
+    <div class="out" id="offerOut"></div>
+    <div class="btnrow"><button class="btn-gold" onclick="copyOut('offerOut')">Copy result</button></div>
+    <p class="status" id="offerStatus"></p>
+  </div>
+
+  <!-- TRANSLATE -->
+  <div class="card tool" id="tool-translate">
+    <h2>Translate a Shop Notice</h2>
+    <p>Translate a short notice between English and Urdu so every customer understands it.</p>
+    <label for="trDir">Direction</label>
+    <select id="trDir"><option value="en-ur">English → Urdu</option><option value="ur-en">Urdu → English</option></select>
+    <label for="trIn">Text to translate</label>
+    <textarea id="trIn" placeholder="e.g. Shop closed on Friday for Jumu'ah prayer, open again at 3 pm."></textarea>
+    <div class="btnrow">
+      <button class="btn-go" onclick="runTool('translate')">Translate</button>
+      <button class="btn-ghost" onclick="demo('translate')">Try a demo</button>
+    </div>
+    <div class="out" id="trOut"></div>
+    <div class="btnrow"><button class="btn-gold" onclick="copyOut('trOut')">Copy result</button></div>
+    <p class="status" id="trStatus"></p>
+  </div>
+
+  <div class="card">
+    <h2>How it works</h2>
+    <p>1. Get a free Gemini API key from Google AI Studio and paste it above.<br>
+    2. Pick a tool, type what you need, and press the button.<br>
+    3. Copy the result and send it to your customer.<br>
+    4. No sign-up, no payment, nothing is uploaded anywhere except Google's AI service when you press a button.</p>
+    <p class="small" style="margin-top:8px">The demo buttons show real example results produced by Gemini, so you can see what the tool does before adding a key.</p>
+  </div>
+
+</div>
+
+<footer>
+  Built by Dr. Saghir Ahmad · Mindful Designes<br>
+  <a href="https://drsahmad.github.io/">More free sites by Dr. Saghir Ahmad</a>
+</footer>
+
+<script>
+const MODEL = "gemini-3.5-flash";
+const DEMOS = {
+  reply: {
+    input: "Do you have this kurta in blue, size medium? And what is the delivery time to DHA?",
+    output: "Hello! Yes, the blue kurta in size medium is currently available. Delivery to DHA Islamabad usually takes 1 to 2 working days.\n\nPlease let us know if you would like to place an order!"
+  },
+  post: {
+    product: "Handmade lawn suits", price: "Rs 3,500", details: "Free delivery in DHA, Islamabad",
+    output: "Beat the heat in style, Islamabad! 🌸\n\nOur gorgeous, handcrafted lawn suits are here to elevate your wardrobe for just Rs 3,500! Perfect for everyday elegance.\n\n✨ Enjoy FREE delivery straight to your doorstep in DHA!\n\nDM us to order your favorite design today! 🛍️\n\n#HandmadeLawn #IslamabadFashion #DHAIslamabad"
+  },
+  offer: {
+    input: "10% off all cooking oil, this Saturday and Sunday only",
+    output: "Stock up your pantry this weekend! Enjoy 10% OFF all cooking oils at our store — this Saturday and Sunday only. From olive oil to vegetable oil, save on all your kitchen essentials.\n\nHurry in and grab yours before the weekend ends!"
+  },
+  translate: {
+    input: "Shop closed on Friday for Jumu'ah prayer, open again at 3 pm.",
+    output: "جمعہ کے دن نمازِ جمعہ کے لیے دکان بند رہے گی، دوپہر 3 بجے دوبارہ کھلے گی۔"
+  }
+};
+
+function showTool(name, btn){
+  document.querySelectorAll('.tool').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tool-'+name).classList.add('active');
+  btn.classList.add('active');
+}
+function getKey(){ return (document.getElementById('apiKey').value || localStorage.getItem('gemini_api_key') || '').trim(); }
+function saveKey(){
+  const k = document.getElementById('apiKey').value.trim();
+  if(!k){ document.getElementById('keyStatus').textContent = 'Paste your key first.'; document.getElementById('keyStatus').className='status err'; return; }
+  localStorage.setItem('gemini_api_key', k);
+  document.getElementById('keyStatus').textContent = 'Key saved on this device.';
+  document.getElementById('keyStatus').className='status ok';
+}
+window.addEventListener('load', ()=>{
+  const k = localStorage.getItem('gemini_api_key');
+  if(k){ document.getElementById('apiKey').value = k; document.getElementById('keyStatus').textContent='Key loaded from this device.'; }
+});
+function demo(kind){
+  const d = DEMOS[kind];
+  if(kind==='reply'){ document.getElementById('replyIn').value=d.input; document.getElementById('replyOut').textContent=d.output; }
+  if(kind==='post'){ document.getElementById('postProduct').value=d.product; document.getElementById('postPrice').value=d.price; document.getElementById('postDetails').value=d.details; document.getElementById('postOut').textContent=d.output; }
+  if(kind==='offer'){ document.getElementById('offerIn').value=d.input; document.getElementById('offerOut').textContent=d.output; }
+  if(kind==='translate'){ document.getElementById('trDir').value='en-ur'; document.getElementById('trIn').value=d.input; document.getElementById('trOut').textContent=d.output; }
+}
+function copyOut(id){
+  const t = document.getElementById(id).textContent;
+  if(!t.trim()) return;
+  navigator.clipboard.writeText(t).then(()=>{ alert('Copied.'); });
+}
+function buildPrompt(kind){
+  if(kind==='reply'){
+    const msg = document.getElementById('replyIn').value.trim();
+    const tone = document.getElementById('replyTone').value;
+    if(!msg) return null;
+    return 'A customer messaged a small shop: "'+msg+'". Write a short '+tone.toLowerCase()+' reply in English, under 60 words. Reply with only the reply text.';
+  }
+  if(kind==='post'){
+    const p = document.getElementById('postProduct').value.trim();
+    const pr = document.getElementById('postPrice').value.trim();
+    const d = document.getElementById('postDetails').value.trim();
+    if(!p) return null;
+    return 'Write a short social media post (under 70 words) for a small shop selling '+p+(pr?', price '+pr:'')+(d?'. Details: '+d:'')+'. Friendly tone, include 3 hashtags. Reply with only the post.';
+  }
+  if(kind==='offer'){
+    const o = document.getElementById('offerIn').value.trim();
+    if(!o) return null;
+    return 'Write a short discount offer message (under 60 words) for a small shop. The offer: '+o+'. Reply with only the message.';
+  }
+  if(kind==='translate'){
+    const t = document.getElementById('trIn').value.trim();
+    const dir = document.getElementById('trDir').value;
+    if(!t) return null;
+    if(dir==='en-ur') return 'Translate this shop notice into Urdu (Urdu script): "'+t+'". Reply with only the Urdu translation.';
+    return 'Translate this shop notice into English: "'+t+'". Reply with only the English translation.';
+  }
+  return null;
+}
+async function runTool(kind){
+  const outId = kind==='translate' ? 'trOut' : kind+'Out';
+  const stId = kind==='translate' ? 'trStatus' : kind+'Status';
+  const out = document.getElementById(outId), st = document.getElementById(stId);
+  const key = getKey();
+  if(!key){ st.textContent='Add your free Gemini API key above first — or press “Try a demo” to see a sample.'; st.className='status err'; return; }
+  const prompt = buildPrompt(kind);
+  if(!prompt){ st.textContent='Type something first.'; st.className='status err'; return; }
+  st.textContent='Writing…'; st.className='status'; out.textContent='';
+  try{
+    const res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/'+MODEL+':generateContent?key='+encodeURIComponent(key), {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({contents:[{parts:[{text:prompt}]}]})
+    });
+    const data = await res.json();
+    if(!res.ok){
+      const msg = (data && data.error && data.error.message) ? data.error.message : ('Request failed (HTTP '+res.status+')');
+      st.textContent = 'Could not generate: '+msg; st.className='status err'; return;
+    }
+    const text = data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0] ? data.candidates[0].content.parts[0].text.trim() : '';
+    if(!text){ st.textContent='Gemini returned an empty answer. Try again.'; st.className='status err'; return; }
+    out.textContent = text;
+    st.textContent='Done — copy it and send it to your customer.'; st.className='status ok';
+  }catch(e){
+    st.textContent='Could not reach Google. Check your internet and try again.'; st.className='status err';
+  }
+}
+</script>
+</body>
+</html>
