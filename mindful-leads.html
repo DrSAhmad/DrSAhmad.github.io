@@ -97,6 +97,19 @@
   .compare th{background:var(--emerald); color:#fff;}
   .compare td:first-child{font-weight:600;}
   .free{color:var(--emerald); font-weight:700;}
+  .pricing{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:16px;}
+  @media(max-width:640px){.pricing{grid-template-columns:1fr;}}
+  .plan{border:1.5px solid var(--line); border-radius:14px; padding:22px; background:var(--cream);}
+  .plan.pro{border-color:var(--gold); background:#fff; box-shadow:0 4px 16px rgba(185,138,30,.18); position:relative;}
+  .plan .tag{position:absolute; top:-12px; right:16px; background:var(--gold); color:#fff; font-size:12px; font-weight:700; padding:4px 12px; border-radius:999px;}
+  .plan h3{font-size:18px; color:var(--emerald-dark);}
+  .plan .price{font-size:32px; font-weight:800; color:var(--emerald-dark); margin:6px 0 2px;}
+  .plan .price span{font-size:15px; font-weight:600; color:var(--muted);}
+  .plan ul{list-style:none; margin:12px 0 18px;}
+  .plan ul li{padding:6px 0; font-size:15px; border-bottom:1px solid var(--line);}
+  .plan ul li:last-child{border-bottom:none;}
+  .plan ul li::before{content:"✓ "; color:var(--emerald); font-weight:700;}
+  .plan .btn{display:block; text-align:center; width:100%;}
   footer{margin:34px 0 40px; text-align:center; color:var(--muted); font-size:14px;}
   footer a{color:var(--emerald); font-weight:600; text-decoration:none;}
   .key-row{display:flex; gap:8px; margin-top:10px;}
@@ -224,6 +237,39 @@
       <div class="step"><div class="num">1</div><h3>Search &amp; verify</h3><p>Choose a business type and any city in the world. Live map data returns real businesses — then check the email domain actually accepts mail.</p></div>
       <div class="step"><div class="num">2</div><h3>Write &amp; follow up</h3><p>AI writes a personal cold email plus Day 3 and Day 7 follow-ups for each business. Copy it or send it from your Gmail.</p></div>
       <div class="step"><div class="num">3</div><h3>Track &amp; close</h3><p>Save leads, mark them Contacted or Replied, and export your list as a CSV. Follow up and win the client.</p></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Free or Pro — your call</h2>
+    <p class="sub">The finder is free forever. Pro adds done-for-you leads, the templates pack and priority support.</p>
+    <div class="pricing">
+      <div class="plan">
+        <h3>Free</h3>
+        <div class="price">$0 <span>forever</span></div>
+        <ul>
+          <li>Search businesses in any city worldwide</li>
+          <li>Phone, website, address &amp; map on every lead</li>
+          <li>Email guesses + domain check</li>
+          <li>AI cold emails + follow-ups (your free key)</li>
+          <li>Save, track &amp; export as CSV</li>
+        </ul>
+        <a class="btn btn-ghost" href="#searchBtn" onclick="document.getElementById('city').focus(); return false;" style="display:block; text-align:center; text-decoration:none; padding:13px;">Start free</a>
+      </div>
+      <div class="plan pro">
+        <span class="tag">MOST POPULAR</span>
+        <h3>Pro</h3>
+        <div class="price">$11.99 <span>/ month</span></div>
+        <ul>
+          <li>Everything in Free</li>
+          <li>100 fresh leads in your niche &amp; city every month (CSV by email)</li>
+          <li>20 Cold Email Templates PDF — every niche, with follow-ups</li>
+          <li>Priority support</li>
+          <li>New features before anyone else</li>
+        </ul>
+        <a class="btn btn-gold" href="https://mindfuldesignes.gumroad.com/l/tyejpl" target="_blank" rel="noopener">Upgrade to Pro →</a>
+        <p class="small" style="text-align:center; margin-top:10px;">Cancel any time. No lock-in.</p>
+      </div>
     </div>
   </div>
 
