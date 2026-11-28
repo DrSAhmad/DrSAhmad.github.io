@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mindful Leads — Free Client Finder for Freelancers & Agencies</title>
+<meta name="description" content="Find real businesses worldwide and reach them with AI-written cold emails. Free forever — no signup, no card, no monthly fee.">
+<style>
+  :root{
+    --emerald:#0D5C46; --emerald-dark:#093E30; --emerald-soft:#E7F0EB;
+    --gold:#B98A1E; --gold-soft:#F6ECD4; --ink:#1D211A; --muted:#5A6158;
+    --cream:#FDF8F0; --white:#FFFFFF; --line:#E3DDD0; --red:#C0392B;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:'Segoe UI',system-ui,-apple-system,Arial,sans-serif; background:var(--cream); color:var(--ink); line-height:1.6;}
+  .wrap{max-width:1060px; margin:0 auto; padding:0 18px;}
+  header{background:linear-gradient(135deg,var(--emerald-dark),var(--emerald)); color:#fff; padding:34px 0 30px;}
+  header h1{font-size:32px; letter-spacing:.5px;}
+  header h1 span{color:var(--gold);}
+  header p{opacity:.92; max-width:640px; margin-top:6px; font-size:16px;}
+  .badges{margin-top:14px; display:flex; flex-wrap:wrap; gap:8px;}
+  .badge{background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.35); color:#fff; padding:5px 12px; border-radius:999px; font-size:13px; font-weight:600;}
+  .badge.gold{background:var(--gold); border-color:var(--gold); color:#fff;}
+  .card{background:var(--white); border:1px solid var(--line); border-radius:14px; padding:22px; margin:22px 0; box-shadow:0 2px 10px rgba(0,0,0,.04);}
+  .card h2{font-size:20px; color:var(--emerald-dark); margin-bottom:4px;}
+  .card .sub{color:var(--muted); font-size:14px; margin-bottom:16px;}
+  label{display:block; font-weight:600; font-size:14px; margin:12px 0 6px;}
+  select,input[type=text]{width:100%; padding:12px 14px; border:1.5px solid var(--line); border-radius:10px; font-size:16px; background:#fff; color:var(--ink);}
+  select:focus,input[type=text]:focus{outline:none; border-color:var(--emerald);}
+  .row{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  @media(max-width:640px){.row{grid-template-columns:1fr;}}
+  .chips{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;}
+  .chip{border:1.5px solid var(--emerald); color:var(--emerald); background:#fff; border-radius:999px; padding:6px 14px; font-size:13px; font-weight:600; cursor:pointer;}
+  .chip:hover{background:var(--emerald-soft);}
+  .chip.active{background:var(--emerald); color:#fff;}
+  .btn{display:inline-block; border:none; cursor:pointer; border-radius:10px; font-weight:700; font-size:16px; padding:13px 26px; text-decoration:none;}
+  .btn-primary{background:var(--emerald); color:#fff; width:100%; margin-top:18px;}
+  .btn-primary:hover{background:var(--emerald-dark);}
+  .btn-primary:disabled{opacity:.55; cursor:wait;}
+  .btn-gold{background:var(--gold); color:#fff;}
+  .btn-ghost{background:#fff; border:1.5px solid var(--emerald); color:var(--emerald); padding:8px 14px; font-size:14px; border-radius:8px; cursor:pointer; font-weight:600;}
+  .btn-ghost:hover{background:var(--emerald-soft);}
+  .tabs{display:flex; gap:8px; margin:22px 0 0;}
+  .tab{border:1.5px solid var(--line); background:#fff; padding:10px 20px; border-radius:10px 10px 0 0; font-weight:700; cursor:pointer; color:var(--muted); border-bottom:none;}
+  .tab.active{color:var(--emerald-dark); background:var(--white); box-shadow:0 -2px 8px rgba(0,0,0,.04);}
+  #status{margin:14px 0; font-size:15px; color:var(--muted);}
+  #status b{color:var(--emerald-dark);}
+  .lead{border:1px solid var(--line); border-radius:12px; padding:18px; margin-bottom:14px; background:#fff;}
+  .lead h3{font-size:18px; color:var(--emerald-dark);}
+  .lead .meta{color:var(--muted); font-size:14px; margin:4px 0 10px;}
+  .lead .meta a{color:var(--emerald); text-decoration:none; font-weight:600;}
+  .lead .meta a:hover{text-decoration:underline;}
+  .emails{margin:10px 0; display:flex; flex-wrap:wrap; gap:8px;}
+  .email-pill{background:var(--gold-soft); border:1px solid #E8D9AC; border-radius:8px; padding:5px 10px; font-size:13px; cursor:pointer;}
+  .email-pill:hover{background:#F1E2B8;}
+  .guess-note{font-size:12px; color:var(--muted); margin-top:4px;}
+  .actions{display:flex; flex-wrap:wrap; gap:8px; margin-top:12px;}
+  .email-box{background:var(--emerald-soft); border:1px solid #CBE0D2; border-radius:10px; padding:14px; margin-top:12px; white-space:pre-wrap; font-size:14px; display:none;}
+  .email-box.show{display:block;}
+  .email-box .subject{font-weight:700; margin-bottom:8px;}
+  .status-select{padding:8px 10px; border:1.5px solid var(--line); border-radius:8px; font-size:14px;}
+  .howto{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:14px;}
+  @media(max-width:640px){.howto{grid-template-columns:1fr;}}
+  .step{background:var(--cream); border:1px solid var(--line); border-radius:12px; padding:16px;}
+  .step .num{background:var(--emerald); color:#fff; width:30px; height:30px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; margin-bottom:8px;}
+  .step h3{font-size:16px; margin-bottom:4px;}
+  .step p{font-size:14px; color:var(--muted);}
+  .compare{width:100%; border-collapse:collapse; margin-top:12px; font-size:14px;}
+  .compare th,.compare td{border:1px solid var(--line); padding:10px 12px; text-align:left;}
+  .compare th{background:var(--emerald); color:#fff;}
+  .compare td:first-child{font-weight:600;}
+  .free{color:var(--emerald); font-weight:700;}
+  footer{margin:34px 0 40px; text-align:center; color:var(--muted); font-size:14px;}
+  footer a{color:var(--emerald); font-weight:600; text-decoration:none;}
+  .key-row{display:flex; gap:8px; margin-top:10px;}
+  .key-row input{flex:1;}
+  .small{font-size:13px; color:var(--muted);}
+  .hidden{display:none;}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>Mindful <span>Leads</span></h1>
+    <p>Find real businesses anywhere in the world and reach them with AI-written cold emails. Built for freelancers and agency owners who want international clients.</p>
+    <div class="badges">
+      <span class="badge gold">Free forever</span>
+      <span class="badge">No signup</span>
+      <span class="badge">No card</span>
+      <span class="badge">Works worldwide</span>
+      <span class="badge">Real map data</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="card">
+    <h2>Find your next clients</h2>
+    <p class="sub">Pick a business type and a city anywhere in the world. We search live map data and show real businesses with their phone, website and address.</p>
+    <div class="row">
+      <div>
+        <label for="niche">Business type</label>
+        <select id="niche">
+          <option value="restaurant">Restaurants</option>
+          <option value="cafe">Cafés &amp; Coffee Shops</option>
+          <option value="dentist">Dentists</option>
+          <option value="estate">Real Estate Agents</option>
+          <option value="gym">Gyms &amp; Fitness Centres</option>
+          <option value="salon">Salons &amp; Barbers</option>
+          <option value="hotel">Hotels</option>
+          <option value="clinic">Clinics &amp; Doctors</option>
+          <option value="bakery">Bakeries</option>
+          <option value="clothes">Clothing Stores</option>
+          <option value="pharmacy">Pharmacies</option>
+          <option value="school">Schools</option>
+        </select>
+      </div>
+      <div>
+        <label for="city">City (anywhere in the world)</label>
+        <input type="text" id="city" value="New York, USA" placeholder="e.g. London, UK">
+      </div>
+    </div>
+    <div class="chips" id="cityChips">
+      <button class="chip active" data-city="New York, USA">New York</button>
+      <button class="chip" data-city="London, UK">London</button>
+      <button class="chip" data-city="Dubai, UAE">Dubai</button>
+      <button class="chip" data-city="Toronto, Canada">Toronto</button>
+      <button class="chip" data-city="Sydney, Australia">Sydney</button>
+      <button class="chip" data-city="Los Angeles, USA">Los Angeles</button>
+      <button class="chip" data-city="Islamabad, Pakistan">Islamabad</button>
+      <button class="chip" data-city="Lahore, Pakistan">Lahore</button>
+    </div>
+    <button class="btn btn-primary" id="searchBtn" onclick="searchLeads()">Find leads →</button>
+    <p class="small" style="margin-top:10px;">Data: OpenStreetMap (free, open data). Businesses appear only if they are listed on the map — coverage is best in the US, UK, Europe and the Gulf, thinner in smaller towns.</p>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" id="tabResults" onclick="showTab('results')">Results <span id="resultCount"></span></button>
+    <button class="tab" id="tabSaved" onclick="showTab('saved')">Saved leads <span id="savedCount"></span></button>
+  </div>
+
+  <div id="status"></div>
+  <div id="results"></div>
+  <div id="saved" class="hidden"></div>
+
+  <div class="card">
+    <h2>AI cold emails — your own free key</h2>
+    <p class="sub">Click “Write email” on any lead and AI writes a short, personal cold email for that business. It runs on your own free Google Gemini key — the key stays in your browser only, never sent to us.</p>
+    <div class="key-row">
+      <input type="text" id="geminiKey" placeholder="Paste your free Gemini API key here">
+      <button class="btn-ghost" onclick="saveKey()">Save key</button>
+    </div>
+    <p class="small" style="margin-top:8px;">Get a free key: <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener" style="color:var(--emerald); font-weight:600;">aistudio.google.com/apikey</a> → Create API key. No card needed.</p>
+  </div>
+
+  <div class="card">
+    <h2>How it works</h2>
+    <div class="howto">
+      <div class="step"><div class="num">1</div><h3>Search</h3><p>Choose a business type and any city in the world. Live map data returns real businesses.</p></div>
+      <div class="step"><div class="num">2</div><h3>Write</h3><p>AI writes a personal cold email for each business — or use your own words. Copy it or send it from your Gmail.</p></div>
+      <div class="step"><div class="num">3</div><h3>Track</h3><p>Save leads, mark them Contacted or Replied, and export your list as a CSV. Follow up and win the client.</p></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Why free?</h2>
+    <p class="sub">Paid lead tools charge $15–$100 a month for the same job. Mindful Leads uses free open map data and your own free AI key, so there is nothing to pay for — ever.</p>
+    <table class="compare">
+      <tr><th></th><th>Mindful Leads</th><th>Typical paid tool</th></tr>
+      <tr><td>Monthly price</td><td class="free">$0 forever</td><td>$15–$100 / month</td></tr>
+      <tr><td>Signup / card</td><td class="free">None</td><td>Account + card</td></tr>
+      <tr><td>Countries</td><td>Worldwide</td><td>Mostly US / EU</td></tr>
+      <tr><td>AI cold emails</td><td class="free">Yes, your free key</td><td>Paid add-on</td></tr>
+      <tr><td>Lead export (CSV)</td><td class="free">Yes</td><td>Often limited</td></tr>
+    </table>
+    <p class="small" style="margin-top:10px;">Honest note: email addresses shown are common patterns guessed from a business website (info@, contact@…). Always verify before sending — the business phone and website on each card are the real listed details.</p>
+  </div>
+
+  <footer>
+    Built by Dr. Saghir Ahmad · <a href="https://drsahmad.github.io/">Mindful Designes</a><br>
+    Data © OpenStreetMap contributors · Free forever
+  </footer>
+</div>
+<script>
+const NICHES = {
+  restaurant:{label:'Restaurant', filter:'["amenity"="restaurant"]'},
+  cafe:{label:'Café', filter:'["amenity"="cafe"]'},
+  dentist:{label:'Dentist', filter:'["amenity"="dentist"]'},
+  estate:{label:'Real Estate Agent', filter:'["office"="estate_agent"]'},
+  gym:{label:'Gym / Fitness', filter:'["leisure"="fitness_centre"]'},
+  salon:{label:'Salon / Barber', filter:'["shop"="hairdresser"]'},
+  hotel:{label:'Hotel', filter:'["tourism"="hotel"]'},
+  clinic:{label:'Clinic', filter:'["amenity"="clinic"]'},
+  bakery:{label:'Bakery', filter:'["shop"="bakery"]'},
+  clothes:{label:'Clothing Store', filter:'["shop"="clothes"]'},
+  pharmacy:{label:'Pharmacy', filter:'["amenity"="pharmacy"]'},
+  school:{label:'School', filter:'["amenity"="school"]'}
+};
+const OVERPASS = [
+  'https://overpass-api.de/api/interpreter',
+  'https://overpass.kumi.systems/api/interpreter'
+];
+let currentLeads = [];
+let currentCity = '';
+let currentNiche = '';
+
+document.getElementById('geminiKey').value = localStorage.getItem('mindful-leads-gemini-key') || '';
+document.querySelectorAll('#cityChips .chip').forEach(ch => {
+  ch.addEventListener('click', () => {
+    document.querySelectorAll('#cityChips .chip').forEach(c => c.classList.remove('active'));
+    ch.classList.add('active');
+    document.getElementById('city').value = ch.dataset.city;
+  });
+});
+document.getElementById('city').addEventListener('input', () => {
+  document.querySelectorAll('#cityChips .chip').forEach(c => c.classList.remove('active'));
+});
+updateSavedCount();
+
+function showTab(which){
+  document.getElementById('tabResults').classList.toggle('active', which==='results');
+  document.getElementById('tabSaved').classList.toggle('active', which==='saved');
+  document.getElementById('results').classList.toggle('hidden', which!=='results');
+  document.getElementById('saved').classList.toggle('hidden', which!=='saved');
+  if(which==='saved') renderSaved();
+}
+
+function saveKey(){
+  const k = document.getElementById('geminiKey').value.trim();
+  if(!k){ alert('Paste your free Gemini API key first.'); return; }
+  localStorage.setItem('mindful-leads-gemini-key', k);
+  alert('Key saved in your browser only.');
+}
+
+function esc(s){ return String(s||'').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+async function searchLeads(){
+  const nicheKey = document.getElementById('niche').value;
+  const city = document.getElementById('city').value.trim();
+  const btn = document.getElementById('searchBtn');
+  const status = document.getElementById('status');
+  const results = document.getElementById('results');
+  if(!city){ alert('Type a city first.'); return; }
+  currentNiche = nicheKey; currentCity = city;
+  btn.disabled = true; btn.textContent = 'Searching…';
+  status.innerHTML = 'Finding <b>' + esc(NICHES[nicheKey].label) + 's</b> in <b>' + esc(city) + '</b>…';
+  results.innerHTML = '';
+  try{
+    const geo = await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(city));
+    const places = await geo.json();
+    if(!places.length) throw new Error('City not found. Try “City, Country”, e.g. London, UK.');
+    const bb = places[0].boundingbox.map(Number); // [minLat, maxLat, minLon, maxLon]
+    const bbox = bb[0] + ',' + bb[2] + ',' + bb[1] + ',' + bb[3]; // south,west,north,east
+    const f = NICHES[nicheKey].filter;
+    const q = '[out:json][timeout:25];(node' + f + '(' + bbox + ');way' + f + '(' + bbox + '););out center 60;';
+    let data = null, lastErr = null;
+    for(const url of OVERPASS){
+      try{
+        const r = await fetch(url, {method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body:'data=' + encodeURIComponent(q)});
+        if(!r.ok) throw new Error('Server ' + r.status);
+        data = await r.json();
+        break;
+      }catch(e){ lastErr = e; }
+    }
+    if(!data) throw lastErr || new Error('Map servers are busy. Try again in a minute.');
+    const seen = new Set();
+    currentLeads = (data.elements || []).map(el => {
+      const t = el.tags || {};
+      const name = t.name || '';
+      if(!name) return null;
+      const phone = t.phone || t['contact:phone'] || '';
+      const website = t.website || t['contact:website'] || '';
+      const addr = [t['addr:housenumber'], t['addr:street'], t['addr:suburb'], t['addr:city']].filter(Boolean).join(', ');
+      const lat = el.lat || (el.center && el.center.lat);
+      const lon = el.lon || (el.center && el.center.lon);
+      return {name, phone, website, addr, lat, lon};
+    }).filter(l => l && !seen.has(l.name.toLowerCase()) && seen.add(l.name.toLowerCase()));
+    if(!currentLeads.length){
+      status.innerHTML = 'No <b>' + esc(NICHES[nicheKey].label) + 's</b> found on the map in <b>' + esc(city) + '</b>. Try a bigger nearby city or another business type.';
+    } else {
+      status.innerHTML = 'Found <b>' + currentLeads.length + ' ' + esc(NICHES[nicheKey].label) + 's</b> in <b>' + esc(city) + '</b>. Tap an email to copy it, or let AI write your outreach.';
+      renderResults();
+    }
+  }catch(err){
+    status.innerHTML = 'Something went wrong: ' + esc(err.message);
+  }finally{
+    btn.disabled = false; btn.textContent = 'Find leads →';
+  }
+}
+
+function domainOf(website){
+  if(!website) return '';
+  return website.replace(/^https?:\/\//,'').replace(/^www\./,'').split('/')[0].split('?')[0];
+}
+function guessEmails(website){
+  const d = domainOf(website);
+  if(!d) return [];
+  return ['info@'+d, 'contact@'+d, 'hello@'+d, 'sales@'+d];
+}
+
+function renderResults(){
+  const results = document.getElementById('results');
+  document.getElementById('resultCount').textContent = '(' + currentLeads.length + ')';
+  showTab('results');
+  results.innerHTML = currentLeads.map((l,i) => {
+    const emails = guessEmails(l.website);
+    const mapLink = (l.lat && l.lon) ? 'https://www.openstreetmap.org/?mlat=' + l.lat + '&mlon=' + l.lon + '#map=16/' + l.lat + '/' + l.lon : '';
+    return '<div class="lead">' +
+      '<h3>' + esc(l.name) + '</h3>' +
+      '<div class="meta">' + esc(NICHES[currentNiche].label) + ' · ' + esc(currentCity) +
+      (l.addr ? '<br>' + esc(l.addr) : '') +
+      (l.phone ? '<br>📞 <a href="tel:' + esc(l.phone.replace(/[^+0-9]/g,'')) + '">' + esc(l.phone) + '</a>' : '') +
+      (l.website ? ' · 🌐 <a href="' + esc(l.website) + '" target="_blank" rel="noopener">Website</a>' : '') +
+      (mapLink ? ' · <a href="' + mapLink + '" target="_blank" rel="noopener">Map</a>' : '') +
+      '</div>' +
+      (emails.length
+        ? '<div class="emails">' + emails.map(e => '<span class="email-pill" onclick="copyText(\'' + e + '\')" title="Tap to copy">✉️ ' + esc(e) + '</span>').join('') + '</div><div class="guess-note">Guessed from the website — verify before sending.</div>'
+        : '<div class="guess-note">No website listed, so no email to guess — call or visit their site.</div>') +
+      '<div class="actions">' +
+        '<button class="btn-ghost" onclick="writeEmail(' + i + ')">✍️ Write email (AI)</button>' +
+        '<button class="btn-ghost" onclick="saveLead(' + i + ')">💾 Save lead</button>' +
+        (emails.length ? '<button class="btn-ghost" onclick="mailtoLead(' + i + ')">📧 Open in Gmail</button>' : '') +
+      '</div>' +
+      '<div class="email-box" id="email-' + i + '"></div>' +
+    '</div>';
+  }).join('') +
+  '<button class="btn btn-gold" onclick="exportCSV(currentLeads, \'leads\')">⬇ Download all as CSV</button>';
+}
+
+function copyText(t){
+  navigator.clipboard.writeText(t).then(()=>{ alert('Copied: ' + t); });
+}
+
+function getSaved(){
+  try{ return JSON.parse(localStorage.getItem('mindful-leads-saved') || '[]'); }catch(e){ return []; }
+}
+function updateSavedCount(){
+  document.getElementById('savedCount').textContent = '(' + getSaved().length + ')';
+}
+function saveLead(i){
+  const lead = Object.assign({}, currentLeads[i], {niche:NICHES[currentNiche].label, city:currentCity, status:'New', savedAt:new Date().toLocaleDateString()});
+  const saved = getSaved();
+  if(saved.some(s => s.name === lead.name && s.city === lead.city)){ alert('Already saved.'); return; }
+  saved.push(lead);
+  localStorage.setItem('mindful-leads-saved', JSON.stringify(saved));
+  updateSavedCount();
+  alert('Saved: ' + lead.name);
+}
+
+function renderSaved(){
+  const saved = getSaved();
+  const box = document.getElementById('saved');
+  if(!saved.length){ box.innerHTML = '<p class="small">No saved leads yet. Search and tap “Save lead” on any business.</p>'; return; }
+  box.innerHTML = saved.map((l,i) => {
+    const emails = guessEmails(l.website);
+    return '<div class="lead"><h3>' + esc(l.name) + '</h3>' +
+      '<div class="meta">' + esc(l.niche) + ' · ' + esc(l.city) + (l.addr ? '<br>' + esc(l.addr) : '') +
+      (l.phone ? '<br>📞 ' + esc(l.phone) : '') +
+      (l.website ? ' · 🌐 <a href="' + esc(l.website) + '" target="_blank" rel="noopener">Website</a>' : '') + '</div>' +
+      (emails.length ? '<div class="emails">' + emails.map(e => '<span class="email-pill" onclick="copyText(\'' + e + '\')">✉️ ' + esc(e) + '</span>').join('') + '</div>' : '') +
+      '<div class="actions"><select class="status-select" onchange="setStatus(' + i + ', this.value)">' +
+      ['New','Contacted','Replied','Not interested'].map(s => '<option' + (l.status===s?' selected':'') + '>' + s + '</option>').join('') +
+      '</select><button class="btn-ghost" onclick="removeSaved(' + i + ')">Remove</button></div></div>';
+  }).join('') + '<button class="btn btn-gold" onclick="exportCSV(getSaved(), \'saved-leads\')">⬇ Download saved as CSV</button>';
+}
+function setStatus(i, v){
+  const saved = getSaved(); saved[i].status = v;
+  localStorage.setItem('mindful-leads-saved', JSON.stringify(saved));
+}
+function removeSaved(i){
+  const saved = getSaved(); saved.splice(i,1);
+  localStorage.setItem('mindful-leads-saved', JSON.stringify(saved));
+  updateSavedCount(); renderSaved();
+}
+function exportCSV(rows, name){
+  if(!rows.length){ alert('Nothing to export.'); return; }
+  const head = ['Name','Type','City','Address','Phone','Website','Guessed emails','Status'];
+  const csv = [head.join(',')].concat(rows.map(l => {
+    const emails = guessEmails(l.website).join(' ');
+    return [l.name, l.niche || NICHES[currentNiche].label, l.city || currentCity, l.addr || '', l.phone || '', l.website || '', emails, l.status || ''].map(v => '"' + String(v||'').replace(/"/g,'""') + '"').join(',');
+  })).join('\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv'}));
+  a.download = 'mindful-leads-' + name + '.csv';
+  a.click();
+}
+
+async function writeEmail(i){
+  const lead = currentLeads[i];
+  const key = (document.getElementById('geminiKey').value || '').trim();
+  const box = document.getElementById('email-' + i);
+  if(!key){
+    box.classList.add('show');
+    box.innerHTML = '<b>Free Gemini key needed.</b>\nGet one at aistudio.google.com/apikey (free, no card), paste it in the “AI cold emails” box above, tap Save key, then try again.';
+    return;
+  }
+  box.classList.add('show');
+  box.innerHTML = 'Writing your email…';
+  const prompt = 'Write a short cold email under 120 words from a freelancer to ' + lead.name + ', a ' + NICHES[currentNiche].label.toLowerCase() + ' business in ' + currentCity + '.' +
+    (lead.website ? ' Their website is ' + lead.website + '.' : '') +
+    ' Offer help with their website, online presence and getting more customers. Friendly, professional, specific to their business type, no hype, no fake claims. End with one simple question. Give a subject line first, then the email body.';
+  try{
+    const r = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=' + encodeURIComponent(key), {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({contents:[{parts:[{text:prompt}]}]})
+    });
+    const d = await r.json();
+    const text = d.candidates && d.candidates[0] && d.candidates[0].content && d.candidates[0].content.parts ? d.candidates[0].content.parts.map(p=>p.text).join('') : '';
+    if(!text) throw new Error('No reply from AI. Check your key and try again.');
+    const lines = text.trim().split('\n');
+    const subject = lines[0].replace(/^(Subject:?\s*)/i,'');
+    const body = lines.slice(1).join('\n').trim();
+    box.innerHTML = '<div class="subject">Subject: ' + esc(subject) + '</div>' + esc(body) +
+      '<div class="actions"><button class="btn-ghost" onclick="copyText(this.parentElement.parentElement.innerText)">Copy email</button></div>';
+    box.dataset.body = body; box.dataset.subject = subject;
+  }catch(err){
+    box.innerHTML = 'Could not write the email: ' + esc(err.message);
+  }
+}
+
+function mailtoLead(i){
+  const lead = currentLeads[i];
+  const emails = guessEmails(lead.website);
+  if(!emails.length) return;
+  const box = document.getElementById('email-' + i);
+  const subject = box.dataset.subject || ('Quick idea for ' + lead.name);
+  const body = box.dataset.body || ('Hi ' + lead.name + ' team,\n\nI help local businesses get more customers online. I had a quick idea for your business and would love to share it.\n\nWould you be open to a short chat this week?\n\nBest regards,\nDr. Saghir Ahmad');
+  window.location.href = 'mailto:' + emails[0] + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+}
+</script>
+</body>
+</html>
