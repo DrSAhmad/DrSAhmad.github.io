@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mindful Leads — Free Client Finder for Freelancers & Agencies</title>
-<meta name="description" content="Find real businesses worldwide and reach them with AI-written cold emails. Free forever — no signup, no card, no monthly fee.">
+<meta name="description" content="Find verified businesses worldwide, check their email domains, and reach them with AI-written cold email sequences. Free forever — no signup, no card, no monthly fee.">
 <style>
   :root{
     --emerald:#0D5C46; --emerald-dark:#093E30; --emerald-soft:#E7F0EB;
     --gold:#B98A1E; --gold-soft:#F6ECD4; --ink:#1D211A; --muted:#5A6158;
-    --cream:#FDF8F0; --white:#FFFFFF; --line:#E3DDD0; --red:#C0392B;
+    --cream:#FDF8F0; --white:#FFFFFF; --line:#E3DDD0; --green:#1E7A4C; --amber:#B7791F; --red:#C0392B;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
   body{font-family:'Segoe UI',system-ui,-apple-system,Arial,sans-serif; background:var(--cream); color:var(--ink); line-height:1.6;}
@@ -21,6 +21,11 @@
   .badges{margin-top:14px; display:flex; flex-wrap:wrap; gap:8px;}
   .badge{background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.35); color:#fff; padding:5px 12px; border-radius:999px; font-size:13px; font-weight:600;}
   .badge.gold{background:var(--gold); border-color:var(--gold); color:#fff;}
+  .stats{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin:22px 0 0;}
+  @media(max-width:640px){.stats{grid-template-columns:repeat(2,1fr);}}
+  .stat{background:#fff; border:1px solid var(--line); border-radius:12px; padding:14px 16px; box-shadow:0 2px 10px rgba(0,0,0,.04);}
+  .stat .n{font-size:26px; font-weight:800; color:var(--emerald-dark); line-height:1.1;}
+  .stat .l{font-size:13px; color:var(--muted); font-weight:600;}
   .card{background:var(--white); border:1px solid var(--line); border-radius:14px; padding:22px; margin:22px 0; box-shadow:0 2px 10px rgba(0,0,0,.04);}
   .card h2{font-size:20px; color:var(--emerald-dark); margin-bottom:4px;}
   .card .sub{color:var(--muted); font-size:14px; margin-bottom:16px;}
@@ -33,6 +38,8 @@
   .chip{border:1.5px solid var(--emerald); color:var(--emerald); background:#fff; border-radius:999px; padding:6px 14px; font-size:13px; font-weight:600; cursor:pointer;}
   .chip:hover{background:var(--emerald-soft);}
   .chip.active{background:var(--emerald); color:#fff;}
+  .chip.history{border-color:var(--gold); color:var(--gold);}
+  .chip.history:hover{background:var(--gold-soft);}
   .btn{display:inline-block; border:none; cursor:pointer; border-radius:10px; font-weight:700; font-size:16px; padding:13px 26px; text-decoration:none;}
   .btn-primary{background:var(--emerald); color:#fff; width:100%; margin-top:18px;}
   .btn-primary:hover{background:var(--emerald-dark);}
@@ -40,24 +47,44 @@
   .btn-gold{background:var(--gold); color:#fff;}
   .btn-ghost{background:#fff; border:1.5px solid var(--emerald); color:var(--emerald); padding:8px 14px; font-size:14px; border-radius:8px; cursor:pointer; font-weight:600;}
   .btn-ghost:hover{background:var(--emerald-soft);}
+  .btn-ghost:disabled{opacity:.5; cursor:wait;}
   .tabs{display:flex; gap:8px; margin:22px 0 0;}
   .tab{border:1.5px solid var(--line); background:#fff; padding:10px 20px; border-radius:10px 10px 0 0; font-weight:700; cursor:pointer; color:var(--muted); border-bottom:none;}
   .tab.active{color:var(--emerald-dark); background:var(--white); box-shadow:0 -2px 8px rgba(0,0,0,.04);}
   #status{margin:14px 0; font-size:15px; color:var(--muted);}
   #status b{color:var(--emerald-dark);}
-  .lead{border:1px solid var(--line); border-radius:12px; padding:18px; margin-bottom:14px; background:#fff;}
-  .lead h3{font-size:18px; color:var(--emerald-dark);}
+  .filterbar{display:none; flex-wrap:wrap; gap:10px; align-items:center; background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px 14px; margin-bottom:14px;}
+  .filterbar.show{display:flex;}
+  .filterbar input[type=text]{width:220px; padding:9px 12px; font-size:14px;}
+  .filterbar select{width:auto; padding:9px 10px; font-size:14px;}
+  .filterbar label{display:inline-flex; align-items:center; gap:6px; font-weight:600; font-size:14px; margin:0;}
+  .bulkbar{display:none; align-items:center; gap:10px; flex-wrap:wrap; background:var(--emerald-dark); color:#fff; border-radius:12px; padding:12px 16px; margin-bottom:14px; font-weight:600;}
+  .bulkbar.show{display:flex;}
+  .bulkbar .btn-ghost{background:transparent; border-color:#fff; color:#fff;}
+  .bulkbar .btn-ghost:hover{background:rgba(255,255,255,.12);}
+  .lead{border:1px solid var(--line); border-radius:12px; padding:18px; margin-bottom:14px; background:#fff; position:relative;}
+  .lead h3{font-size:18px; color:var(--emerald-dark); padding-right:30px;}
   .lead .meta{color:var(--muted); font-size:14px; margin:4px 0 10px;}
   .lead .meta a{color:var(--emerald); text-decoration:none; font-weight:600;}
   .lead .meta a:hover{text-decoration:underline;}
+  .lead .pick{position:absolute; top:16px; right:14px; width:20px; height:20px; accent-color:var(--emerald); cursor:pointer;}
   .emails{margin:10px 0; display:flex; flex-wrap:wrap; gap:8px;}
   .email-pill{background:var(--gold-soft); border:1px solid #E8D9AC; border-radius:8px; padding:5px 10px; font-size:13px; cursor:pointer;}
   .email-pill:hover{background:#F1E2B8;}
+  .email-pill.verified{border-color:#9CCFAF; background:#EAF6EE;}
+  .email-pill.bad{border-color:#E5B3AC; background:#FBEDEB;}
   .guess-note{font-size:12px; color:var(--muted); margin-top:4px;}
+  .verify-result{font-size:13px; margin-top:6px; font-weight:600;}
+  .verify-result.ok{color:var(--green);}
+  .verify-result.no{color:var(--red);}
+  .social{font-size:13px; margin-top:8px; color:var(--muted);}
+  .social a{color:var(--emerald); font-weight:600; text-decoration:none; margin-right:10px;}
+  .social a:hover{text-decoration:underline;}
   .actions{display:flex; flex-wrap:wrap; gap:8px; margin-top:12px;}
   .email-box{background:var(--emerald-soft); border:1px solid #CBE0D2; border-radius:10px; padding:14px; margin-top:12px; white-space:pre-wrap; font-size:14px; display:none;}
   .email-box.show{display:block;}
   .email-box .subject{font-weight:700; margin-bottom:8px;}
+  .email-box .fu-label{font-weight:700; margin-top:14px; color:var(--emerald-dark);}
   .status-select{padding:8px 10px; border:1.5px solid var(--line); border-radius:8px; font-size:14px;}
   .howto{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:14px;}
   @media(max-width:640px){.howto{grid-template-columns:1fr;}}
@@ -82,22 +109,30 @@
 <header>
   <div class="wrap">
     <h1>Mindful <span>Leads</span></h1>
-    <p>Find real businesses anywhere in the world and reach them with AI-written cold emails. Built for freelancers and agency owners who want international clients.</p>
+    <p>Find verified businesses anywhere in the world and reach them with AI-written cold email sequences. Built for freelancers and agency owners who want international clients.</p>
     <div class="badges">
       <span class="badge gold">Free forever</span>
       <span class="badge">No signup</span>
       <span class="badge">No card</span>
+      <span class="badge">Email domain check</span>
+      <span class="badge">Follow-up sequences</span>
       <span class="badge">Works worldwide</span>
-      <span class="badge">Real map data</span>
     </div>
   </div>
 </header>
 
 <div class="wrap">
 
+  <div class="stats">
+    <div class="stat"><div class="n" id="statFound">0</div><div class="l">Leads found</div></div>
+    <div class="stat"><div class="n" id="statSaved">0</div><div class="l">Saved leads</div></div>
+    <div class="stat"><div class="n" id="statContacted">0</div><div class="l">Contacted</div></div>
+    <div class="stat"><div class="n" id="statReplied">0</div><div class="l">Replied</div></div>
+  </div>
+
   <div class="card">
     <h2>Find your next clients</h2>
-    <p class="sub">Pick a business type and a city anywhere in the world. We search live map data and show real businesses with their phone, website and address.</p>
+    <p class="sub">Pick a business type and a city anywhere in the world. We search live map data and show real businesses with their phone, website and address — then verify the email domain before you write.</p>
     <div class="row">
       <div>
         <label for="niche">Business type</label>
@@ -114,6 +149,13 @@
           <option value="clothes">Clothing Stores</option>
           <option value="pharmacy">Pharmacies</option>
           <option value="school">Schools</option>
+          <option value="lawyer">Lawyers</option>
+          <option value="accountant">Accountants</option>
+          <option value="travel">Travel Agencies</option>
+          <option value="marketing">Marketing Agencies</option>
+          <option value="vet">Vets &amp; Pet Care</option>
+          <option value="spa">Spas &amp; Wellness</option>
+          <option value="car">Car Dealers</option>
         </select>
       </div>
       <div>
@@ -131,6 +173,7 @@
       <button class="chip" data-city="Islamabad, Pakistan">Islamabad</button>
       <button class="chip" data-city="Lahore, Pakistan">Lahore</button>
     </div>
+    <div class="chips" id="historyChips"></div>
     <button class="btn btn-primary" id="searchBtn" onclick="searchLeads()">Find leads →</button>
     <p class="small" style="margin-top:10px;">Data: OpenStreetMap (free, open data). Businesses appear only if they are listed on the map — coverage is best in the US, UK, Europe and the Gulf, thinner in smaller towns.</p>
   </div>
@@ -141,12 +184,33 @@
   </div>
 
   <div id="status"></div>
+
+  <div class="filterbar" id="filterbar">
+    <input type="text" id="filterText" placeholder="Filter results by name…" oninput="applyFilters()">
+    <label><input type="checkbox" id="fWebsite" onchange="applyFilters()"> Website</label>
+    <label><input type="checkbox" id="fPhone" onchange="applyFilters()"> Phone</label>
+    <label><input type="checkbox" id="fEmail" onchange="applyFilters()"> Email guess</label>
+    <select id="sortSel" onchange="applyFilters()">
+      <option value="name">Sort: Name A–Z</option>
+      <option value="website">Sort: Website first</option>
+      <option value="phone">Sort: Phone first</option>
+    </select>
+  </div>
+
+  <div class="bulkbar" id="bulkbar">
+    <span id="bulkCount">0 selected</span>
+    <button class="btn-ghost" onclick="bulkWriteEmails()">✍️ Write emails</button>
+    <button class="btn-ghost" onclick="bulkSave()">💾 Save all</button>
+    <button class="btn-ghost" onclick="bulkExport()">⬇ Export CSV</button>
+    <button class="btn-ghost" onclick="clearSelection()">Clear</button>
+  </div>
+
   <div id="results"></div>
   <div id="saved" class="hidden"></div>
 
   <div class="card">
-    <h2>AI cold emails — your own free key</h2>
-    <p class="sub">Click “Write email” on any lead and AI writes a short, personal cold email for that business. It runs on your own free Google Gemini key — the key stays in your browser only, never sent to us.</p>
+    <h2>AI cold emails + follow-ups — your own free key</h2>
+    <p class="sub">Click “Write email” on any lead and AI writes a short, personal cold email for that business — plus two follow-ups (Day 3 and Day 7), just like the paid tools' sequences. It runs on your own free Google Gemini key — the key stays in your browser only, never sent to us.</p>
     <div class="key-row">
       <input type="text" id="geminiKey" placeholder="Paste your free Gemini API key here">
       <button class="btn-ghost" onclick="saveKey()">Save key</button>
@@ -157,24 +221,26 @@
   <div class="card">
     <h2>How it works</h2>
     <div class="howto">
-      <div class="step"><div class="num">1</div><h3>Search</h3><p>Choose a business type and any city in the world. Live map data returns real businesses.</p></div>
-      <div class="step"><div class="num">2</div><h3>Write</h3><p>AI writes a personal cold email for each business — or use your own words. Copy it or send it from your Gmail.</p></div>
-      <div class="step"><div class="num">3</div><h3>Track</h3><p>Save leads, mark them Contacted or Replied, and export your list as a CSV. Follow up and win the client.</p></div>
+      <div class="step"><div class="num">1</div><h3>Search &amp; verify</h3><p>Choose a business type and any city in the world. Live map data returns real businesses — then check the email domain actually accepts mail.</p></div>
+      <div class="step"><div class="num">2</div><h3>Write &amp; follow up</h3><p>AI writes a personal cold email plus Day 3 and Day 7 follow-ups for each business. Copy it or send it from your Gmail.</p></div>
+      <div class="step"><div class="num">3</div><h3>Track &amp; close</h3><p>Save leads, mark them Contacted or Replied, and export your list as a CSV. Follow up and win the client.</p></div>
     </div>
   </div>
 
   <div class="card">
     <h2>Why free?</h2>
-    <p class="sub">Paid lead tools charge $15–$100 a month for the same job. Mindful Leads uses free open map data and your own free AI key, so there is nothing to pay for — ever.</p>
+    <p class="sub">Paid lead tools charge $15–$100 a month for the same job. Mindful Leads uses free open map data, free DNS checks and your own free AI key, so there is nothing to pay for — ever.</p>
     <table class="compare">
       <tr><th></th><th>Mindful Leads</th><th>Typical paid tool</th></tr>
       <tr><td>Monthly price</td><td class="free">$0 forever</td><td>$15–$100 / month</td></tr>
       <tr><td>Signup / card</td><td class="free">None</td><td>Account + card</td></tr>
       <tr><td>Countries</td><td>Worldwide</td><td>Mostly US / EU</td></tr>
+      <tr><td>Email domain check</td><td class="free">Yes</td><td>Paid add-on</td></tr>
+      <tr><td>Follow-up sequences</td><td class="free">Yes — Day 3 &amp; Day 7</td><td>Paid plans only</td></tr>
       <tr><td>AI cold emails</td><td class="free">Yes, your free key</td><td>Paid add-on</td></tr>
       <tr><td>Lead export (CSV)</td><td class="free">Yes</td><td>Often limited</td></tr>
     </table>
-    <p class="small" style="margin-top:10px;">Honest note: email addresses shown are common patterns guessed from a business website (info@, contact@…). Always verify before sending — the business phone and website on each card are the real listed details.</p>
+    <p class="small" style="margin-top:10px;">Honest note: email addresses shown are common patterns guessed from a business website (info@, contact@…). The domain check confirms the domain can receive email — it does not prove that exact address exists. Always send one test email first.</p>
   </div>
 
   <footer>
@@ -195,15 +261,24 @@ const NICHES = {
   bakery:{label:'Bakery', filter:'["shop"="bakery"]'},
   clothes:{label:'Clothing Store', filter:'["shop"="clothes"]'},
   pharmacy:{label:'Pharmacy', filter:'["amenity"="pharmacy"]'},
-  school:{label:'School', filter:'["amenity"="school"]'}
+  school:{label:'School', filter:'["amenity"="school"]'},
+  lawyer:{label:'Lawyer', filter:'["office"="lawyer"]'},
+  accountant:{label:'Accountant', filter:'["office"="accountant"]'},
+  travel:{label:'Travel Agency', filter:'["shop"="travel_agency"]'},
+  marketing:{label:'Marketing Agency', filter:'["office"="advertising_agency"]'},
+  vet:{label:'Vet / Pet Care', filter:'["amenity"="veterinary"]'},
+  spa:{label:'Spa / Wellness', filter:'["leisure"="spa"]'},
+  car:{label:'Car Dealer', filter:'["shop"="car"]'}
 };
 const OVERPASS = [
   'https://overpass-api.de/api/interpreter',
   'https://overpass.kumi.systems/api/interpreter'
 ];
 let currentLeads = [];
+let filteredLeads = [];
 let currentCity = '';
 let currentNiche = '';
+let selected = new Set();
 
 document.getElementById('geminiKey').value = localStorage.getItem('mindful-leads-gemini-key') || '';
 document.querySelectorAll('#cityChips .chip').forEach(ch => {
@@ -216,13 +291,16 @@ document.querySelectorAll('#cityChips .chip').forEach(ch => {
 document.getElementById('city').addEventListener('input', () => {
   document.querySelectorAll('#cityChips .chip').forEach(c => c.classList.remove('active'));
 });
-updateSavedCount();
+renderHistory();
+updateStats();
 
 function showTab(which){
   document.getElementById('tabResults').classList.toggle('active', which==='results');
   document.getElementById('tabSaved').classList.toggle('active', which==='saved');
   document.getElementById('results').classList.toggle('hidden', which!=='results');
   document.getElementById('saved').classList.toggle('hidden', which!=='saved');
+  document.getElementById('filterbar').classList.toggle('show', which==='results' && currentLeads.length>0);
+  document.getElementById('bulkbar').classList.toggle('show', which==='results' && selected.size>0);
   if(which==='saved') renderSaved();
 }
 
@@ -235,6 +313,42 @@ function saveKey(){
 
 function esc(s){ return String(s||'').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 
+function getSaved(){
+  try{ return JSON.parse(localStorage.getItem('mindful-leads-saved') || '[]'); }catch(e){ return []; }
+}
+function updateStats(){
+  const saved = getSaved();
+  document.getElementById('statFound').textContent = currentLeads.length;
+  document.getElementById('statSaved').textContent = saved.length;
+  document.getElementById('statContacted').textContent = saved.filter(s => s.status==='Contacted' || s.status==='Replied').length;
+  document.getElementById('statReplied').textContent = saved.filter(s => s.status==='Replied').length;
+  document.getElementById('savedCount').textContent = '(' + saved.length + ')';
+}
+function updateSavedCount(){ updateStats(); }
+
+function getHistory(){
+  try{ return JSON.parse(localStorage.getItem('mindful-leads-history') || '[]'); }catch(e){ return []; }
+}
+function pushHistory(niche, city){
+  let h = getHistory().filter(x => !(x.niche===niche && x.city===city));
+  h.unshift({niche, city});
+  localStorage.setItem('mindful-leads-history', JSON.stringify(h.slice(0,5)));
+  renderHistory();
+}
+function renderHistory(){
+  const h = getHistory();
+  const box = document.getElementById('historyChips');
+  box.innerHTML = h.length ? '<span class="small" style="align-self:center;">Recent:</span>' + h.map(x =>
+    '<button class="chip history" onclick="runHistory(\'' + x.niche + '\', \'' + esc(x.city) + '\')">' + esc(NICHES[x.niche] ? NICHES[x.niche].label : x.niche) + ' · ' + esc(x.city) + '</button>'
+  ).join('') : '';
+}
+function runHistory(niche, city){
+  document.getElementById('niche').value = niche;
+  document.getElementById('city').value = city;
+  document.querySelectorAll('#cityChips .chip').forEach(c => c.classList.remove('active'));
+  searchLeads();
+}
+
 async function searchLeads(){
   const nicheKey = document.getElementById('niche').value;
   const city = document.getElementById('city').value.trim();
@@ -243,9 +357,11 @@ async function searchLeads(){
   const results = document.getElementById('results');
   if(!city){ alert('Type a city first.'); return; }
   currentNiche = nicheKey; currentCity = city;
+  selected = new Set(); updateBulkBar();
   btn.disabled = true; btn.textContent = 'Searching…';
   status.innerHTML = 'Finding <b>' + esc(NICHES[nicheKey].label) + 's</b> in <b>' + esc(city) + '</b>…';
   results.innerHTML = '';
+  document.getElementById('filterbar').classList.remove('show');
   try{
     const geo = await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(city));
     const places = await geo.json();
@@ -279,9 +395,12 @@ async function searchLeads(){
     if(!currentLeads.length){
       status.innerHTML = 'No <b>' + esc(NICHES[nicheKey].label) + 's</b> found on the map in <b>' + esc(city) + '</b>. Try a bigger nearby city or another business type.';
     } else {
-      status.innerHTML = 'Found <b>' + currentLeads.length + ' ' + esc(NICHES[nicheKey].label) + 's</b> in <b>' + esc(city) + '</b>. Tap an email to copy it, or let AI write your outreach.';
-      renderResults();
+      status.innerHTML = 'Found <b>' + currentLeads.length + ' ' + esc(NICHES[nicheKey].label) + 's</b> in <b>' + esc(city) + '</b>. Tap an email to copy it, verify the domain, or let AI write your outreach.';
+      pushHistory(nicheKey, city);
+      document.getElementById('filterbar').classList.add('show');
+      applyFilters();
     }
+    updateStats();
   }catch(err){
     status.innerHTML = 'Something went wrong: ' + esc(err.message);
   }finally{
@@ -299,14 +418,48 @@ function guessEmails(website){
   return ['info@'+d, 'contact@'+d, 'hello@'+d, 'sales@'+d];
 }
 
+function applyFilters(){
+  const text = (document.getElementById('filterText').value || '').toLowerCase();
+  const needWeb = document.getElementById('fWebsite').checked;
+  const needPhone = document.getElementById('fPhone').checked;
+  const needEmail = document.getElementById('fEmail').checked;
+  const sort = document.getElementById('sortSel').value;
+  filteredLeads = currentLeads.filter(l => {
+    if(text && !l.name.toLowerCase().includes(text)) return false;
+    if(needWeb && !l.website) return false;
+    if(needPhone && !l.phone) return false;
+    if(needEmail && !guessEmails(l.website).length) return false;
+    return true;
+  });
+  if(sort==='website') filteredLeads.sort((a,b) => (b.website?1:0) - (a.website?1:0) || a.name.localeCompare(b.name));
+  else if(sort==='phone') filteredLeads.sort((a,b) => (b.phone?1:0) - (a.phone?1:0) || a.name.localeCompare(b.name));
+  else filteredLeads.sort((a,b) => a.name.localeCompare(b.name));
+  renderResults();
+}
+
+function socialLinks(name){
+  const q = encodeURIComponent(name);
+  return '<div class="social">Find on: ' +
+    '<a href="https://www.google.com/search?q=' + q + '" target="_blank" rel="noopener">Google</a>' +
+    '<a href="https://www.linkedin.com/search/results/companies/?keywords=' + q + '" target="_blank" rel="noopener">LinkedIn</a>' +
+    '<a href="https://www.facebook.com/search/top?q=' + q + '" target="_blank" rel="noopener">Facebook</a>' +
+    '<a href="https://www.instagram.com/explore/search/keyword/?q=' + q + '" target="_blank" rel="noopener">Instagram</a></div>';
+}
+
 function renderResults(){
   const results = document.getElementById('results');
-  document.getElementById('resultCount').textContent = '(' + currentLeads.length + ')';
-  showTab('results');
-  results.innerHTML = currentLeads.map((l,i) => {
+  document.getElementById('resultCount').textContent = '(' + filteredLeads.length + (filteredLeads.length!==currentLeads.length ? ' of ' + currentLeads.length : '') + ')';
+  showTabKeep();
+  if(!filteredLeads.length){
+    results.innerHTML = '<p class="small">No leads match these filters. Clear a filter to see more.</p>';
+    return;
+  }
+  results.innerHTML = filteredLeads.map(l => {
+    const i = currentLeads.indexOf(l);
     const emails = guessEmails(l.website);
     const mapLink = (l.lat && l.lon) ? 'https://www.openstreetmap.org/?mlat=' + l.lat + '&mlon=' + l.lon + '#map=16/' + l.lat + '/' + l.lon : '';
     return '<div class="lead">' +
+      '<input type="checkbox" class="pick" ' + (selected.has(i)?'checked':'') + ' onchange="toggleSelect(' + i + ', this.checked)" title="Select for bulk actions">' +
       '<h3>' + esc(l.name) + '</h3>' +
       '<div class="meta">' + esc(NICHES[currentNiche].label) + ' · ' + esc(currentCity) +
       (l.addr ? '<br>' + esc(l.addr) : '') +
@@ -315,37 +468,99 @@ function renderResults(){
       (mapLink ? ' · <a href="' + mapLink + '" target="_blank" rel="noopener">Map</a>' : '') +
       '</div>' +
       (emails.length
-        ? '<div class="emails">' + emails.map(e => '<span class="email-pill" onclick="copyText(\'' + e + '\')" title="Tap to copy">✉️ ' + esc(e) + '</span>').join('') + '</div><div class="guess-note">Guessed from the website — verify before sending.</div>'
+        ? '<div class="emails">' + emails.map(e => '<span class="email-pill" id="pill-' + i + '-' + e.split('@')[0] + '" onclick="copyText(\'' + e + '\')" title="Tap to copy">✉️ ' + esc(e) + '</span>').join('') + '</div>' +
+          '<div class="guess-note">Guessed from the website — verify the domain before sending. <button class="btn-ghost" style="padding:4px 10px; font-size:12px;" onclick="verifyDomain(' + i + ', this)">✓ Verify domain</button></div>' +
+          '<div class="verify-result" id="verify-' + i + '"></div>'
         : '<div class="guess-note">No website listed, so no email to guess — call or visit their site.</div>') +
+      socialLinks(l.name) +
       '<div class="actions">' +
-        '<button class="btn-ghost" onclick="writeEmail(' + i + ')">✍️ Write email (AI)</button>' +
+        '<button class="btn-ghost" onclick="writeEmail(' + i + ')">✍️ Write email + follow-ups (AI)</button>' +
         '<button class="btn-ghost" onclick="saveLead(' + i + ')">💾 Save lead</button>' +
         (emails.length ? '<button class="btn-ghost" onclick="mailtoLead(' + i + ')">📧 Open in Gmail</button>' : '') +
       '</div>' +
       '<div class="email-box" id="email-' + i + '"></div>' +
     '</div>';
   }).join('') +
-  '<button class="btn btn-gold" onclick="exportCSV(currentLeads, \'leads\')">⬇ Download all as CSV</button>';
+  '<button class="btn btn-gold" onclick="exportCSV(filteredLeads, \'leads\')">⬇ Download these as CSV</button>';
+}
+function showTabKeep(){
+  document.getElementById('results').classList.remove('hidden');
 }
 
 function copyText(t){
   navigator.clipboard.writeText(t).then(()=>{ alert('Copied: ' + t); });
 }
 
-function getSaved(){
-  try{ return JSON.parse(localStorage.getItem('mindful-leads-saved') || '[]'); }catch(e){ return []; }
+async function verifyDomain(i, btn){
+  const lead = currentLeads[i];
+  const domain = domainOf(lead.website);
+  const out = document.getElementById('verify-' + i);
+  if(!domain || !out) return;
+  btn.disabled = true; btn.textContent = 'Checking…';
+  out.textContent = '';
+  try{
+    const r = await fetch('https://dns.google/resolve?name=' + encodeURIComponent(domain) + '&type=MX');
+    const d = await r.json();
+    const ok = d.Answer && d.Answer.length > 0;
+    out.className = 'verify-result ' + (ok ? 'ok' : 'no');
+    out.textContent = ok
+      ? '✅ ' + domain + ' can receive email (mail server found).'
+      : '⚠️ ' + domain + ' has no mail server — these guesses will likely bounce.';
+    guessEmails(lead.website).forEach(e => {
+      const pill = document.getElementById('pill-' + i + '-' + e.split('@')[0]);
+      if(pill) pill.classList.add(ok ? 'verified' : 'bad');
+    });
+  }catch(e){
+    out.className = 'verify-result no';
+    out.textContent = 'Could not check right now — try again in a minute.';
+  }finally{
+    btn.disabled = false; btn.textContent = '✓ Verify domain';
+  }
 }
-function updateSavedCount(){
-  document.getElementById('savedCount').textContent = '(' + getSaved().length + ')';
+
+function toggleSelect(i, on){
+  if(on) selected.add(i); else selected.delete(i);
+  updateBulkBar();
 }
-function saveLead(i){
+function updateBulkBar(){
+  document.getElementById('bulkCount').textContent = selected.size + ' selected';
+  document.getElementById('bulkbar').classList.toggle('show', selected.size>0);
+}
+function clearSelection(){
+  selected = new Set();
+  document.querySelectorAll('.lead .pick').forEach(c => c.checked = false);
+  updateBulkBar();
+}
+function bulkSave(){
+  let n = 0;
+  selected.forEach(i => { if(saveLead(i, true)) n++; });
+  updateStats();
+  alert(n ? ('Saved ' + n + ' lead' + (n>1?'s':'') + '.') : 'Those leads were already saved.');
+}
+function bulkExport(){
+  const rows = [...selected].map(i => currentLeads[i]);
+  exportCSV(rows, 'selected-leads');
+}
+async function bulkWriteEmails(){
+  const key = (document.getElementById('geminiKey').value || '').trim();
+  if(!key){ alert('Add your free Gemini key first (in the AI box below).'); return; }
+  if(!selected.size) return;
+  for(const i of selected){ await writeEmail(i); }
+  alert('Emails written for ' + selected.size + ' lead' + (selected.size>1?'s':'') + '. Scroll through them to copy each one.');
+}
+
+function saveLead(i, silent){
   const lead = Object.assign({}, currentLeads[i], {niche:NICHES[currentNiche].label, city:currentCity, status:'New', savedAt:new Date().toLocaleDateString()});
   const saved = getSaved();
-  if(saved.some(s => s.name === lead.name && s.city === lead.city)){ alert('Already saved.'); return; }
+  if(saved.some(s => s.name === lead.name && s.city === lead.city)){
+    if(!silent) alert('Already saved.');
+    return false;
+  }
   saved.push(lead);
   localStorage.setItem('mindful-leads-saved', JSON.stringify(saved));
-  updateSavedCount();
-  alert('Saved: ' + lead.name);
+  updateStats();
+  if(!silent) alert('Saved: ' + lead.name);
+  return true;
 }
 
 function renderSaved(){
@@ -367,11 +582,12 @@ function renderSaved(){
 function setStatus(i, v){
   const saved = getSaved(); saved[i].status = v;
   localStorage.setItem('mindful-leads-saved', JSON.stringify(saved));
+  updateStats();
 }
 function removeSaved(i){
   const saved = getSaved(); saved.splice(i,1);
   localStorage.setItem('mindful-leads-saved', JSON.stringify(saved));
-  updateSavedCount(); renderSaved();
+  updateStats(); renderSaved();
 }
 function exportCSV(rows, name){
   if(!rows.length){ alert('Nothing to export.'); return; }
@@ -386,6 +602,19 @@ function exportCSV(rows, name){
   a.click();
 }
 
+function parseSequence(text){
+  const get = (label, next) => {
+    const re = new RegExp(label + '\\s*[:\\-]?\\s*([\\s\\S]*?)(?=' + (next || '$') + ')', 'i');
+    const m = text.match(re);
+    return m ? m[1].trim() : '';
+  };
+  const subject = get('SUBJECT', 'EMAIL');
+  const email = get('EMAIL', 'FOLLOW-UP 1');
+  const fu1 = get('FOLLOW-UP 1(?: \\(DAY 3\\))?', 'FOLLOW-UP 2');
+  const fu2 = get('FOLLOW-UP 2(?: \\(DAY 7\\))?', '');
+  return {subject, email, fu1, fu2, raw:text};
+}
+
 async function writeEmail(i){
   const lead = currentLeads[i];
   const key = (document.getElementById('geminiKey').value || '').trim();
@@ -396,10 +625,11 @@ async function writeEmail(i){
     return;
   }
   box.classList.add('show');
-  box.innerHTML = 'Writing your email…';
-  const prompt = 'Write a short cold email under 120 words from a freelancer to ' + lead.name + ', a ' + NICHES[currentNiche].label.toLowerCase() + ' business in ' + currentCity + '.' +
+  box.innerHTML = 'Writing your email + follow-ups…';
+  const prompt = 'Write a cold outreach sequence from a freelancer to ' + lead.name + ', a ' + NICHES[currentNiche].label.toLowerCase() + ' business in ' + currentCity + '.' +
     (lead.website ? ' Their website is ' + lead.website + '.' : '') +
-    ' Offer help with their website, online presence and getting more customers. Friendly, professional, specific to their business type, no hype, no fake claims. End with one simple question. Give a subject line first, then the email body.';
+    ' Offer help with their website, online presence and getting more customers. Friendly, professional, specific to their business type, no hype, no fake claims.' +
+    ' Use exactly this format:\nSUBJECT: <one subject line>\nEMAIL: <the first email, under 120 words, ending with one simple question>\nFOLLOW-UP 1 (Day 3): <a short follow-up under 60 words>\nFOLLOW-UP 2 (Day 7): <a final short follow-up under 60 words>';
   try{
     const r = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=' + encodeURIComponent(key), {
       method:'POST', headers:{'Content-Type':'application/json'},
@@ -408,12 +638,17 @@ async function writeEmail(i){
     const d = await r.json();
     const text = d.candidates && d.candidates[0] && d.candidates[0].content && d.candidates[0].content.parts ? d.candidates[0].content.parts.map(p=>p.text).join('') : '';
     if(!text) throw new Error('No reply from AI. Check your key and try again.');
-    const lines = text.trim().split('\n');
-    const subject = lines[0].replace(/^(Subject:?\s*)/i,'');
-    const body = lines.slice(1).join('\n').trim();
-    box.innerHTML = '<div class="subject">Subject: ' + esc(subject) + '</div>' + esc(body) +
-      '<div class="actions"><button class="btn-ghost" onclick="copyText(this.parentElement.parentElement.innerText)">Copy email</button></div>';
-    box.dataset.body = body; box.dataset.subject = subject;
+    const s = parseSequence(text.trim());
+    if(s.email){
+      box.innerHTML = '<div class="subject">Subject: ' + esc(s.subject || ('Quick idea for ' + lead.name)) + '</div>' + esc(s.email) +
+        (s.fu1 ? '<div class="fu-label">Follow-up 1 — Day 3</div>' + esc(s.fu1) : '') +
+        (s.fu2 ? '<div class="fu-label">Follow-up 2 — Day 7</div>' + esc(s.fu2) : '') +
+        '<div class="actions"><button class="btn-ghost" onclick="copyText(this.closest(\'.email-box\').innerText)">Copy all</button></div>';
+      box.dataset.body = s.email; box.dataset.subject = s.subject || ('Quick idea for ' + lead.name);
+    } else {
+      box.innerHTML = esc(text) + '<div class="actions"><button class="btn-ghost" onclick="copyText(this.closest(\'.email-box\').innerText)">Copy all</button></div>';
+      box.dataset.body = text; box.dataset.subject = 'Quick idea for ' + lead.name;
+    }
   }catch(err){
     box.innerHTML = 'Could not write the email: ' + esc(err.message);
   }
